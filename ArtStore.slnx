@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ArtStore.Api/ArtStore.Api.csproj" Id="16c438eb-65fe-4160-a227-82bdb00f6493" />
+  <Project Path="ArtStore.Application/ArtStore.Application.csproj" Id="29239097-0fbd-4ccf-9589-91343c235bd1" />
+  <Project Path="ArtStore.Domain/ArtStore.Domain.csproj" Id="c26c6b83-4902-4be3-8579-8c50f4978ae3" />
+  <Project Path="ArtStore.Infrastructure/ArtStore.Infrastructure.csproj" Id="ceefa38b-2818-4833-96d7-2c079312d633" />
+</Solution>
