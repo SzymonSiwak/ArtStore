@@ -32,7 +32,7 @@ namespace ArtStore.Infrastructure.Repositories
         {
             return await _context.Products
                                  .Include(p => p.Artist)
-                                 .Where(p => p.IsBestSeller)
+                                 .Where(p => p.IsBestseller)
                                  .Take(count)
                                  .ToListAsync();
 		}
