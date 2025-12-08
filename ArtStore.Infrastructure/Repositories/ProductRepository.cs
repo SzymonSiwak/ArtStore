@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ArtStore.Domain.Enums;
+﻿using ArtStore.Domain.Enums;
 using ArtStore.Domain.Entities;
 using ArtStore.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +28,7 @@ namespace ArtStore.Infrastructure.Repositories
                                  .FirstOrDefaultAsync(p => p.Id == id);
 		}
 
-        public async Task<IEnumerable<Product>> GetBestSellersAsync(int count)
+        public async Task<IEnumerable<Product>> GetBestsellersAsync(int count)
         {
             return await _context.Products
                                  .Include(p => p.Artist)

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ArtStore.Domain.Entities;
+﻿using ArtStore.Domain.Entities;
 
 namespace ArtStore.Domain.Interfaces
 {

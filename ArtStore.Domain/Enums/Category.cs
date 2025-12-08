@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ArtStore.Domain.Enums
+﻿namespace ArtStore.Domain.Enums
 {
     public enum Category
     {

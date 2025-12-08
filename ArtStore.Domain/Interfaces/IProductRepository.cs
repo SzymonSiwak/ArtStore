@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ArtStore.Domain.Entities;
+﻿using ArtStore.Domain.Entities;
 
 namespace ArtStore.Domain.Interfaces
 {
@@ -11,7 +8,7 @@ namespace ArtStore.Domain.Interfaces
         Task<IEnumerable<Product>> GetAllAsync();
 
         //Methods for categories on main page
-        Task<IEnumerable<Product>> GetBestSellersAsync(int count);
+        Task<IEnumerable<Product>> GetBestsellersAsync(int count);
         Task<IEnumerable<Product>> GetNewArrivalsAsync(int count);
 		Task<IEnumerable<Product>> GetByCategoryAsync(Enums.Category category);
 
