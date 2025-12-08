@@ -4,6 +4,6 @@
     {
         Living_Accessories,
         Stationary,
-        Others
+        Other
     }
 }

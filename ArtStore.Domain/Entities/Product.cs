@@ -17,7 +17,7 @@ namespace ArtStore.Domain.Entities
 		public Money Price { get; set; } = new Money(0, "USD");
 
 		public Category Category { get; set; }
-		public bool IsBestSeller { get; set; } //flag for best sellers items
+		public bool IsBestseller { get; set; } //flag for best sellers items
 
 		//Relations with Artist
 		public Guid ArtistId { get; set; }
