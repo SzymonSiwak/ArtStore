@@ -1,8 +1,13 @@
-﻿using ArtStore.Domain.Interfaces;
+﻿using ArtStore.Application.Common.Interfaces;
+using ArtStore.Domain.Entities;
+using ArtStore.Domain.Interfaces;
 using ArtStore.Infrastructure.Repositories;
+using ArtStore.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 
 namespace ArtStore.Infrastructure
 {
@@ -13,12 +18,22 @@ namespace ArtStore.Infrastructure
             // Register DbContext
             services.AddDbContext<ArtStoreDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-            // Register repositories
-            services.AddScoped<IProductRepository, ProductRepository>();
+
+            //Identity and TokenService registration
+            services.AddIdentityCore<User>()
+				.AddRoles<IdentityRole>()
+				.AddEntityFrameworkStores<ArtStoreDbContext>()
+                .AddDefaultTokenProviders();
+
+			services.AddScoped<ITokenService, TokenService>();
+
+			// Register repositories
+			services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IArtistRepository, ArtistRepository>();
             //services.AddScoped<IOrderRepository, OrderRepository>();
+
             // Add other repositories as needed
             return services;
-		}
-	}
+        }
+    }
 }
