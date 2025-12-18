@@ -12,8 +12,10 @@ namespace ArtStore.Infrastructure
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Artist> Artists { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Cart> Carts { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Apply all configurations from the current assembly
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ArtStoreDbContext).Assembly);
