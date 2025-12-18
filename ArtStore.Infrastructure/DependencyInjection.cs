@@ -23,9 +23,11 @@ namespace ArtStore.Infrastructure
             services.AddIdentityCore<User>()
 				.AddRoles<IdentityRole>()
 				.AddEntityFrameworkStores<ArtStoreDbContext>()
-                .AddDefaultTokenProviders();
+				.AddSignInManager<SignInManager<User>>()
+				.AddDefaultTokenProviders();
 
 			services.AddScoped<ITokenService, TokenService>();
+			services.AddScoped<IAuthService, AuthService>();
 
 			// Register repositories
 			services.AddScoped<IProductRepository, ProductRepository>();
