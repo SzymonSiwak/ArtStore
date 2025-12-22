@@ -1,8 +1,9 @@
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using ArtStore.Application;
 using ArtStore.Infrastructure;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +32,42 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(option =>
+{
+	// Documentation title and version
+	option.SwaggerDoc("v1", new OpenApiInfo { Title = "ArtStore API", Version = "v1" });
+
+	// Definition of the security scheme 
+	option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Description = "Enter your JWT token",
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		BearerFormat = "JWT",
+		Scheme = "bearer"
+	});
+
+	// Requirement of the security scheme
+	option.AddSecurityRequirement((document) => new OpenApiSecurityRequirement()
+	{
+		[new OpenApiSecuritySchemeReference("Bearer", document)] = []
+	});
+	//option.AddSecurityRequirement(new OpenApiSecurityRequirement
+	//{
+	//	{
+	//		new OpenApiSecurityScheme
+	//		{
+	//			Reference = new OpenApiReference
+	//			{
+	//				Type=ReferenceType.SecurityScheme,
+	//				Id="Bearer"
+	//			}
+	//		},
+	//		new string[]{}
+	//	}
+	//});
+});
 
 var app = builder.Build();
 

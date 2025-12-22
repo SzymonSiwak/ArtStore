@@ -13,6 +13,17 @@ namespace ArtStore.Application.Common.Mappings
                 .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency))
                 .ForMember(dest => dest.ArtistName, opt => opt.MapFrom(src => src.Artist != null ? 
                            src.Artist.Name : string.Empty));
+
+            CreateMap<CartItem, CartItemDto>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product!.Name))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Product!.ImageUrl))
+                .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Product!.Price.Amount))
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => 
+                           src.Product!.Price.Amount * src.Quantity));
+
+            CreateMap<Cart, CartDto>()
+                .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => 
+                           src.Items.Sum(i => i.Product!.Price.Amount * i.Quantity)));
 		}
 	}
 }
