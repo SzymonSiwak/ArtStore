@@ -7,6 +7,16 @@ using Microsoft.OpenApi;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowAll",
+		policy =>
+		{
+			policy.AllowAnyOrigin()
+				  .AllowAnyMethod()
+				  .AllowAnyHeader();
+		});
+});
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -53,20 +63,6 @@ builder.Services.AddSwaggerGen(option =>
 	{
 		[new OpenApiSecuritySchemeReference("Bearer", document)] = []
 	});
-	//option.AddSecurityRequirement(new OpenApiSecurityRequirement
-	//{
-	//	{
-	//		new OpenApiSecurityScheme
-	//		{
-	//			Reference = new OpenApiReference
-	//			{
-	//				Type=ReferenceType.SecurityScheme,
-	//				Id="Bearer"
-	//			}
-	//		},
-	//		new string[]{}
-	//	}
-	//});
 });
 
 var app = builder.Build();
@@ -95,6 +91,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
