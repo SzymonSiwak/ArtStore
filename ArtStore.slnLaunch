@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "ArtStore.Api\\ArtStore.Api.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "ArtStore.Blazor\\ArtStore.Blazor.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

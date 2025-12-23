@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1" Color="Color.Primary">
+        <MudText Typo="Typo.h5" Class="ml-3">ArtStore</MudText>
+        <MudSpacer />
+
+        <MudButton Link="/" Variant="Variant.Text" Color="Color.Inherit">Home</MudButton>
+        <MudButton Link="/cart" Variant="Variant.Text" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.ShoppingCart">Koszyk</MudButton>
+        <MudButton Link="/login" Variant="Variant.Text" Color="Color.Inherit">Logowanie</MudButton>
+    </MudAppBar>
+
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
