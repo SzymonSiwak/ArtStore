@@ -1,4 +1,4 @@
-﻿namespace ArtStore.Application.DTOs
+﻿namespace ArtStore.Shared.DTOs
 {
 	public class AuthResponseDto
 	{

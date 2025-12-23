@@ -1,4 +1,4 @@
-﻿namespace ArtStore.Domain.Enums
+﻿namespace ArtStore.Shared.Enums
 {
     public enum Category
     {

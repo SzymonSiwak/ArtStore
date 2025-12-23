@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="10.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ArtStore.Shared\ArtStore.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

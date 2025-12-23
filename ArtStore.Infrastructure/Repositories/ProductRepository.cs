@@ -1,4 +1,4 @@
-﻿using ArtStore.Domain.Enums;
+﻿using ArtStore.Shared.Enums;
 using ArtStore.Domain.Entities;
 using ArtStore.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;

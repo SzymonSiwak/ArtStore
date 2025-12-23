@@ -1,5 +1,5 @@
 ﻿using ArtStore.Domain.Entities;
-using ArtStore.Domain.Enums;
+using ArtStore.Shared.Enums;
 using ArtStore.Domain.ValueObjects;
 
 namespace ArtStore.Infrastructure

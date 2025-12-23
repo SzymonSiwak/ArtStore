@@ -3,4 +3,5 @@
   <Project Path="ArtStore.Application/ArtStore.Application.csproj" Id="29239097-0fbd-4ccf-9589-91343c235bd1" />
   <Project Path="ArtStore.Domain/ArtStore.Domain.csproj" Id="c26c6b83-4902-4be3-8579-8c50f4978ae3" />
   <Project Path="ArtStore.Infrastructure/ArtStore.Infrastructure.csproj" Id="ceefa38b-2818-4833-96d7-2c079312d633" />
+  <Project Path="ArtStore.Shared/ArtStore.Shared.csproj" Id="abc98ce0-0e54-475f-b682-157c50c5f212" />
 </Solution>

@@ -1,4 +1,4 @@
-﻿using ArtStore.Application.DTO;
+﻿using ArtStore.Shared.DTOs;
 using ArtStore.Application.Features.Products.Queries.GetHomePageData;
 using ArtStore.Application.Features.Products.Queries.GetProductDetails;
 using MediatR;

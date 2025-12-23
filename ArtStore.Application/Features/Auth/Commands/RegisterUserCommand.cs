@@ -1,5 +1,5 @@
 ﻿using ArtStore.Application.Common.Interfaces;
-using ArtStore.Application.DTOs;
+using ArtStore.Shared.DTOs;
 using MediatR;
 
 namespace ArtStore.Application.Features.Auth.Commands

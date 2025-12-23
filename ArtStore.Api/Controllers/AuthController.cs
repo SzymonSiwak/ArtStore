@@ -1,4 +1,4 @@
-﻿using ArtStore.Application.DTOs;
+﻿using ArtStore.Shared.DTOs;
 using ArtStore.Application.Features.Auth.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

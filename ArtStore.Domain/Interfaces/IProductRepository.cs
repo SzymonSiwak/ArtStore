@@ -1,4 +1,5 @@
 ﻿using ArtStore.Domain.Entities;
+using ArtStore.Shared.Enums;
 
 namespace ArtStore.Domain.Interfaces
 {
@@ -10,7 +11,7 @@ namespace ArtStore.Domain.Interfaces
         //Methods for categories on main page
         Task<IEnumerable<Product>> GetBestsellersAsync(int count);
         Task<IEnumerable<Product>> GetNewArrivalsAsync(int count);
-		Task<IEnumerable<Product>> GetByCategoryAsync(Enums.Category category);
+		Task<IEnumerable<Product>> GetByCategoryAsync(Category category);
 
 		Task AddAsync(Product product);
 		Task UpdateAsync(Product product);

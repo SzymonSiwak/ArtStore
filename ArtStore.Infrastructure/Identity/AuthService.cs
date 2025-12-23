@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ArtStore.Application.Common.Interfaces;
-using ArtStore.Application.DTOs;
+﻿using ArtStore.Application.Common.Interfaces;
+using ArtStore.Shared.DTOs;
 using ArtStore.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 

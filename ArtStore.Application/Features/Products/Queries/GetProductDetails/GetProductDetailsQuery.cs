@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using ArtStore.Application.DTO;
+﻿using ArtStore.Shared.DTOs;
 using ArtStore.Domain.Interfaces;
 using AutoMapper;
 using MediatR;

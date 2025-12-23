@@ -1,4 +1,4 @@
-﻿namespace ArtStore.Application.DTO
+﻿namespace ArtStore.Shared.DTOs
 {
     public class CartItemDto
     {

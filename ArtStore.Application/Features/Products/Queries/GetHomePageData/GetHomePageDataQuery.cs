@@ -1,5 +1,5 @@
-﻿using ArtStore.Application.DTO;
-using ArtStore.Domain.Enums;
+﻿using ArtStore.Shared.DTOs;
+using ArtStore.Shared.Enums;
 using ArtStore.Domain.Interfaces;
 using AutoMapper;
 using MediatR;

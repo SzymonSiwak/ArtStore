@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using ArtStore.Application.DTO;
+using ArtStore.Shared.DTOs;
 using ArtStore.Application.Features.Cart.Commands;
 using ArtStore.Application.Features.Cart.Queries.GetCart;
 using MediatR;
