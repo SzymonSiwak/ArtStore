@@ -1,0 +1,17 @@
+﻿/* Frame */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: flex-end;
+padding: 0px 0px 0px 96px;
+gap: 12px;
+
+width: 260px;
+height: 15px;
+
+background: #FFFFFF;
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;

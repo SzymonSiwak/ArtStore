@@ -1,6 +1,6 @@
 ﻿using ArtStore.Shared.DTOs;
 
-namespace ArtStore.Application.Features.Products.Queries.GetHomePageData
+namespace ArtStore.Shared.DTOs
 {
     public class HomePageDto
     {

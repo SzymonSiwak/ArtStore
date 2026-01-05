@@ -1,0 +1,38 @@
+﻿@using ArtStore.Shared.DTOs
+
+<MudCard Elevation="3" Class="h-100">
+	@if (!string.IsNullOrEmpty(ProductDto.ImageUrl))
+	{
+		<MudCardMedia Image="@ProductDto.ImageUrl" Height="200" />
+	}
+	else
+	{
+		<MudCardMedia Image="https://placehold.co/600x400" Height="200" />
+	}
+
+	<MudCardContent>
+		<!-- Title and artist-->
+		<MudText Typo="Typo.h6" >@ProductDto.Name</MudText>
+		<MudText Typo="Typo.body2" Color="Color.Secondary">@ProductDto.ArtistName</MudText>
+
+		<!-- Price -->
+		<MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-2">
+			@ProductDto.Price @ProductDto.Currency
+		</MudText>
+	</MudCardContent>
+
+	<MudCardActions>
+		<MudButton Variant="Variant.Text" Color="Color.Primary" Link="@($"/product/{ProductDto.Id}")">
+			Details
+		</MudButton>
+		<MudSpacer />
+		<!-- Ikona koszyka (na razie tylko wizualna) -->
+		<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Secondary" />
+	</MudCardActions>
+</MudCard>
+
+
+	@code{
+		[Parameter]
+		public ProductDto ProductDto { get; set; } = new();
+}

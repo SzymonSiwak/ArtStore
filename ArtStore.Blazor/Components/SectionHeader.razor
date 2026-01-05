@@ -1,0 +1,9 @@
+﻿@using MudBlazor
+
+<MudText Typo="Typo.h4" Class="mt-8 mb-4">@Title</MudText>
+<MudDivider Class="mb-4" />
+
+@code{
+	[Parameter]
+	public string Title { get; set; } = string.Empty;
+}

@@ -1,0 +1,26 @@
+﻿@using MudBlazor
+
+
+<MudGrid>
+	@if(Products != null)
+	{
+		@foreach (var product in Products)
+		{
+			<MudItem xs="12" sm="6" md="4" lg="3" xl="2">
+				<ProductCard ProductDto="product" />
+			</MudItem>
+		}
+
+		@if(!Products.Any())
+		{
+			<MudItem xs="12">
+				<MudAlert Severity="Severity.Info">No products available.</MudAlert>
+			</MudItem>
+		}
+	}
+</MudGrid>
+
+@code{
+	[Parameter]
+	public IEnumerable<ProductDto> Products { get; set; } = new List<ProductDto>();
+}
