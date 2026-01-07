@@ -1,4 +1,5 @@
 ﻿@using ArtStore.Shared.DTOs
+@inject NavigationManager NavigationManager
 
 <MudCard Elevation="3" Class="h-100">
 	@if (!string.IsNullOrEmpty(ProductDto.ImageUrl))
@@ -22,11 +23,11 @@
 	</MudCardContent>
 
 	<MudCardActions>
-		<MudButton Variant="Variant.Text" Color="Color.Primary" Link="@($"/product/{ProductDto.Id}")">
+		<MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="GoToDetails">
 			Details
 		</MudButton>
 		<MudSpacer />
-		<!-- Ikona koszyka (na razie tylko wizualna) -->
+		<!-- Shopping Card icon -->
 		<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Secondary" />
 	</MudCardActions>
 </MudCard>
@@ -35,4 +36,15 @@
 	@code{
 		[Parameter]
 		public ProductDto ProductDto { get; set; } = new();
-}
+
+		private void GoToDetails()
+		{
+			if (ProductDto.Id == Guid.Empty)
+			{
+				Console.WriteLine("BŁĄD: ID produktu jest puste (same zera)!");
+				return;
+			}
+
+			NavigationManager.NavigateTo($"/product/{ProductDto.Id}");
+		}
+	}
