@@ -1,0 +1,53 @@
+﻿@page "/login"
+@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTOs
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+
+<MudContainer MaxWidth="MaxWidth.Small" Class="mt-16">
+	<MudPaper Elevation="3" Class="pa-8">
+		<MudText Typo="Typo.h4" Align="Align.Center" Class="mb-6">Sign In</MudText>
+
+		<MudForm @bind-IsValid="@success">
+			<MudTextField T="string" Label="Email" @bind-Value="loginDto.Email" Required="true"
+					InputType="InputType.Email" />
+			<MudTextField T="string" Label="Password" @bind-Value="loginDto.Password" Required="true"
+					InputType="InputType.Password" />
+
+			<MudButton Variant="Variant.Filled"
+					   Color="Color.Primary"
+					   Class="mt-6 full-width"
+					   OnClick="HandleLogin"
+					   Disabled="@(!success)">
+				   Login
+			</MudButton>
+		</MudForm>
+
+			<MudText Align="Align.Center" Class="mt-4">
+				Don't have an account? Use Swagger to register (for now).
+			</MudText>
+	</MudPaper>
+</MudContainer>
+
+@code {
+	private LoginDto loginDto = new();
+	private bool success;
+
+	private async Task HandleLogin()
+	{
+		var result = await AuthService.Login(loginDto);
+
+		if (result)
+		{
+			Snackbar.Add("Login successful!", Severity.Success);
+			NavigationManager.NavigateTo("/");
+		}
+		else
+		{
+			Snackbar.Add("Login failed. Please check your credentials.", Severity.Error);
+		}
+	}
+}
