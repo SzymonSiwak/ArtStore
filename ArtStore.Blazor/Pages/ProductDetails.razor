@@ -1,0 +1,101 @@
+﻿@page "/product/{Id:guid}"
+@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTOs
+@using MudBlazor
+@inject IProductService ProductService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<PageTitle>ArtStore - @(product?.Name ?? "Details")</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+
+    <MudButton StartIcon="@Icons.Material.Filled.ArrowBack" OnClick="GoBackToGallery" Variant="Variant.Text" Class="mb-4">
+        Back to Gallery
+    </MudButton>
+
+    @if (product == null)
+    {
+        <div class="d-flex justify-center mt-10">
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        </div>
+    }
+    else
+    {
+        <MudGrid Spacing="4">
+            <!-- Left column: photo-->
+            <MudItem xs="12" md="7">
+                <MudPaper Elevation="0" Class="pa-4 d-flex justify-center align-center" Style="background-color: #f5f5f5; height: 500px;">
+                    @if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        <MudImage Src="@product.ImageUrl" ObjectFit="ObjectFit.Contain" Height="450" Fluid="true" Class="rounded-lg" />
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.ImageNotSupported" Size="Size.Large" />
+                    }
+                </MudPaper>
+            </MudItem>
+
+            <!-- Right column: info -->
+            <MudItem xs="12" md="5">
+                <MudText Typo="Typo.h3" Class="mb-2">@product.Name</MudText>
+                <MudText Typo="Typo.h5" Color="Color.Secondary" Class="mb-6">by @product.ArtistName</MudText>
+
+                <MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-6">
+                    @product.Price @product.Currency
+                </MudText>
+
+                <MudText Typo="Typo.body1" Class="mb-6">
+                    @product.Description
+                </MudText>
+
+                <MudDivider Class="mb-6" />
+
+                <!-- Add to cart panel -->
+                <div class="d-flex align-center gap-4">
+                    <MudNumericField @bind-Value="quantity" Label="Quantity" Variant="Variant.Outlined" Min="1" Max="10" Class="mt-0" Style="width: 100px;" />
+
+                    <MudButton Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               Size="Size.Large"
+                               StartIcon="@Icons.Material.Filled.ShoppingCart"
+                               OnClick="AddToCart"
+                               Class="flex-grow-1">
+                        Add to Cart
+                    </MudButton>
+                </div>
+
+                <!-- Additional info -->
+                <MudAlert Severity="Severity.Info" Class="mt-8" NoIcon="true">
+                    Free shipping specifically for @product.Name within Europe.
+                </MudAlert>
+            </MudItem>
+        </MudGrid>
+    }
+</MudContainer>
+
+@code {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private ProductDto? product;
+    private int quantity = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ProductService.GetProductById(Id);
+    }
+
+    private async Task AddToCart()
+    {
+        Snackbar.Add($"Added {quantity} x {product?.Name} to cart (Simulation)", Severity.Success);
+    }
+
+    private void GoBackToGallery()
+    {
+        NavigationManager.NavigateTo("/");
+	}
+}
