@@ -1,0 +1,74 @@
+﻿@page "/cart"
+@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
+@inject ICartService CartService
+@inject NavigationManager NavigationManager
+
+<PageTitle>ArtStore - Shopping Cart</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Medium" Class="mt-8">
+	<MudText Typo="Typo.h4" Class="mt-6" >Your Shopping Cart</MudText>
+	@if(isLoading)
+	{
+		<MudProgressCircular Color="Color.Primary" Intermediate="true" />
+	}
+	else if(cart == null ||!cart.Items.Any())
+	{
+		<MudAlert Severity="Severity.Info">
+			Your cart is empty. <MudLink Href="/">Go back to gallery</MudLink>
+		</MudAlert>
+	}
+	else
+	{
+        <MudTable Items="@cart.Items" Hover="true" Breakpoint="Breakpoint.Sm" Elevation="3">
+            <HeaderContent>
+                <MudTh>Art</MudTh>
+                <MudTh>Name</MudTh>
+                <MudTh>Price</MudTh>
+                <MudTh>Quantity</MudTh>
+                <MudTh>Total</MudTh>
+                <MudTh></MudTh> <!-- Kolumna na przycisk usuwania -->
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Art">
+                    <MudImage Src="@context.ImageUrl" Height="60" Class="rounded" ObjectFit="ObjectFit.Cover" />
+                </MudTd>
+                <MudTd DataLabel="Name">
+                    <MudText Typo="Typo.body1">@context.ProductName</MudText>
+                </MudTd>
+                <MudTd DataLabel="Price">@context.UnitPrice</MudTd>
+                <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
+                <MudTd DataLabel="Total" Style="font-weight: bold;">@context.TotalPrice</MudTd>
+                <MudTd>
+                    <!-- Tu w przyszłości dodamy usuwanie -->
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" />
+                </MudTd>
+            </RowTemplate>
+            <FooterContent>
+                <MudTd colspan="4" Style="text-align: right; font-weight: bold;">Grand Total:</MudTd>
+                <MudTd Style="font-weight: bold; font-size: 1.2em; color: var(--mud-palette-primary);">
+                    @cart.TotalAmount USD
+                </MudTd>
+                <MudTd></MudTd>
+            </FooterContent>
+        </MudTable>
+
+        <div class="d-flex justify-end mt-6">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large">
+                Proceed to Checkout
+            </MudButton>
+        </div>
+	}
+</MudContainer>
+
+@code{
+    private CartDto? cart;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cart = await CartService.GetCart();
+        isLoading = false;
+    }
+}
+}

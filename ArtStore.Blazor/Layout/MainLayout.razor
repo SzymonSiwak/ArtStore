@@ -11,7 +11,7 @@
         <MudSpacer />
 
         <MudButton Link="/" Variant="Variant.Text" Color="Color.Inherit">Home</MudButton>
-        <MudButton Link="/cart" Variant="Variant.Text" Color="Color.Inherit" StartIcon="@Icons.Material.Filled.ShoppingCart">Koszyk</MudButton>
+        <MudButton Link="/cart" Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToCart" StartIcon="@Icons.Material.Filled.ShoppingCart">Shopping Cart</MudButton>
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToLogin">Logowanie</MudButton>
     </MudAppBar>
 
@@ -24,4 +24,5 @@
 
 @code{
     private void GoToLogin() => NavigationManager.NavigateTo("/login");
+	private void GoToCart() => NavigationManager.NavigateTo("/cart");
 }
