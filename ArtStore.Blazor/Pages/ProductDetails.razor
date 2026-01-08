@@ -5,6 +5,7 @@
 @using MudBlazor
 @inject IProductService ProductService
 @inject ISnackbar Snackbar
+@inject ICartService CartService
 @inject NavigationManager NavigationManager
 
 <PageTitle>ArtStore - @(product?.Name ?? "Details")</PageTitle>
@@ -91,7 +92,26 @@
 
     private async Task AddToCart()
     {
-        Snackbar.Add($"Added {quantity} x {product?.Name} to cart (Simulation)", Severity.Success);
+        try
+        {
+            await CartService.AddToCart(product!.Id, quantity);
+
+            Snackbar.Add($"Added {quantity} x {product.Name} to cart!", Severity.Success);
+        }
+        catch (Exception ex)
+        {
+            // if not logged, redirect to login page
+            if (ex.Message.Contains("logged in"))
+            {
+                Snackbar.Add("Please login first.", Severity.Warning);
+                NavigationManager.NavigateTo("/login");
+            }
+            else
+            {
+                Snackbar.Add("Something went wrong.", Severity.Error);
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 
     private void GoBackToGallery()
