@@ -1,4 +1,5 @@
 ﻿using ArtStore.Blazor.Interfaces;
+using ArtStore.Shared.DTOs;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -34,6 +35,23 @@ namespace ArtStore.Blazor.Services
 			{
 				throw new Exception("Failed to add to cart.");
 			}
+		}
+
+        public async Task<CartDto?> GetCart()
+        {
+            var token = await _auth.GetToken();
+            if (string.IsNullOrEmpty(token)) return null;
+
+            _http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            try
+            {
+                return await _http.GetFromJsonAsync<CartDto>("api/cart");
+			}
+            catch(Exception ex)
+            {
+                return null;
+            }
 		}
     }
 }
