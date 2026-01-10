@@ -55,10 +55,13 @@ namespace ArtStore.Application.UnitTests.Feature
 
             // Mock: Product does not exist
             _productRepo.GetByIdAsync(command.ProductId).Returns((Product?)null);
-            
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _handler.Handle(command, CancellationToken.None));
-            await _cartRepo.DidNotReceive().SaveChangesAsync();
+
+			// Act
+			Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
+
+			// Assert
+			await act.Should().ThrowAsync<Exception>().WithMessage("Product not found");
+			await _cartRepo.DidNotReceive().SaveChangesAsync();
 		}
 
 		[Fact]
