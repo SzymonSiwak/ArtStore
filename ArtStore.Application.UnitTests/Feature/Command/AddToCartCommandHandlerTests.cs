@@ -6,7 +6,7 @@ using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
 
-namespace ArtStore.Application.UnitTests.Feature
+namespace ArtStore.Application.UnitTests.Feature.Command
 {
     public class AddToCartCommandHandlerTests
     {

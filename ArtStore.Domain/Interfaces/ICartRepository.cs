@@ -7,6 +7,5 @@ namespace ArtStore.Domain.Interfaces
         Task<Cart?> GetByUserIdAsync(string userId);
         Task AddAsync(Cart cart);
         Task SaveChangesAsync();
-
 	}
 }

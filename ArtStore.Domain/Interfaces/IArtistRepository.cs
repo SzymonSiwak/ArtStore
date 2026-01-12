@@ -7,6 +7,5 @@ namespace ArtStore.Domain.Interfaces
 		Task<IEnumerable<Artist>> GetAllAsync();
 		Task<Artist?> GetByIdAsync(Guid id);
 		Task AddAsync(Artist artist);
-
 	}
 }
