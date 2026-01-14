@@ -24,6 +24,8 @@ namespace ArtStore.Application.Common.Mappings
             CreateMap<Cart, CartDto>()
                 .ForMember(dest => dest.TotalAmount, opt => opt.MapFrom(src => 
                            src.Items.Sum(i => i.Product!.Price.Amount * i.Quantity)));
+
+			CreateMap<Artist, ArtistDto>();
 		}
 	}
 }
