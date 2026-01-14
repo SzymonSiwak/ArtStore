@@ -38,7 +38,17 @@ namespace ArtStore.Api.Controllers
             var command = new AddToCartCommand(userId, request.ProductId, request.Quantity);
             var result = await _mediator.Send(command);
             return Ok(result);
-        }		
+        }
+
+		[HttpDelete("items/{productId}")]
+		public async Task<ActionResult<CartDto>> RemoveItem(Guid productId)
+		{
+			var userId = GetUserId();
+			var command = new RemoveFromCartCommand(userId, productId);
+
+			var result = await _mediator.Send(command);
+			return Ok(result);
+		}
 	}
 
 	//Helper method to represent the add to cart request body
