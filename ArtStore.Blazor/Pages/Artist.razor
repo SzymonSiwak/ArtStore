@@ -1,0 +1,75 @@
+﻿@page "/artists"
+@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTOs
+@inject IArtistService ArtistService
+
+<PageTitle>ArtStore - Our Artists</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-4">Meet the Artists</MudText>
+    <MudText Typo="Typo.subtitle1" Align="Align.Center" Class="mb-12" Color="Color.Secondary">
+        The creative minds behind our exclusive collection.
+    </MudText>
+
+    @if (isLoading)
+    {
+        <div class="d-flex justify-center">
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        </div>
+    }
+    else
+    {
+        <MudGrid>
+            @foreach (var artist in artists)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard Elevation="4" Class="h-100 d-flex flex-column align-center pa-4 hover-effect">
+
+                        <MudAvatar Style="height:120px; width:120px;" Class="mb-4">
+                            @if (!string.IsNullOrEmpty(artist.AvatarUrl))
+                            {
+                                <MudImage Src="@artist.AvatarUrl" />
+                            }
+                            else
+                            {
+                                <MudText Typo="Typo.h4">@artist.Name.Substring(0, 1)</MudText>
+                            }
+                        </MudAvatar>
+
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5" Align="Align.Center" GutterBottom="true">@artist.Name</MudText>
+                            <MudText Typo="Typo.body2" Align="Align.Justify" Color="Color.Secondary">
+                                @artist.Bio
+                            </MudText>
+                        </MudCardContent>
+
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">View Collection</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+</MudContainer>
+
+<style>
+    .hover-effect {
+        transition: transform 0.3s;
+    }
+    .hover-effect:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+@code {
+    private IEnumerable<ArtistDto> artists = new List<ArtistDto>();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        artists = await ArtistService.GetAllArtists();
+        isLoading = false;
+    }
+}

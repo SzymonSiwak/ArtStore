@@ -15,5 +15,6 @@ builder.Services.AddMudServices();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IArtistService, ArtistService>();
 
 await builder.Build().RunAsync();
