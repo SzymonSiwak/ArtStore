@@ -2,6 +2,7 @@
 @using ArtStore.Blazor.Interfaces
 @using ArtStore.Blazor.Services
 @inject ICartService CartService
+@inject ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
 <PageTitle>ArtStore - Shopping Cart</PageTitle>
@@ -27,7 +28,7 @@
                 <MudTh>Price</MudTh>
                 <MudTh>Quantity</MudTh>
                 <MudTh>Total</MudTh>
-                <MudTh></MudTh> <!-- Kolumna na przycisk usuwania -->
+                <MudTh>Remove</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="Art">
@@ -40,8 +41,7 @@
                 <MudTd DataLabel="Quantity">@context.Quantity</MudTd>
                 <MudTd DataLabel="Total" Style="font-weight: bold;">@context.TotalPrice</MudTd>
                 <MudTd>
-                    <!-- Tu w przyszłości dodamy usuwanie -->
-                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="Color.Error" Size="Size.Small" OnClick="@(() => RemoveItem(context.ProductId))" />
                 </MudTd>
             </RowTemplate>
             <FooterContent>
@@ -69,6 +69,15 @@
     {
         cart = await CartService.GetCart();
         isLoading = false;
+    }
+
+    private async Task RemoveItem(Guid productId)
+    {
+        await CartService.RemoveFromCart(productId);
+
+        cart = await CartService.GetCart();
+
+        Snackbar.Add("Item removed", Severity.Info);
     }
 }
 }

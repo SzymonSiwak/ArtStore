@@ -1,7 +1,8 @@
-﻿using ArtStore.Blazor.Interfaces;
-using ArtStore.Shared.DTOs;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using ArtStore.Blazor.Interfaces;
+using ArtStore.Shared.DTOs;
 
 namespace ArtStore.Blazor.Services
 {
@@ -37,7 +38,20 @@ namespace ArtStore.Blazor.Services
 			}
 		}
 
-        public async Task<CartDto?> GetCart()
+		public async Task RemoveFromCart(Guid productId)
+		{
+			var token = await _auth.GetToken();
+			_http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+			var response = await _http.DeleteAsync($"api/cart/items/{productId}");
+
+			if (!response.IsSuccessStatusCode)
+			{
+				throw new Exception("Failed to remove item.");
+			}
+		}
+
+		public async Task<CartDto?> GetCart()
         {
             var token = await _auth.GetToken();
             if (string.IsNullOrEmpty(token)) return null;

@@ -12,7 +12,9 @@ namespace ArtStore.Application.Features.Cart.Commands
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
-        public AddToCartCommandHandler(ICartRepository cartRepository, IProductRepository productRepository, IMapper mapper)
+        public AddToCartCommandHandler(ICartRepository cartRepository, 
+                                       IProductRepository productRepository,
+                                       IMapper mapper)
         {
             _cartRepository = cartRepository;
             _productRepository = productRepository;
