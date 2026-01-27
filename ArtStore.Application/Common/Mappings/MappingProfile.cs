@@ -26,6 +26,8 @@ namespace ArtStore.Application.Common.Mappings
                            src.Items.Sum(i => i.Product!.Price.Amount * i.Quantity)));
 
 			CreateMap<Artist, ArtistDto>();
+
+			CreateMap<Artist, ArtistDetailsDto>();
 		}
 	}
 }
