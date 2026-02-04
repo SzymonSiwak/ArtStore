@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 using ArtStore.Blazor.Interfaces;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 
 namespace ArtStore.Blazor.Services
 {
@@ -21,6 +21,12 @@ namespace ArtStore.Blazor.Services
         public async Task<ProductDto?> GetProductById(Guid id)
         {
             return await _httpClient.GetFromJsonAsync<ProductDto>($"api/Product/{id}");
+		}
+
+		public async Task<IEnumerable<ProductDto>> GetFilteredProducts(ProductFilterDto filter)
+		{
+			var response = await _httpClient.PostAsJsonAsync("api/Product/search", filter);
+			return await response.Content.ReadFromJsonAsync<IEnumerable<ProductDto>>() ?? new List<ProductDto>();
 		}
 	}
 }

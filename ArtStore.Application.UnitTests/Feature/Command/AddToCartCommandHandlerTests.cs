@@ -1,7 +1,7 @@
 ﻿using ArtStore.Application.Features.Cart.Commands;
 using ArtStore.Domain.Entities;
 using ArtStore.Domain.Interfaces;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;

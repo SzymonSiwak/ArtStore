@@ -1,4 +1,4 @@
-﻿namespace ArtStore.Shared.DTOs
+﻿namespace ArtStore.Shared.DTO
 {
     public class ArtistDto
     {

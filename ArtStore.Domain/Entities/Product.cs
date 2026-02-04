@@ -19,6 +19,8 @@ namespace ArtStore.Domain.Entities
 		public Category Category { get; set; }
 		public bool IsBestseller { get; set; } //flag for best sellers items
 
+		public FrameType Frame { get; set; } = FrameType.None;
+
 		//Relations with Artist
 		public Guid ArtistId { get; set; }
 		public Artist? Artist { get; set; }

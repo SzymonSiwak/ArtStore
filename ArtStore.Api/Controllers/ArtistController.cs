@@ -1,6 +1,5 @@
 ﻿using ArtStore.Application.Features.Artist.Queries;
-using ArtStore.Application.Features.Artists.Queries.GetArtistDetails;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

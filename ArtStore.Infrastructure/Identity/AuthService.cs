@@ -1,5 +1,5 @@
 ﻿using ArtStore.Application.Common.Interfaces;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 using ArtStore.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 

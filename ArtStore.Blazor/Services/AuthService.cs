@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using ArtStore.Blazor.Interfaces;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 using System.Net.Http.Json;
 
 namespace ArtStore.Blazor.Services

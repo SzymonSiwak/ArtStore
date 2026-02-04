@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using ArtStore.Blazor.Services;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 
 namespace ArtStore.Blazor.Interfaces
 {

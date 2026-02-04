@@ -27,10 +27,28 @@ namespace ArtStore.Infrastructure
 				AvatarUrl = "data:image/jpeg;base64,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"
 			};
 
-			await context.Artists.AddRangeAsync(artist1, artist2);
+			var artist3 = new Artist
+			{
+				Name = "Poster Creator",
+				Bio = "Creator of various posters available in the store.",
+				AvatarUrl = "images/poster-creator.jpg"
+			};
+
+			var artist4 = new Artist
+			{
+				Name = "Paintings creator",
+				Bio = "Creator of various paintings available in the store.",
+				AvatarUrl = "images/poster-creator-2.jpg"
+			};
+
+			await context.Artists.AddRangeAsync(artist1, artist2, artist3, artist4);
 
 			await context.SaveChangesAsync();
 
+			if (context.Products.Any())
+			{
+				return;
+			}
 
 			var products = new List<Product>
 			{
@@ -44,7 +62,9 @@ namespace ArtStore.Infrastructure
 					Price = new Money(12000, "USD"),
 					Category = Category.Living_Accessories,
 					IsBestseller = true, 
-                    ArtistId = artist1.Id
+                    ArtistId = artist1.Id,
+					Frame = FrameType.Gold, 
+					CreatedAt = DateTime.UtcNow.AddMonths(-6)
 				},
 				new Product
 				{
@@ -55,7 +75,9 @@ namespace ArtStore.Infrastructure
 					Price = new Money(5000, "USD"),
 					Category = Category.Living_Accessories,
 					IsBestseller = false,
-					ArtistId = artist1.Id
+					ArtistId = artist1.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow.AddMonths(-5)
 				},
 
                 new Product
@@ -67,7 +89,9 @@ namespace ArtStore.Infrastructure
 					Price = new Money(8500, "USD"),
 					Category = Category.Stationary,
 					IsBestseller = true, 
-                    ArtistId = artist2.Id
+                    ArtistId = artist2.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddMonths(-6)
 				},
 				new Product
 				{
@@ -78,7 +102,9 @@ namespace ArtStore.Infrastructure
 					Price = new Money(9000, "USD"),
 					Category = Category.Stationary,
 					IsBestseller = false,
-					ArtistId = artist2.Id
+					ArtistId = artist2.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddMonths(-6)
 				},
                  
                 // for test purposes
@@ -90,9 +116,515 @@ namespace ArtStore.Infrastructure
 					ImageUrl = "https://placehold.co/600x400",
 					Price = new Money(300, "USD"),
 					Category = Category.Other,
-					IsBestseller = false,
+					IsBestseller = true,
 					ArtistId = artist1.Id
+				},
+
+				// Sample data from wwwroot/images
+				new Product
+				{
+					Name = "Bangkok",
+					Description = "Poster from bangkok",
+					Dimensions = "54x27 cm",
+					ImageUrl = "images/bangkok.jpg",
+					Price = new Money(18, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-6)
+				},
+
+				new Product
+				{
+					Name = "Bathtub",
+					Description = "Bathtub poster",
+					Dimensions = "56x28 cm",
+					ImageUrl = "images/bathtub.jpg",
+					Price = new Money(21, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-5)
+				},
+
+				new Product
+				{
+					Name = "Beach",
+					Description = "Poster from beach",
+					Dimensions = "62x27 cm",
+					ImageUrl = "images/beach.jpg",
+					Price = new Money(15, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = true,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-6)
+				},
+
+				new Product
+				{
+					Name = "Binoculars",
+					Description = "Binoculars poster",
+					Dimensions = "64x28 cm",
+					ImageUrl = "images/binoculars.jpg",
+					Price = new Money(25, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = true,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-4)
+				},
+
+				new Product
+				{
+					Name = "Botanical lover",
+					Description = "Binoculars-lover poster",
+					Dimensions = "54x26 cm",
+					ImageUrl = "images/botanical-lover.jpg",
+					Price = new Money(22, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-4)
+				},
+
+				new Product
+				{
+					Name = "Breakfast",
+					Description = "Breakfast painting",
+					Dimensions = "74x38 cm",
+					ImageUrl = "images/breakfast.jpg",
+					Price = new Money(114, "EUR"),
+					Category = Category.Other,
+					IsBestseller = false,
+					ArtistId = artist4.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Cheers!",
+					Description = "Cheers! poster",
+					Dimensions = "54x28 cm",
+					ImageUrl = "images/cheers.jpg",
+					Price = new Money(14, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Cherry",
+					Description = "Cherry painting",
+					Dimensions = "174x138 cm",
+					ImageUrl = "images/cherry.jpg",
+					Price = new Money(314, "EUR"),
+					Category = Category.Other,
+					IsBestseller = true,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Wood,
+					CreatedAt = DateTime.UtcNow.AddMonths(-7)
+				},
+
+				new Product
+				{
+					Name = "Couch",
+					Description = "Couch poster",
+					Dimensions = "34x18 cm",
+					ImageUrl = "images/couch.jpg",
+					Price = new Money(4, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "Eggs",
+					Description = "eggs painting",
+					Dimensions = "174x88 cm",
+					ImageUrl = "images/eggs.jpg",
+					Price = new Money(104, "EUR"),
+					Category = Category.Other,
+					IsBestseller = false,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Wood,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "Eggs2",
+					Description = "eggs poster, based on Eggs painting",
+					Dimensions = "38x18 cm",
+					ImageUrl = "images/eggs-2.jpg",
+					Price = new Money(10, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Eleitas",
+					Description = "Eleitas painting",
+					Dimensions = "63x38 cm",
+					ImageUrl = "images/eleitas.jpg",
+					Price = new Money(126, "EUR"),
+					Category = Category.Other,
+					IsBestseller = false,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Wood,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "Feeling Spritzy",
+					Description = "Feeling Spritzy poster",
+					Dimensions = "74x88 cm",
+					ImageUrl = "images/feeling-spritzy.jpg",
+					Price = new Money(21, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = true,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Wood,
+					CreatedAt = DateTime.UtcNow.AddMonths(-6)
+				},
+
+				new Product
+				{
+					Name = "Flower Head",
+					Description = "Flower Head poster",
+					Dimensions = "54x28 cm",
+					ImageUrl = "images/flower-head.jpg",
+					Price = new Money(21, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Wood,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Flowers",
+					Description = "flowers painting",
+					Dimensions = "100x48 cm",
+					ImageUrl = "images/flowers-2.jpg",
+					Price = new Money(124, "EUR"),
+					Category = Category.Other,
+					IsBestseller = false,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "Full of Shit",
+					Description = "full of shit poster",
+					Dimensions = "44x28 cm",
+					ImageUrl = "images/full-of-shit.jpg",
+					Price = new Money(10, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = true,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "Green Image",
+					Description = "green image poster",
+					Dimensions = "54x28 cm",
+					ImageUrl = "images/green-image.jpg",
+					Price = new Money(15, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Greetings",
+					Description = "eggs painting",
+					Dimensions = "74x48 cm",
+					ImageUrl = "images/greetings.jpg",
+					Price = new Money(24, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = true,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Wood,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "Junijs",
+					Description = "Junijs poster",
+					Dimensions = "44x28 cm",
+					ImageUrl = "images/junijs.jpg",
+					Price = new Money(34, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Lighthouse",
+					Description = "Lighthouse poster",
+					Dimensions = "53x38 cm",
+					ImageUrl = "images/lighthouse.jpg",
+					Price = new Money(44, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-3)
+				},
+
+				new Product
+				{
+					Name = "Lobster",
+					Description = "Lobster poster",
+					Dimensions = "68x34 cm",
+					ImageUrl = "images/lobster.jpg",
+					Price = new Money(34, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "You are my lobster!",
+					Description = "Very super sweet Lobster poster",
+					Dimensions = "47x34 cm",
+					ImageUrl = "images/lobster-6.jpg",
+					Price = new Money(24, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = true,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddDays(-10)
+				},
+
+				new Product
+				{
+					Name = "Pink lobster",
+					Description = "Very super sweet pink Lobster poster",
+					Dimensions = "37x15 cm",
+					ImageUrl = "images/lobster-8.jpg",
+					Price = new Money(44, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow.AddDays(-17)
+				},
+
+				new Product
+				{
+					Name = "Missed Call",
+					Description = "Missed call poster",
+					Dimensions = "37x15 cm",
+					ImageUrl = "images/missed-call.jpg",
+					Price = new Money(26, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddDays(-26)
+				},
+
+				new Product
+				{
+					Name = "Mug",
+					Description = "Mug painting",
+					Dimensions = "167x115 cm",
+					ImageUrl = "images/lmug.jpg",
+					Price = new Money(444, "EUR"),
+					Category = Category.Other,
+					IsBestseller = true,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Wood,
+					CreatedAt = DateTime.UtcNow.AddMonths(-5)
+				},
+
+				new Product
+				{
+					Name = "Noodles",
+					Description = "Very super noodles poster",
+					Dimensions = "37x15 cm",
+					ImageUrl = "images/noodles.jpg",
+					Price = new Money(34, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddMonths(-17)
+				},
+
+				new Product
+				{
+					Name = "Notebooks",
+					Description = "Very super extra power notebooks poster",
+					Dimensions = "68x45 cm",
+					ImageUrl = "images/notebooks.jpg",
+					Price = new Money(24, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Oranges",
+					Description = "Very super oranges poster",
+					Dimensions = "48x25 cm",
+					ImageUrl = "images/oranges.jpg",
+					Price = new Money(24, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = true,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddMonths(-7)
+				},
+
+				new Product
+				{
+					Name = "Parasite",
+					Description = "Super parasite poster",
+					Dimensions = "68x35 cm",
+					ImageUrl = "images/parasite.jpg",
+					Price = new Money(34, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow.AddMonths(-5)
+				},
+
+				new Product
+				{
+					Name = "Pool day",
+					Description = "Very super pool day painting",
+					Dimensions = "148x125 cm",
+					ImageUrl = "images/pool-day.jpg",
+					Price = new Money(124, "EUR"),
+					Category = Category.Other,
+					IsBestseller = true,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddMonths(-7)
+				},
+
+				new Product
+				{
+					Name = "Smile",
+					Description = "Very super smile poster",
+					Dimensions = "68x35 cm",
+					ImageUrl = "images/smile.jpg",
+					Price = new Money(24, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow
+				},
+
+				new Product
+				{
+					Name = "Socks",
+					Description = "Very super socks painting",
+					Dimensions = "148x125 cm",
+					ImageUrl = "images/pool-day.jpg",
+					Price = new Money(124, "EUR"),
+					Category = Category.Other,
+					IsBestseller = false,
+					ArtistId = artist4.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow.AddMonths(-5)
+				},
+
+				new Product
+				{
+					Name = "Springs-flowers",
+					Description = "Very super spring flowers poster",
+					Dimensions = "58x35 cm",
+					ImageUrl = "images/spring-flowers.jpg",
+					Price = new Money(38, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.None,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "Tenis",
+					Description = "Very super tenis poster",
+					Dimensions = "48x15 cm",
+					ImageUrl = "images/tennis.jpg",
+					Price = new Money(12, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = true,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow.AddMonths(-4)
+				},
+
+				new Product
+				{
+					Name = "Woman",
+					Description = "Super sweet woman poster",
+					Dimensions = "38x15 cm",
+					ImageUrl = "images/woman.jpg",
+					Price = new Money(32, "EUR"),
+					Category = Category.Stationary,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Gold,
+					CreatedAt = DateTime.UtcNow.AddMonths(-2)
+				},
+
+				new Product
+				{
+					Name = "wo-tiles",
+					Description = "Super sweet wotiles",
+					Dimensions = "48x23 cm",
+					ImageUrl = "images/wo-tiles.jpg",
+					Price = new Money(27, "EUR"),
+					Category = Category.Living_Accessories,
+					IsBestseller = false,
+					ArtistId = artist3.Id,
+					Frame = FrameType.Metal,
+					CreatedAt = DateTime.UtcNow
 				}
+
 			};
 
 			await context.Products.AddRangeAsync(products);

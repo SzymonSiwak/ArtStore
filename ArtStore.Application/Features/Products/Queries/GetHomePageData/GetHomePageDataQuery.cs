@@ -1,4 +1,4 @@
-﻿using ArtStore.Shared.DTOs;
+﻿using ArtStore.Shared.DTO;
 using ArtStore.Shared.Enums;
 using ArtStore.Domain.Interfaces;
 using AutoMapper;
