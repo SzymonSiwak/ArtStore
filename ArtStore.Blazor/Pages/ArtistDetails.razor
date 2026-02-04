@@ -1,0 +1,70 @@
+﻿@page "/artists/{Id:guid}"
+@using ArtStore.Blazor.Components
+@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTOs
+@inject IArtistService ArtistService
+
+<PageTitle>ArtStore - @(artist?.Name ?? "Artist Details")</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+
+    <MudButton StartIcon="@Icons.Material.Filled.ArrowBack" Link="/artists" Variant="Variant.Text" Class="mb-4">
+        Back to Artists
+    </MudButton>
+
+    @if (isLoading)
+    {
+        <div class="d-flex justify-center mt-10">
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        </div>
+    }
+    else if (artist == null)
+    {
+        <MudAlert Severity="Severity.Error">Artist not found.</MudAlert>
+    }
+    else
+    {
+        <!-- BIO section -->
+        <MudPaper Elevation="0" Class="pa-8 mb-8" Style="background-color: #f9f9f9;">
+            <MudGrid Class="align-center">
+                <MudItem xs="12" sm="3" Class="d-flex justify-center">
+                    <MudAvatar Style="height:150px; width:150px; font-size: 3rem;">
+                        @if (!string.IsNullOrEmpty(artist.AvatarUrl))
+                        {
+                            <MudImage Src="@artist.AvatarUrl" />
+                        }
+                        else
+                        {
+                            @artist.Name.Substring(0, 1)
+                        }
+                    </MudAvatar>
+                </MudItem>
+                <MudItem xs="12" sm="9">
+                    <MudText Typo="Typo.h3" GutterBottom="true">@artist.Name</MudText>
+                    <MudText Typo="Typo.body1" Style="white-space: pre-line;">@artist.Bio</MudText>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+
+        <MudText Typo="Typo.h4" Class="mb-4">Artworks by @artist.Name</MudText>
+        <MudDivider Class="mb-6" />
+
+        <ProductGrid Products="@artist.Products" />
+    }
+
+</MudContainer>
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private ArtistDetailsDto? artist;
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        artist = await ArtistService.GetArtistById(Id);
+        isLoading = false;
+    }
+}

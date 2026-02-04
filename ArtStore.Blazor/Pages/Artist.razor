@@ -3,6 +3,7 @@
 @using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
 @inject IArtistService ArtistService
+@inject NavigationManager NavigationManager
 
 <PageTitle>ArtStore - Our Artists</PageTitle>
 
@@ -45,7 +46,7 @@
                         </MudCardContent>
 
                         <MudCardActions>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">View Collection</MudButton>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => GoToArtistDetails(artist))">View Collection</MudButton>
                         </MudCardActions>
                     </MudCard>
                 </MudItem>
@@ -72,4 +73,6 @@
         artists = await ArtistService.GetAllArtists();
         isLoading = false;
     }
+
+    private void GoToArtistDetails(ArtistDto artist) => NavigationManager.NavigateTo($"/artists/{artist.Id}");
 }

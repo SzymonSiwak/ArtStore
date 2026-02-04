@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
 using ArtStore.Blazor.Interfaces;
 using ArtStore.Shared.DTO;
 
@@ -24,7 +25,18 @@ namespace ArtStore.Blazor.Services
             {
                 return new List<ArtistDto>();
             }
-
         }
-    }
+
+		public async Task<ArtistDetailsDto?> GetArtistById(Guid id)
+		{
+			try
+			{
+				return await _http.GetFromJsonAsync<ArtistDetailsDto>($"api/artist/{id}");
+			}
+			catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+			{
+				return null;
+			}
+		}
+	}
 }

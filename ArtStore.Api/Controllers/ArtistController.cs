@@ -22,5 +22,19 @@ namespace ArtStore.Api.Controllers
             var artists = await _mediator.Send(new GetArtistsQuery());
             return Ok(artists);
 		}
+
+		[HttpGet("{id}")]
+		public async Task<ActionResult<ArtistDetailsDto>> GetById(Guid id)
+		{
+			var query = new GetArtistDetailsQuery(id);
+			var result = await _mediator.Send(query);
+
+			if (result == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(result);
+		}
 	}
 }
