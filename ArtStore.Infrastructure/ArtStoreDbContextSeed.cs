@@ -41,10 +41,14 @@ namespace ArtStore.Infrastructure
 				AvatarUrl = "images/poster-creator-2.jpg"
 			};
 
-			await context.Artists.AddRangeAsync(artist1, artist2);
+			await context.Artists.AddRangeAsync(artist1, artist2, artist3, artist4);
 
 			await context.SaveChangesAsync();
 
+			if (context.Products.Any())
+			{
+				return;
+			}
 
 			var products = new List<Product>
 			{

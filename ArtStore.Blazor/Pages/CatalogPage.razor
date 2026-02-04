@@ -1,0 +1,103 @@
+﻿@page "/collection/{CollectionName}"
+@using ArtStore.Blazor.Components
+@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTO
+@using ArtStore.Shared.Enums
+@inject IProductService ProductService
+
+<PageTitle>@FormatTitle(CollectionName)</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+
+    <MudText Typo="Typo.h3" Class="mb-8">@FormatTitle(CollectionName)</MudText>
+
+    <MudGrid>
+        <!-- LEFT COLUMN: FILTER -->
+        <MudItem xs="12" md="3">
+            <MudPaper Class="pa-4" Elevation="2">
+                <MudText Typo="Typo.h6" Class="mb-4">Filters</MudText>
+
+                <!-- Category filter -->
+                @if (CollectionName == "new-arrivals" || CollectionName == "bestsellers")
+                {
+                    <MudSelect T="Category ?" Label="Category" @bind-Value="filter.SpecificCategory" Clearable="true" Class="mb-4">
+                        @foreach (Category cat in Enum.GetValues(typeof(Category)))
+                        {
+                            <MudSelectItem Value="(Category?)cat">@cat</MudSelectItem>
+                        }
+                    </MudSelect>
+                }
+
+                <!-- Price filter -->
+                <MudText Typo="Typo.body2">Price Range</MudText>
+                <MudGrid>
+                    <MudItem xs="6">
+                        <MudNumericField @bind-Value="filter.MinPrice" Label="Min" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                    </MudItem>
+                    <MudItem xs="6">
+                        <MudNumericField @bind-Value="filter.MaxPrice" Label="Max" Variant="Variant.Outlined" Margin="Margin.Dense" />
+                    </MudItem>
+                </MudGrid>
+
+                <!-- Frame filter -->
+                <MudSelect T="FrameType ?" Label="Frame" @bind-Value="filter.FrameType" Clearable="true" Class="mt-4 mb-6">
+                    @foreach (FrameType frame in Enum.GetValues(typeof(FrameType)))
+                    {
+                        <MudSelectItem Value="(FrameType?)frame">@frame</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <!-- Apply button -->
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="LoadData">
+                    Apply Filters
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+
+        <!-- RIGHT COLUMN: PRODUCTS -->
+        <MudItem xs="12" md="9">
+            @if (isLoading)
+            {
+                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+            }
+            else
+            {
+                <ProductGrid Products="products" />
+            }
+        </MudItem>
+    </MudGrid>
+
+</MudContainer>
+
+@code {
+    [Parameter]
+    public string CollectionName { get; set; } = string.Empty;
+
+    private IEnumerable<ProductDto> products = new List<ProductDto>();
+    private ProductFilterDto filter = new();
+    private bool isLoading = true;
+
+	// Method will apply filters and load data when parameters are set
+    protected override async Task OnParametersSetAsync()
+    {
+		// Reset filter for new collection
+        filter = new ProductFilterDto { CollectionName = CollectionName };
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        isLoading = true;
+        filter.CollectionName = CollectionName;
+        products = await ProductService.GetFilteredProducts(filter);
+        isLoading = false;
+    }
+
+    private string FormatTitle(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return "";
+		// Change "new-arrivals" to "New Arrivals"
+        return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Replace("-", " "));
+    }
+}

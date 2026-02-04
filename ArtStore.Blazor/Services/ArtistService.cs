@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 using ArtStore.Blazor.Interfaces;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 
 namespace ArtStore.Blazor.Services
 {

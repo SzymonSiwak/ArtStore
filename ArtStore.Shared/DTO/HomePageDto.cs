@@ -1,6 +1,6 @@
-﻿using ArtStore.Shared.DTOs;
+﻿using ArtStore.Shared.DTO;
 
-namespace ArtStore.Shared.DTOs
+namespace ArtStore.Shared.DTO
 {
     public class HomePageDto
     {

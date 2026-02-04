@@ -11,6 +11,14 @@
         <MudSpacer />
 
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToHome">Home</MudButton>
+
+        <MudButton Link="/collection/bestsellers" ...>Bestsellers</MudButton>
+        <MudButton Link="/collection/new-arrivals" ...>New Arrivals</MudButton>
+        <MudMenu Label="Shop by Room" Variant="Variant.Text">
+            <MudMenuItem Link="/collection/living">Living Room</MudMenuItem>
+            <MudMenuItem Link="/collection/stationary">Stationary</MudMenuItem>
+        </MudMenu>
+
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToCart" StartIcon="@Icons.Material.Filled.ShoppingCart">Shopping Cart</MudButton>
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToArtists">Artists</MudButton>
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToLogin">Logowanie</MudButton>

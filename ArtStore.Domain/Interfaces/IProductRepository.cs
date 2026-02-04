@@ -1,4 +1,5 @@
 ﻿using ArtStore.Domain.Entities;
+using ArtStore.Shared.DTO;
 using ArtStore.Shared.Enums;
 
 namespace ArtStore.Domain.Interfaces
@@ -12,6 +13,7 @@ namespace ArtStore.Domain.Interfaces
         Task<IEnumerable<Product>> GetBestsellersAsync(int count);
         Task<IEnumerable<Product>> GetNewArrivalsAsync(int count);
 		Task<IEnumerable<Product>> GetByCategoryAsync(Category category);
+        Task<IEnumerable<Product>> GetFilteredProductsAsync(ProductFilterDto filter);
 
 		Task AddAsync(Product product);
 		Task UpdateAsync(Product product);

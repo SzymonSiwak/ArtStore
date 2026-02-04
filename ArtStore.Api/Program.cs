@@ -70,16 +70,22 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
+	var logger = services.GetRequiredService<ILogger<Program>>();
 	try
 	{
+		logger.LogInformation("--- SEEDING THE DATABASE IS STARTED ---"); 
+
 		var context = services.GetRequiredService<ArtStoreDbContext>();
 
+		context.Database.EnsureCreated();
+
 		await ArtStoreDbContextSeed.SeedAsync(context);
+
+		logger.LogInformation("--- SEEDING COMPLETED ---");
 	}
 	catch (Exception ex)
 	{
-		var logger = services.GetRequiredService<ILogger<Program>>();
-		logger.LogError(ex, "Wyst¹pi³ b³¹d podczas wype³niania bazy danych.");
+		logger.LogError(ex, "--- ERROR ---");
 	}
 }
 

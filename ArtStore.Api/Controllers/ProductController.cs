@@ -1,6 +1,7 @@
-﻿using ArtStore.Shared.DTOs;
+﻿using ArtStore.Application.Features.Products.Queries.GetFilteredProducts;
 using ArtStore.Application.Features.Products.Queries.GetHomePageData;
 using ArtStore.Application.Features.Products.Queries.GetProductDetails;
+using ArtStore.Shared.DTO;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,5 +37,11 @@ namespace ArtStore.Api.Controllers
 
             return Ok(result);
         }
-    }
+
+		[HttpPost("search")]
+		public async Task<ActionResult<IEnumerable<ProductDto>>> Search([FromBody] ProductFilterDto filter)
+		{
+			return Ok(await _mediator.Send(new GetFilteredProductsQuery(filter)));
+		}
+	}
 }

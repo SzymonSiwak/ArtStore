@@ -1,4 +1,4 @@
-﻿using ArtStore.Shared.DTOs;
+﻿using ArtStore.Shared.DTO;
 
 namespace ArtStore.Application.Common.Interfaces
 {

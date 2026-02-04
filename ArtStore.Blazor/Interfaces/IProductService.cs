@@ -1,4 +1,4 @@
-﻿using ArtStore.Shared.DTOs;
+﻿using ArtStore.Shared.DTO;
 
 namespace ArtStore.Blazor.Interfaces
 {
@@ -6,6 +6,6 @@ namespace ArtStore.Blazor.Interfaces
     {
 		Task<HomePageDto?> GetHomePageData();
 		Task<ProductDto?> GetProductById(Guid id);
-
+		Task<IEnumerable<ProductDto>> GetFilteredProducts(ProductFilterDto filter);
 	}
 }

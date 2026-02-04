@@ -1,6 +1,7 @@
-﻿using ArtStore.Shared.Enums;
-using ArtStore.Domain.Entities;
+﻿using ArtStore.Domain.Entities;
 using ArtStore.Domain.Interfaces;
+using ArtStore.Shared.DTO;
+using ArtStore.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace ArtStore.Infrastructure.Repositories
@@ -54,7 +55,48 @@ namespace ArtStore.Infrastructure.Repositories
                                  .ToListAsync();
 		}
 
-        public async Task AddAsync(Product product)
+		public async Task<IEnumerable<Product>> GetFilteredProductsAsync(ProductFilterDto filter)
+        {
+            var query = _context.Products
+                                .Include(p => p.Artist)
+                                .AsQueryable();
+
+            switch(filter.CollectionName?.ToLower())
+            {
+                case "bestsellers":
+                    query = query.Where(p => p.IsBestseller);
+                    break;
+
+                case "new-arrivals":
+                    query = query.OrderByDescending(p => p.CreatedAt);
+                    break;
+
+                case "living":
+                    query = query.Where(p => p.Category == Category.Living_Accessories);
+                    break;
+
+                case "stationary":
+                    query = query.Where(p => p.Category == Category.Stationary);
+                    break;
+            }
+
+			if (filter.MinPrice.HasValue)
+				query = query.Where(p => p.Price.Amount >= filter.MinPrice.Value);
+
+			if (filter.MaxPrice.HasValue)
+				query = query.Where(p => p.Price.Amount <= filter.MaxPrice.Value);
+
+			if (filter.FrameType.HasValue)
+				query = query.Where(p => p.Frame == filter.FrameType.Value);
+
+			if (filter.SpecificCategory.HasValue)
+				query = query.Where(p => p.Category == filter.SpecificCategory.Value);
+
+			return await query.ToListAsync();
+		}
+
+
+		public async Task AddAsync(Product product)
         {
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();

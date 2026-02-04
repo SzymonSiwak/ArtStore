@@ -4,7 +4,7 @@ using System.Text;
 using ArtStore.Application.Features.Cart.Queries.GetCart;
 using ArtStore.Domain.Entities;
 using ArtStore.Domain.Interfaces;
-using ArtStore.Shared.DTOs;
+using ArtStore.Shared.DTO;
 using AutoMapper;
 using FluentAssertions;
 using NSubstitute;
