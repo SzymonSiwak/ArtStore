@@ -3,7 +3,7 @@ using ArtStore.Shared.DTO;
 using AutoMapper;
 using MediatR;
 
-namespace ArtStore.Application.Features.Artists.Queries.GetArtistDetails
+namespace ArtStore.Application.Features.Artist.Queries
 {
 	public record GetArtistDetailsQuery(Guid Id) : IRequest<ArtistDetailsDto>;
 
