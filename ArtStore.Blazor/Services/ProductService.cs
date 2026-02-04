@@ -25,7 +25,7 @@ namespace ArtStore.Blazor.Services
 
 		public async Task<IEnumerable<ProductDto>> GetFilteredProducts(ProductFilterDto filter)
 		{
-			var response = await _httpClient.PostAsJsonAsync("api/products/search", filter);
+			var response = await _httpClient.PostAsJsonAsync("api/Product/search", filter);
 			return await response.Content.ReadFromJsonAsync<IEnumerable<ProductDto>>() ?? new List<ProductDto>();
 		}
 	}

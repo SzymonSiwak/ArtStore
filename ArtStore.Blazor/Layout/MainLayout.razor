@@ -3,20 +3,21 @@
 
 <MudThemeProvider />
 <MudDialogProvider />
+<MudPopoverProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="1" Color="Color.Primary">
-        <MudText Typo="Typo.h5" Class="ml-3">ArtStore</MudText>
+        <MudText Typo="Typo.h5" Class="ml-3" OnClick="GoToHome">ArtStore</MudText>
         <MudSpacer />
 
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToHome">Home</MudButton>
 
-        <MudButton Link="/collection/bestsellers" ...>Bestsellers</MudButton>
-        <MudButton Link="/collection/new-arrivals" ...>New Arrivals</MudButton>
+        <MudButton OnClick="GoToBestsellers">Bestsellers</MudButton>
+        <MudButton OnClick="GoToNewArrivals">New Arrivals</MudButton>
         <MudMenu Label="Shop by Room" Variant="Variant.Text">
-            <MudMenuItem Link="/collection/living">Living Room</MudMenuItem>
-            <MudMenuItem Link="/collection/stationary">Stationary</MudMenuItem>
+            <MudMenuItem OnClick="GoToLiving">Living</MudMenuItem>
+            <MudMenuItem OnClick="GoToStationary">Stationary</MudMenuItem>
         </MudMenu>
 
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToCart" StartIcon="@Icons.Material.Filled.ShoppingCart">Shopping Cart</MudButton>
@@ -36,4 +37,8 @@
 	private void GoToCart() => NavigationManager.NavigateTo("/cart");
     private void GoToHome() => NavigationManager.NavigateTo("/");
 	private void GoToArtists() => NavigationManager.NavigateTo("/artists");
+	private void GoToBestsellers() => NavigationManager.NavigateTo("/collection/bestsellers");
+	private void GoToNewArrivals() => NavigationManager.NavigateTo("/collection/new-arrivals");
+	private void GoToLiving() => NavigationManager.NavigateTo("/collection/living");
+	private void GoToStationary() => NavigationManager.NavigateTo("/collection/stationary");
 }
