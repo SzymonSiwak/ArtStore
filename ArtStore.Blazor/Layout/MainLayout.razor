@@ -25,12 +25,103 @@
         <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToLogin">Logowanie</MudButton>
     </MudAppBar>
 
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-4">
+    <MudMainContent Class="pa-0"> <!-- pa-0 usuwa domyślny padding, żeby stopka stykała się z dołem -->
+        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-16 mb-16">
             @Body
         </MudContainer>
+
+
+        <footer style="background-color: #000000; color: #ffffff; padding-top: 80px; padding-bottom: 40px;">
+            <MudContainer MaxWidth="MaxWidth.Large">
+                
+                <MudGrid Spacing="4">
+                    <!-- COLUMN 1 -->
+                    <MudItem xs="6" md="2">
+                        <MudText Typo="Typo.h6" Class="mb-4" Style="font-weight: bold;">About</MudText>
+                        <div class="d-flex flex-column gap-2">
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">About us</MudLink>
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">Work</MudLink>
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">Press</MudLink>
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">Gifting</MudLink>
+                        </div>
+                    </MudItem>
+
+                    <!-- COLUMN 2 -->
+                    <MudItem xs="6" md="2">
+                        <MudText Typo="Typo.h6" Class="mb-4" Style="font-weight: bold;">Help</MudText>
+                        <div class="d-flex flex-column gap-2">
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">Contact us</MudLink>
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">Support</MudLink>
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">Delivery & Shipping</MudLink>
+                            <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link">Returns</MudLink>
+                        </div>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="2"></MudItem> <!-- Blank space -->
+
+                    <!-- COLUMN 3 -->
+                    <MudItem xs="12" md="6">
+                        <MudText Typo="Typo.h6" Class="mb-6" Style="font-weight: bold;">Sign up for newsletter</MudText>
+                        
+                        <!-- Custom input -->
+                        <div class="d-flex align-center pb-2 mb-2" style="border-bottom: 1px solid white;">
+                            <input type="email" placeholder="Enter the email" 
+                                   style="background: transparent; border: none; color: white; width: 100%; outline: none;" />
+                            <button style="background: transparent; border: none; color: white; cursor: pointer; text-transform: uppercase; font-size: 0.8rem;">
+                                Subscribe
+                            </button>
+                        </div>
+                        
+                        <MudText Typo="Typo.caption" Style="color: #888;">
+                            Sign up to our newsletter and get 10% off your first order
+                        </MudText>
+
+                        <!-- SC ICONS -->
+                        <div class="mt-6 d-flex gap-4">
+                            <MudIcon Icon="@Icons.Custom.Brands.Facebook" Size="Size.Small" />
+                            <MudIcon Icon="@Icons.Custom.Brands.Instagram" Size="Size.Small" />
+                            <MudIcon Icon="@Icons.Custom.Brands.Pinterest" Size="Size.Small" />
+                        </div>
+                    </MudItem>
+                </MudGrid>
+
+                <!-- BUTTOM SECTION -->
+                <MudGrid Class="mt-16 align-center">
+                    <MudItem xs="12" md="6">
+                        <!-- Logo -->
+                        <MudText Typo="Typo.h3" Style="font-weight: 500;">ArtStore</MudText>
+                    </MudItem>
+                    
+                    <MudItem xs="12" md="6" Class="d-flex justify-end gap-8 flex-wrap">
+                        <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link-small">Term of use</MudLink>
+                        <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link-small">Privacy and policy</MudLink>
+                        <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link-small">Use of cookies</MudLink>
+                    </MudItem>
+                </MudGrid>
+
+            </MudContainer>
+        </footer>
     </MudMainContent>
 </MudLayout>
+
+<!-- Footer css -->
+<style>
+    .footer-link:hover {
+        color: #aaaaaa !important; 
+        text-decoration: underline;
+    }
+
+    .footer-link-small {
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+    /* Input placeholder */
+    ::placeholder {
+        color: #666;
+        opacity: 1;
+    }
+</style>
 
 @code{
     private void GoToLogin() => NavigationManager.NavigateTo("/login");
