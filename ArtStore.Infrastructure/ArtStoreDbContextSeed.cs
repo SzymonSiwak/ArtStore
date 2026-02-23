@@ -462,7 +462,7 @@ namespace ArtStore.Infrastructure
 					Name = "Mug",
 					Description = "Mug painting",
 					Dimensions = "167x115 cm",
-					ImageUrl = "images/lmug.jpg",
+					ImageUrl = "images/mug.jpg",
 					Price = new Money(444, "EUR"),
 					Category = Category.Other,
 					IsBestseller = true,

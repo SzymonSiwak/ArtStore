@@ -18,7 +18,7 @@ namespace ArtStore.Infrastructure.Repositories
         }
         public async Task<Artist?> GetByIdAsync(Guid id)
         {
-            return await _context.Artists.FindAsync(id);
+            return await _context.Artists.Include(p => p.Products).FirstOrDefaultAsync(a => a.Id == id);
         }
         public async Task AddAsync(Artist artist)
         {
