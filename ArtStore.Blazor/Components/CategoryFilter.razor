@@ -1,0 +1,29 @@
+﻿@using ArtStore.Shared.Enums
+@using MudBlazor
+
+<MudSelect T="Category ?"
+           Label="Category"
+           Value="SelectedCategory"
+           ValueChanged="OnValueChanged"
+           Clearable="true"
+           Class="mb-4">
+    @foreach (Category cat in Enum.GetValues(typeof(Category)))
+    {
+        <MudSelectItem Value="(Category?)cat">@cat</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter]
+    public Category? SelectedCategory { get; set; }
+
+    [Parameter]
+    public EventCallback<Category?> SelectedCategoryChanged { get; set; }
+
+    private async Task OnValueChanged(Category? newValue)
+    {
+        SelectedCategory = newValue;
+
+        await SelectedCategoryChanged.InvokeAsync(newValue);
+    }
+}

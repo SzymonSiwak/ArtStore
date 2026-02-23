@@ -1,0 +1,43 @@
+﻿@using MudBlazor
+
+<MudText Typo="Typo.body2">Price Range</MudText>
+<MudGrid>
+    <MudItem xs="6">
+        <MudNumericField T="decimal?"
+                         Value="MinPrice"
+                         ValueChanged="OnMinChanged"
+                         Label="Min"
+                         Variant="Variant.Outlined"
+                         Margin="Margin.Dense"
+                         DebounceInterval="500" /> <!-- 0.5 s waiting -->
+    </MudItem>
+    <MudItem xs="6">
+        <MudNumericField T="decimal?"
+                         Value="MaxPrice"
+                         ValueChanged="OnMaxChanged"
+                         Label="Max"
+                         Variant="Variant.Outlined"
+                         Margin="Margin.Dense"
+                         DebounceInterval="500" />
+    </MudItem>
+</MudGrid>
+
+@code {
+    [Parameter] public decimal? MinPrice { get; set; }
+    [Parameter] public decimal? MaxPrice { get; set; }
+
+    [Parameter] public EventCallback<decimal?> MinPriceChanged { get; set; }
+    [Parameter] public EventCallback<decimal?> MaxPriceChanged { get; set; }
+
+    private async Task OnMinChanged(decimal? val)
+    {
+        MinPrice = val;
+        await MinPriceChanged.InvokeAsync(val);
+    }
+
+    private async Task OnMaxChanged(decimal? val)
+    {
+        MaxPrice = val;
+        await MaxPriceChanged.InvokeAsync(val);
+    }
+}

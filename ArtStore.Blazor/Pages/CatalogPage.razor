@@ -12,61 +12,79 @@
 
     <MudText Typo="Typo.h3" Class="mb-8">@FormatTitle(CollectionName)</MudText>
 
-    <MudGrid>
-        <!-- LEFT COLUMN: FILTER -->
-        <MudItem xs="12" md="3">
-            <MudPaper Class="pa-4" Elevation="2">
-                <MudText Typo="Typo.h6" Class="mb-4">Filters</MudText>
+    <div class="d-flex gap-4 mb-8 flex-wrap align-center">
 
-                <!-- Category filter -->
-                @if (CollectionName == "new-arrivals" || CollectionName == "bestsellers")
+        <!-- Category filter -->
+        @if (CollectionName == "new-arrivals" || CollectionName == "bestsellers")
+        {
+            <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                     Label="@(filter.SpecificCategory.HasValue ? filter.SpecificCategory.ToString() : "Category")"
+                     Class="@(filter.SpecificCategory.HasValue ? "filter-button filter-button-active" : "filter-button")"
+                     Variant="Variant.Text"
+                     AnchorOrigin="Origin.BottomLeft"
+                     TransformOrigin="Origin.TopLeft">
+                <MudMenuItem OnClick="@(() => OnCategoryChanged(null))">All Categories</MudMenuItem>
+                @foreach (Category cat in Enum.GetValues(typeof(Category)))
                 {
-                    <MudSelect T="Category ?" Label="Category" @bind-Value="filter.SpecificCategory" Clearable="true" Class="mb-4">
-                        @foreach (Category cat in Enum.GetValues(typeof(Category)))
-                        {
-                            <MudSelectItem Value="(Category?)cat">@cat</MudSelectItem>
-                        }
-                    </MudSelect>
+                    <MudMenuItem OnClick="@(() => OnCategoryChanged(cat))">@cat</MudMenuItem>
                 }
+            </MudMenu>
+        }
 
-                <!-- Price filter -->
-                <MudText Typo="Typo.body2">Price Range</MudText>
-                <MudGrid>
-                    <MudItem xs="6">
-                        <MudNumericField @bind-Value="filter.MinPrice" Label="Min" Variant="Variant.Outlined" Margin="Margin.Dense" />
-                    </MudItem>
-                    <MudItem xs="6">
-                        <MudNumericField @bind-Value="filter.MaxPrice" Label="Max" Variant="Variant.Outlined" Margin="Margin.Dense" />
-                    </MudItem>
-                </MudGrid>
-
-                <!-- Frame filter -->
-                <MudSelect T="FrameType ?" Label="Frame" @bind-Value="filter.FrameType" Clearable="true" Class="mt-4 mb-6">
-                    @foreach (FrameType frame in Enum.GetValues(typeof(FrameType)))
-                    {
-                        <MudSelectItem Value="(FrameType?)frame">@frame</MudSelectItem>
-                    }
-                </MudSelect>
-
-                <!-- Apply button -->
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="LoadData">
-                    Apply Filters
-                </MudButton>
-            </MudPaper>
-        </MudItem>
-
-        <!-- RIGHT COLUMN: PRODUCTS -->
-        <MudItem xs="12" md="9">
-            @if (isLoading)
+        <!-- Frame filter -->
+        <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                 Label="@(filter.FrameType.HasValue ? filter.FrameType.ToString() : "Frame")"
+                 Class="@(filter.FrameType.HasValue ? "filter-button filter-button-active" : "filter-button")"
+                 Variant="Variant.Text"
+                 AnchorOrigin="Origin.BottomLeft"
+                 TransformOrigin="Origin.TopLeft">
+            <MudMenuItem OnClick="@(() => OnFrameChanged(null))">Any Frame</MudMenuItem>
+            @foreach (FrameType frame in Enum.GetValues(typeof(FrameType)))
             {
-                <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+                <MudMenuItem OnClick="@(() => OnFrameChanged(frame))">@frame</MudMenuItem>
             }
-            else
-            {
-                <ProductGrid Products="products" />
-            }
-        </MudItem>
-    </MudGrid>
+        </MudMenu>
+
+        <!-- Price filter -->
+        <!-- ActivationEvent="MouseEvent.LeftClick", for unclosing menu -->
+        <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                 Label="Price"
+                 Class="@(filter.MinPrice.HasValue || filter.MaxPrice.HasValue ? "filter-button filter-button-active" : "filter-button")"
+                 Variant="Variant.Text"
+                 AnchorOrigin="Origin.BottomLeft"
+                 TransformOrigin="Origin.TopLeft"
+                 Dense="true">
+            <div class="pa-4" style="min-width: 300px;">
+
+                <PriceFilter MinPrice="filter.MinPrice"
+                             MaxPrice="filter.MaxPrice"
+                             MinPriceChanged="OnMinPriceChanged"
+                             MaxPriceChanged="OnMaxPriceChanged" />
+
+                <!-- Clear -->
+                <div class="d-flex justify-end mt-2">
+                    <MudButton OnClick="ClearPrice" Size="Size.Small">Clear</MudButton>
+                </div>
+            </div>
+        </MudMenu>
+
+        <MudSpacer />
+
+        <!-- Product's counting -->
+        <MudText Typo="Typo.body2" Color="Color.Secondary">@products.Count() items</MudText>
+    </div>
+
+    <!-- Products -->
+    @if (isLoading)
+    {
+        <div class="d-flex justify-center mt-12">
+            <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+        </div>
+    }
+    else
+    {
+        <ProductGrid Products="products" />
+    }
 
 </MudContainer>
 
@@ -78,10 +96,8 @@
     private ProductFilterDto filter = new();
     private bool isLoading = true;
 
-	// Method will apply filters and load data when parameters are set
     protected override async Task OnParametersSetAsync()
     {
-		// Reset filter for new collection
         filter = new ProductFilterDto { CollectionName = CollectionName };
         await LoadData();
     }
@@ -90,14 +106,46 @@
     {
         isLoading = true;
         filter.CollectionName = CollectionName;
-        products = await ProductService.GetFilteredProducts(filter);
+        products = await ProductService.GetFilteredProducts(filter); 
         isLoading = false;
+    }
+
+    // --- Handlers ---
+
+    private async Task OnCategoryChanged(Category? newCategory)
+    {
+        filter.SpecificCategory = newCategory;
+        await LoadData();
+    }
+
+    private async Task OnFrameChanged(FrameType? newFrame)
+    {
+        filter.FrameType = newFrame;
+        await LoadData();
+    }
+
+    private async Task OnMinPriceChanged(decimal? newMin)
+    {
+        filter.MinPrice = newMin;
+        await LoadData();
+    }
+
+    private async Task OnMaxPriceChanged(decimal? newMax)
+    {
+        filter.MaxPrice = newMax;
+        await LoadData();
+    }
+
+    private async Task ClearPrice()
+    {
+        filter.MinPrice = null;
+        filter.MaxPrice = null;
+        await LoadData();
     }
 
     private string FormatTitle(string name)
     {
         if (string.IsNullOrEmpty(name)) return "";
-		// Change "new-arrivals" to "New Arrivals"
         return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Replace("-", " "));
     }
 }
