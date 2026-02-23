@@ -1,0 +1,28 @@
+﻿@using ArtStore.Shared.Enums
+@using MudBlazor
+
+<MudSelect T="FrameType ?"
+           Label="Frame"
+           Value="SelectedFrame"
+           ValueChanged="OnValueChanged"
+           Clearable="true"
+           Class="mt-4 mb-6">
+    @foreach (FrameType frame in Enum.GetValues(typeof(FrameType)))
+    {
+        <MudSelectItem Value="(FrameType?)frame">@frame</MudSelectItem>
+    }
+</MudSelect>
+
+@code {
+    [Parameter]
+    public FrameType? SelectedFrame { get; set; }
+
+    [Parameter]
+    public EventCallback<FrameType?> SelectedFrameChanged { get; set; }
+
+    private async Task OnValueChanged(FrameType? newValue)
+    {
+        SelectedFrame = newValue;
+        await SelectedFrameChanged.InvokeAsync(newValue);
+    }
+}
