@@ -1,28 +1,33 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 
-<MudThemeProvider />
+<MudThemeProvider Theme="Custom"/>
 <MudDialogProvider />
 <MudPopoverProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1" Color="Color.Primary">
-        <MudText Typo="Typo.h5" Class="ml-3" OnClick="GoToHome">ArtStore</MudText>
+    <MudAppBar Elevation="0" Fixed=false Style="background: transparent; box-shadow: none; padding-left: 24px; padding-right: 24px;">
+        <MudButton Typo="Typo.h5" Class="ml-3" OnClick="GoToHome" Style="text-transform: none; min-width: auto; padding: 0;">
+            <MudText Typo="Typo.h4" Style="font-weight: 500; letter-spacing: 0.5px;">Square</MudText>
+        </MudButton>
         <MudSpacer />
 
-        <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToHome">Home</MudButton>
+        <div class="d-none d-md-flex gap-4 align-center" >
+            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToBestsellers">Bestsellers</MudButton>
+            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToNewArrivals">New Arrivals</MudButton>
+            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToLiving">Living</MudButton>
+            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToStationary">Stationary</MudButton>
+            <MudButton Class=navBar OnClick="GoToArtists">Artists</MudButton>
+        </div>
 
-        <MudButton OnClick="GoToBestsellers">Bestsellers</MudButton>
-        <MudButton OnClick="GoToNewArrivals">New Arrivals</MudButton>
-        <MudMenu Label="Shop by Room" Variant="Variant.Text">
-            <MudMenuItem OnClick="GoToLiving">Living</MudMenuItem>
-            <MudMenuItem OnClick="GoToStationary">Stationary</MudMenuItem>
-        </MudMenu>
+        <MudSpacer />
 
-        <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToCart" StartIcon="@Icons.Material.Filled.ShoppingCart">Shopping Cart</MudButton>
-        <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToArtists">Artists</MudButton>
-        <MudButton Variant="Variant.Text" Color="Color.Inherit" OnClick="GoToLogin">Logowanie</MudButton>
+        <div class="d-flex align-center gap-1">
+            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>
+            <MudIconButton Variant="Variant.Text" OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+            <MudIconButton Variant="Variant.Text" OnClick="GoToCart" Icon="@Icons.Material.Outlined.ShoppingCart"></MudIconButton>
+        </div>
     </MudAppBar>
 
     <MudMainContent Class="pa-0"> 
@@ -98,7 +103,6 @@
                         <MudLink Href="#" Color="Color.Inherit" Underline="Underline.None" Class="footer-link-small">Use of cookies</MudLink>
                     </MudItem>
                 </MudGrid>
-
             </MudContainer>
         </footer>
     </MudMainContent>
@@ -125,11 +129,19 @@
 
 @code{
     private void GoToLogin() => NavigationManager.NavigateTo("/login");
-	private void GoToCart() => NavigationManager.NavigateTo("/cart");
+    private void GoToCart() => NavigationManager.NavigateTo("/cart");
     private void GoToHome() => NavigationManager.NavigateTo("/");
-	private void GoToArtists() => NavigationManager.NavigateTo("/artists");
-	private void GoToBestsellers() => NavigationManager.NavigateTo("/collection/bestsellers");
-	private void GoToNewArrivals() => NavigationManager.NavigateTo("/collection/new-arrivals");
-	private void GoToLiving() => NavigationManager.NavigateTo("/collection/living");
-	private void GoToStationary() => NavigationManager.NavigateTo("/collection/stationary");
+    private void GoToArtists() => NavigationManager.NavigateTo("/artists");
+    private void GoToBestsellers() => NavigationManager.NavigateTo("/collection/bestsellers");
+    private void GoToNewArrivals() => NavigationManager.NavigateTo("/collection/new-arrivals");
+    private void GoToLiving() => NavigationManager.NavigateTo("/collection/living");
+    private void GoToStationary() => NavigationManager.NavigateTo("/collection/stationary");
+
+    MudTheme Custom = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Background = "#FFFEF6",
+        }
+    };
 }
