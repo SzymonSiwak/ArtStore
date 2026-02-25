@@ -6,11 +6,29 @@
 @using ArtStore.Shared.Enums
 @inject IProductService ProductService
 
-<PageTitle>@FormatTitle(CollectionName)</PageTitle>
-
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
 
     <MudText Typo="Typo.h3" Class="mb-8">@FormatTitle(CollectionName)</MudText>
+
+    <MudBreadcrumbs Items="_breadcrumbs" Separator=">" Class="pa-0 mb-4" Style="font-size: 0.9rem; color: #666;">
+        <ItemTemplate Context="item">
+            <MudLink Href="@item.Href" Underline="Underline.Hover" Color="Color.Inherit">
+                @item.Text.ToUpper()
+            </MudLink>
+        </ItemTemplate>
+    </MudBreadcrumbs>
+
+    <MudText Typo="Typo.h3" Style="font-weight: 500;" Class="mb-4">
+        @FormatTitle(CollectionName)
+    </MudText>
+
+    <!-- Description -->
+    <MudText Typo="Typo.body1" Class="mb-8" Style="max-width: 900px; line-height: 1.6; color: #4a4a4a;">
+        @GetDescription(CollectionName)
+    </MudText>
+
+    <!-- Dark line -->
+    <MudDivider Class="mb-8" style="border-color: #000;" />
 
     <div class="d-flex gap-4 mb-8 flex-wrap align-center">
 
@@ -95,9 +113,16 @@
     private IEnumerable<ProductDto> products = new List<ProductDto>();
     private ProductFilterDto filter = new();
     private bool isLoading = true;
+    private List<BreadcrumbItem> _breadcrumbs = new List<BreadcrumbItem>();
 
     protected override async Task OnParametersSetAsync()
     {
+        _breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem("Home", href: "/"),
+            new BreadcrumbItem(FormatTitle(CollectionName), href: null, disabled: true)
+        };
+
         filter = new ProductFilterDto { CollectionName = CollectionName };
         await LoadData();
     }
@@ -108,6 +133,13 @@
         filter.CollectionName = CollectionName;
         products = await ProductService.GetFilteredProducts(filter); 
         isLoading = false;
+    }
+
+    private string GetDescription(string collectionName)
+    {
+        return "Explore our collection of " + collectionName.Replace("-", " ") + 
+               " and find popular designs that reflect your taste and style. " + 
+               "From delicate illustrations to eye-catching typography, colourful compositions to black and white backdrops, there's something for everyone.";
     }
 
     // --- Handlers ---

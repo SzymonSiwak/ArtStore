@@ -7,7 +7,7 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="0" Fixed=false Style="background: transparent; box-shadow: none; padding-left: 24px; padding-right: 24px;">
+    <MudAppBar Elevation="0" Class="px-4 px-md-16" Fixed=false Style="background: transparent; box-shadow: none; padding-left: 24px; padding-right: 24px;">
         <MudButton Typo="Typo.h5" Class="ml-3" OnClick="GoToHome" Style="text-transform: none; min-width: auto; padding: 0;">
             <MudText Typo="Typo.h4" Style="font-weight: 500; letter-spacing: 0.5px;">Square</MudText>
         </MudButton>
@@ -31,7 +31,7 @@
     </MudAppBar>
 
     <MudMainContent Class="pa-0"> 
-        <MudContainer MaxWidth="MaxWidth.Large" Class="mt-16 mb-16">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8 mb-16 px-4 px-md-16">
             @Body
         </MudContainer>
 
