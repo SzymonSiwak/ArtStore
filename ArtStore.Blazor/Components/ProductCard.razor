@@ -1,7 +1,9 @@
-﻿@using ArtStore.Shared.DTO
+﻿@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTO
+@inject UserProfileService UserService
 @inject NavigationManager NavigationManager
 
-<MudCard Elevation="3" Class="h-100">
+<MudCard Elevation="3" Class="h-100 position-relative">
 	@if (!string.IsNullOrEmpty(ProductDto.ImageUrl))
 	{
 		<MudCardMedia Image="@ProductDto.ImageUrl" Height="200" />
@@ -27,6 +29,12 @@
 			Details
 		</MudButton>
 		<MudSpacer />
+		<!-- Add to favorite -->
+		<MudIconButton Icon="@(UserService.IsFavorite(ProductDto.Id) ? Icons.Material.Filled.Favorite : Icons.Material.Outlined.FavoriteBorder)"
+					   Color="Color.Error"
+					   Class="position-absolute z-10"
+					   Style="top: 8px; right: 8px; background-color: rgba(255,255,255,0.7);"
+					   OnClick="@(async () => await ToggleFav())" />
 		<!-- Shopping Card icon -->
 		<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Secondary" />
 	</MudCardActions>
@@ -36,6 +44,18 @@
 	@code{
 		[Parameter]
 		public ProductDto ProductDto { get; set; } = new();
+
+		protected override void OnInitialized()
+		{
+			UserService.OnChange += StateHasChanged;
+		}
+
+		public void Dispose() => UserService.OnChange -= StateHasChanged;
+
+		private async Task ToggleFav()
+		{
+			await UserService.ToggleFavorite(ProductDto.Id);
+		}
 
 		private void GoToDetails()
 		{
