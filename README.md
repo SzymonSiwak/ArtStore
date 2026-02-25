@@ -9,7 +9,7 @@
 
 ## 🚀 Overview
 
-**ArtStore** demonstrates how to build a scalable, maintainable enterprise application using the latest Microsoft stack. It features a decoupled backend API implementing **CQRS** pattern and a responsive **Blazor WebAssembly** frontend with **MudBlazor** UI components.
+**ArtStore** demonstrates how to build a scalable, maintainable enterprise application using the latest Microsoft stack. It features backend API implementing **CQRS** pattern and responsive **Blazor WebAssembly** frontend with **MudBlazor** UI components.
 
 The system handles product catalog management, user authentication (JWT), shopping cart logic with database persistence, and order processing simulation.
 
@@ -21,7 +21,6 @@ The system handles product catalog management, user authentication (JWT), shoppi
 - **Dynamic Catalog:** Filter artwork by Category (Living, Stationary), Price range, and Frame type.
 - **Product Details:** High-quality image zoom, artist bio, and related works.
 - **Persistent Cart:** Shopping cart items are stored in the database, allowing users to switch devices without losing data.
-- **Search & Filtering:** Advanced server-side filtering logic.
 
 ### 🔐 User & Security
 - **Registration & Login:** Secure identity system with hashed passwords.
@@ -31,7 +30,6 @@ The system handles product catalog management, user authentication (JWT), shoppi
 ### ⚙️ Developer Experience (DX)
 - **Automatic Seeding:** The database is automatically populated with sample data (Van Gogh, Monet) on startup.
 - **Global Error Handling:** Centralized exception handling middleware.
-- **Repository Pattern:** Generic and specific repositories for data access abstraction.
 
 ---
 
