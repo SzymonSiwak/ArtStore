@@ -1,9 +1,10 @@
 ﻿using System.Net.Http.Json;
+using ArtStore.Blazor.Interfaces;
 using ArtStore.Shared.DTO;
 
 namespace ArtStore.Blazor.Services
 {
-	public class UserProfileService
+	public class UserProfileService : IUserProfileService
 	{
 		private readonly HttpClient _http;
 

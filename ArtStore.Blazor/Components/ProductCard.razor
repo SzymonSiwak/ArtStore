@@ -1,6 +1,7 @@
-﻿@using ArtStore.Blazor.Services
+﻿@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
-@inject UserProfileService UserService
+@inject IUserProfileService UserService
 @inject NavigationManager NavigationManager
 
 <MudCard Elevation="3" Class="h-100 position-relative">

@@ -1,0 +1,50 @@
+﻿@page "/profile"
+@attribute [Authorize]
+@inject UserProfileService UserService
+@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTO
+@using Microsoft.AspNetCore.Authorization
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    @if (profile == null)
+    {
+        <MudProgressCircular Indeterminate="true" />
+    }
+    else
+    {
+        <MudGrid>
+            <!-- Data -->
+            <MudItem xs="12" md="3">
+                <MudPaper Class="pa-6 d-flex flex-column align-center">
+                    <MudAvatar Style="height:100px; width:100px; font-size:2rem;" Color="Color.Secondary" Class="mb-4">
+                        @profile.FirstName.Substring(0,1)
+                    </MudAvatar>
+                    <MudText Typo="Typo.h5">@profile.FullName</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">@profile.Email</MudText>
+                </MudPaper>
+            </MudItem>
+
+            <!-- Favorites -->
+            <MudItem xs="12" md="9">
+                <MudText Typo="Typo.h5" Class="mb-4">My Favorites</MudText>
+                @if (profile.Favorites.Any())
+                {
+                    <ProductGrid Products="profile.Favorites" />
+                }
+                else
+                {
+                    <MudAlert Severity="Severity.Info">No favorites. Go explore!</MudAlert>
+                }
+            </MudItem>
+        </MudGrid>
+    }
+</MudContainer>
+
+@code {
+    private UserProfileDto? profile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profile = await UserService.GetProfile();
+    }
+}
