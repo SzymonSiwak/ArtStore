@@ -18,4 +18,6 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IArtistService, ArtistService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
+builder.Services.AddAuthorizationCore();
+
 await builder.Build().RunAsync();
