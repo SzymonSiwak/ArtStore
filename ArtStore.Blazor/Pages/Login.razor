@@ -2,9 +2,11 @@
 @using ArtStore.Blazor.Interfaces
 @using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
-@inject IAuthService AuthService
-@inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
+@inject IAuthService AuthService
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavigationManager
+
 
 
 <MudContainer MaxWidth="MaxWidth.Small" Class="mt-16">
@@ -42,6 +44,9 @@
 
 		if (result)
 		{
+			var provider = (ApiAuthenticationStateProvider)AuthStateProvider;
+			provider.MarkUserAsAuthenticated(loginDto.Email);
+
 			Snackbar.Add("Login successful!", Severity.Success);
 			NavigationManager.NavigateTo("/");
 		}

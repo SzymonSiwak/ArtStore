@@ -10,7 +10,8 @@ namespace ArtStore.Blazor.Services
         private readonly HttpClient _httpClient;
         private readonly IJSRuntime _jsRuntime;
 
-        public AuthService(HttpClient httpClient, IJSRuntime jsRuntime)
+
+		public AuthService(HttpClient httpClient, IJSRuntime jsRuntime)
         {
             _httpClient = httpClient;
             _jsRuntime = jsRuntime;
@@ -26,7 +27,8 @@ namespace ArtStore.Blazor.Services
 
 				// Store the token in local storage
 				await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", result!.Token);
-                return true;
+
+				return true;
 			}
             return false;
 		}

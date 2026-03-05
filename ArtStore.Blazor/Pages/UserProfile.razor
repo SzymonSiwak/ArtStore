@@ -1,8 +1,10 @@
 ﻿@page "/profile"
 @attribute [Authorize]
-@inject UserProfileService UserService
+@inject IUserProfileService UserService
+@using ArtStore.Blazor.Interfaces
 @using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
+@using ArtStore.Blazor.Components
 @using Microsoft.AspNetCore.Authorization
 
 <MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
@@ -17,7 +19,7 @@
             <MudItem xs="12" md="3">
                 <MudPaper Class="pa-6 d-flex flex-column align-center">
                     <MudAvatar Style="height:100px; width:100px; font-size:2rem;" Color="Color.Secondary" Class="mb-4">
-                        @profile.FirstName.Substring(0,1)
+                        @GetInitial(profile)
                     </MudAvatar>
                     <MudText Typo="Typo.h5">@profile.FullName</MudText>
                     <MudText Typo="Typo.body2" Color="Color.Secondary">@profile.Email</MudText>
@@ -46,5 +48,18 @@
     protected override async Task OnInitializedAsync()
     {
         profile = await UserService.GetProfile();
+    }
+
+    private string GetInitial(UserProfileDto? p)
+    {
+        if (p == null) return "U";
+
+        if (!string.IsNullOrWhiteSpace(p.FirstName))
+            return p.FirstName.Substring(0, 1).ToUpper();
+
+        if (!string.IsNullOrWhiteSpace(p.Email))
+            return p.Email.Substring(0, 1).ToUpper();
+
+        return "U";
     }
 }

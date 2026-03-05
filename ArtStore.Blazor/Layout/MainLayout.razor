@@ -1,5 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using ArtStore.Blazor.Services
+@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject ApiAuthenticationStateProvider ApiAuthenticationStateProvider
 
 <MudThemeProvider Theme="Custom"/>
 <MudDialogProvider />
@@ -25,7 +27,7 @@
 
         <div class="d-flex align-center gap-1">
             <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>
-            <MudIconButton Variant="Variant.Text" OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+            <MudIconButton  OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
             <MudIconButton Variant="Variant.Text" OnClick="GoToCart" Icon="@Icons.Material.Outlined.ShoppingCart"></MudIconButton>
         </div>
         <AuthorizeView>
@@ -33,14 +35,14 @@
                 <!-- Logged in -->
                 <MudIconButton OnClick="GoToProfile">
                     <MudAvatar Color="Color.Secondary" Size="Size.Small">
-                        @context.User.Identity?.Name?.Substring(0, 1).ToUpper()
+                        @(string.IsNullOrEmpty(context.User.Identity?.Name) ? "U" : context.User.Identity!.Name!.Substring(0, 1).ToUpper())
                     </MudAvatar>
                 </MudIconButton>
             </Authorized>
-            <NotAuthorized>
+                <!-- <NotAuthorized> -->
                 <!-- Not logged in -->
-                <MudIconButton Icon="@Icons.Material.Outlined.Person" OnClick="GoToLogin" Color="Color.Inherit" />
-            </NotAuthorized>
+                <!-- <MudIconButton Icon="@Icons.Material.Outlined.Person" OnClick="GoToLogin" /> -->
+                <!-- </NotAuthorized> -->
         </AuthorizeView>
     </MudAppBar>
 
@@ -159,28 +161,4 @@
             Background = "#FFFEF6",
         }
     };
-
-    [CascadingParameter]
-    private Task<AuthenticationState>? AuthStateTask { get; set; }
-
-    private string userName = "U"; // Default logged user letter
-
-    protected override async Task OnParametersSetAsync()
-    {
-        if (AuthStateTask != null)
-        {
-            var authState = await AuthStateTask;
-            var user = authState.User;
-
-            if (user.Identity is { IsAuthenticated: true })
-            {
-                // First letter of name or email
-                var name = user.Identity.Name;
-                if (!string.IsNullOrEmpty(name))
-                {
-                    userName = name.Substring(0, 1).ToUpper();
-                }
-            }
-        }
-    }
 }
