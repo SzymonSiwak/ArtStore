@@ -1,5 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using ArtStore.Blazor.Services
+@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject ApiAuthenticationStateProvider ApiAuthenticationStateProvider
 
 <MudThemeProvider Theme="Custom"/>
 <MudDialogProvider />
@@ -25,9 +27,23 @@
 
         <div class="d-flex align-center gap-1">
             <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>
-            <MudIconButton Variant="Variant.Text" OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+            <MudIconButton  OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
             <MudIconButton Variant="Variant.Text" OnClick="GoToCart" Icon="@Icons.Material.Outlined.ShoppingCart"></MudIconButton>
         </div>
+        <AuthorizeView>
+            <Authorized>
+                <!-- Logged in -->
+                <MudIconButton OnClick="GoToProfile">
+                    <MudAvatar Color="Color.Secondary" Size="Size.Small">
+                        @(string.IsNullOrEmpty(context.User.Identity?.Name) ? "U" : context.User.Identity!.Name!.Substring(0, 1).ToUpper())
+                    </MudAvatar>
+                </MudIconButton>
+            </Authorized>
+                <!-- <NotAuthorized> -->
+                <!-- Not logged in -->
+                <!-- <MudIconButton Icon="@Icons.Material.Outlined.Person" OnClick="GoToLogin" /> -->
+                <!-- </NotAuthorized> -->
+        </AuthorizeView>
     </MudAppBar>
 
     <MudMainContent Class="pa-0"> 
@@ -40,7 +56,7 @@
             <MudContainer MaxWidth="MaxWidth.Large">
                 
                 <MudGrid Spacing="4">
-                    <!-- COLUMN 1 -->
+                    <!-- column 1 -->
                     <MudItem xs="6" md="2">
                         <MudText Typo="Typo.h6" Class="mb-4" Style="font-weight: bold;">About</MudText>
                         <div class="d-flex flex-column gap-2">
@@ -51,7 +67,7 @@
                         </div>
                     </MudItem>
 
-                    <!-- COLUMN 2 -->
+                    <!-- column 2 -->
                     <MudItem xs="6" md="2">
                         <MudText Typo="Typo.h6" Class="mb-4" Style="font-weight: bold;">Help</MudText>
                         <div class="d-flex flex-column gap-2">
@@ -64,7 +80,7 @@
                     
                     <MudItem xs="12" md="2"></MudItem> <!-- Blank space -->
 
-                    <!-- COLUMN 3 -->
+                    <!-- column 3 -->
                     <MudItem xs="12" md="6">
                         <MudText Typo="Typo.h6" Class="mb-6" Style="font-weight: bold;">Sign up for newsletter</MudText>
                         
@@ -81,7 +97,7 @@
                             Sign up to our newsletter and get 10% off your first order
                         </MudText>
 
-                        <!-- SC ICONS -->
+                        <!-- sc icons -->
                         <div class="mt-6 d-flex gap-4">
                             <MudIcon Icon="@Icons.Custom.Brands.Facebook" Size="Size.Small" />
                             <MudIcon Icon="@Icons.Custom.Brands.Instagram" Size="Size.Small" />
@@ -90,7 +106,7 @@
                     </MudItem>
                 </MudGrid>
 
-                <!-- BUTTOM SECTION -->
+                <!-- buttom section -->
                 <MudGrid Class="mt-16 align-center">
                     <MudItem xs="12" md="6">
                         <!-- Logo -->
@@ -136,6 +152,7 @@
     private void GoToNewArrivals() => NavigationManager.NavigateTo("/collection/new-arrivals");
     private void GoToLiving() => NavigationManager.NavigateTo("/collection/living");
     private void GoToStationary() => NavigationManager.NavigateTo("/collection/stationary");
+	private void GoToProfile() => NavigationManager.NavigateTo("/profile");
 
     MudTheme Custom = new MudTheme()
     {

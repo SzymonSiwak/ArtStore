@@ -1,0 +1,81 @@
+﻿@page "/profile"
+@attribute [Authorize]
+@inject IUserProfileService UserService
+@inject IAuthService AuthService
+@inject NavigationManager NavManager
+@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
+@using ArtStore.Shared.DTO
+@using ArtStore.Blazor.Components
+@using Microsoft.AspNetCore.Authorization
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+    @if (profile == null)
+    {
+        <MudProgressCircular Indeterminate="true" />
+    }
+    else
+    {
+        <MudGrid>
+            <!-- Data -->
+            <MudItem xs="12" md="3">
+                <MudPaper Class="pa-6 d-flex flex-column align-center">
+                    <MudAvatar Style="height:100px; width:100px; font-size:2rem;" Color="Color.Secondary" Class="mb-4">
+                        @GetInitial(profile)
+                    </MudAvatar>
+                    <MudText Typo="Typo.h5">@profile.FullName</MudText>
+                    <MudText Typo="Typo.body2" Color="Color.Secondary">@profile.Email</MudText>
+                </MudPaper>
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Error"
+                           StartIcon="@Icons.Material.Filled.Logout"
+                           OnClick="Logout">
+                    Logout
+                </MudButton>
+            </MudItem>
+
+            <!-- Favorites -->
+            <MudItem xs="12" md="9">
+                <MudText Typo="Typo.h5" Class="mb-4">My Favorites</MudText>
+                @if (profile.Favorites.Any())
+                {
+                    <ProductGrid Products="profile.Favorites" />
+                }
+                else
+                {
+                    <MudAlert Severity="Severity.Info">No favorites. Go explore!</MudAlert>
+                }
+            </MudItem>
+        </MudGrid>
+    }
+</MudContainer>
+
+@code {
+    private UserProfileDto? profile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profile = await UserService.GetProfile();
+    }
+
+    private string GetInitial(UserProfileDto? p)
+    {
+        if (p == null) return "U";
+
+        if (!string.IsNullOrWhiteSpace(p.FirstName))
+            return p.FirstName.Substring(0, 1).ToUpper();
+
+        if (!string.IsNullOrWhiteSpace(p.Email))
+            return p.Email.Substring(0, 1).ToUpper();
+
+        return "U";
+    }
+
+    private async Task Logout()
+    {
+        await AuthService.Logout();
+
+		// Force reload to clear any cached user data
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+}

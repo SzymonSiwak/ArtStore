@@ -21,6 +21,12 @@ namespace ArtStore.Infrastructure
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ArtStoreDbContext).Assembly);
 
 			base.OnModelCreating(modelBuilder);
+
+			// Favorites art configuration (many-to-many)
+			modelBuilder.Entity<User>()
+				.HasMany(u => u.Favorites)
+				.WithMany() 
+				.UsingEntity(j => j.ToTable("UserFavorites"));
 		}
 	}
 }

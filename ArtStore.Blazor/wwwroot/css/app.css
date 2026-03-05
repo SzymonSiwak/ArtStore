@@ -114,11 +114,11 @@ code {
     text-align: start;
 }
 
-/* NAV BAR */
+/* ------------ NAV BAR ------------*/
 
 @font-face {
-    font-family: Urbanist; /* set name */
-    src: url(https://font.download/font/urbanist); /* url of the font */
+    font-family: 'Urbanist'; /* set name */
+    src: url('../fonts/Urbanist-VariableFont_wght') format('ttf'); /* url of the font */
 }
 
 .navBar {
@@ -129,7 +129,7 @@ code {
 }
 
 
-/* CATEGORY FILTER BUTTON */
+/* ---- CATEGORY FILTER BUTTON ----*/
 
 @font-face {
     font-family: Karla; /* set name */

@@ -33,6 +33,7 @@ namespace ArtStore.Infrastructure
 			services.AddScoped<ICartRepository, CartRepository>();
 			services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IArtistRepository, ArtistRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             //services.AddScoped<IOrderRepository, OrderRepository>();
 
             // Add other repositories as needed
