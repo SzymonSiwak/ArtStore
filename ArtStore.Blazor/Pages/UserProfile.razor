@@ -1,6 +1,8 @@
 ﻿@page "/profile"
 @attribute [Authorize]
 @inject IUserProfileService UserService
+@inject IAuthService AuthService
+@inject NavigationManager NavManager
 @using ArtStore.Blazor.Interfaces
 @using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
@@ -39,6 +41,14 @@
                 }
             </MudItem>
         </MudGrid>
+
+        <MudButton Variant="Variant.Outlined"
+                   Color="Color.Error"
+                   FullWidth="true"
+                   StartIcon="@Icons.Material.Filled.Logout"
+                   OnClick="Logout">
+            Logout
+        </MudButton>
     }
 </MudContainer>
 
@@ -61,5 +71,13 @@
             return p.Email.Substring(0, 1).ToUpper();
 
         return "U";
+    }
+
+    private async Task Logout()
+    {
+        await AuthService.Logout();
+
+		// Force reload to clear any cached user data
+        NavManager.NavigateTo("/", forceLoad: true);
     }
 }

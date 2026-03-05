@@ -37,6 +37,9 @@ namespace ArtStore.Blazor.Services
         {
 			// Remove the token from local storage
 			await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+
+			// Clear the default request headers to ensure the token is not sent with future requests
+			_httpClient.DefaultRequestHeaders.Authorization = null;
 		}
 
         public async Task<string> GetToken()
