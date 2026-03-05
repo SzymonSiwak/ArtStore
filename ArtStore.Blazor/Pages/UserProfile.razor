@@ -26,6 +26,12 @@
                     <MudText Typo="Typo.h5">@profile.FullName</MudText>
                     <MudText Typo="Typo.body2" Color="Color.Secondary">@profile.Email</MudText>
                 </MudPaper>
+                <MudButton Variant="Variant.Outlined"
+                           Color="Color.Error"
+                           StartIcon="@Icons.Material.Filled.Logout"
+                           OnClick="Logout">
+                    Logout
+                </MudButton>
             </MudItem>
 
             <!-- Favorites -->
@@ -41,14 +47,6 @@
                 }
             </MudItem>
         </MudGrid>
-
-        <MudButton Variant="Variant.Outlined"
-                   Color="Color.Error"
-                   FullWidth="true"
-                   StartIcon="@Icons.Material.Filled.Logout"
-                   OnClick="Logout">
-            Logout
-        </MudButton>
     }
 </MudContainer>
 
