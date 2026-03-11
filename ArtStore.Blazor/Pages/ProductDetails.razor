@@ -24,13 +24,17 @@
     }
     else
     {
-        <MudGrid Spacing="4">
+        <MudGrid Spacing="6" Class="align-start">
             <!-- Left column: photo-->
-            <MudItem xs="12" md="7">
+            <MudItem xs="12" md="6">
                 <MudPaper Elevation="0" Class="pa-4 d-flex justify-center align-center" Style="background-color: #f5f5f5; height: 500px;">
                     @if (!string.IsNullOrEmpty(product.ImageUrl))
                     {
-                        <MudImage Src="@product.ImageUrl" ObjectFit="ObjectFit.Contain" Height="450" Fluid="true" Class="rounded-lg" />
+                        <MudImage Src="@product.ImageUrl"
+                                  ObjectFit="ObjectFit.Cover"
+                                  Style="width: 100%; height: 100%; cursor: pointer; transition: transform 0.2s;"
+                                  Class="rounded-lg image-hover"
+                                  @onclick="OpenLightbox" />
                     }
                     else
                     {
@@ -40,13 +44,26 @@
             </MudItem>
 
             <!-- Right column: info -->
-            <MudItem xs="12" md="5">
+            <MudItem xs="12" md="6" Class="pl-md-8 pt-md-4">
                 <MudText Typo="Typo.h3" Class="mb-2">@product.Name</MudText>
                 <MudText Typo="Typo.h5" Color="Color.Secondary" Class="mb-6">by @product.ArtistName</MudText>
 
                 <MudText Typo="Typo.h4" Color="Color.Primary" Class="mb-6">
                     @product.Price @product.Currency
                 </MudText>
+
+                <MudText Typo="Typo.body2" Class="mb-3" Style="text-decoration: underline; color: #666;">Size</MudText>
+
+                <div class="d-flex gap-3 mb-6 flex-wrap">
+                    @foreach (var size in availableSizes)
+                    {
+                        <MudButton DisableElevation="true"
+                                   OnClick="@(() => SelectSize(size))"
+                                   Class="@(selectedSize == size ? "size-pill size-pill-active" : "size-pill")">
+                            @size
+                        </MudButton>
+                    }
+                </div>
 
                 <MudText Typo="Typo.body1" Class="mb-6">
                     @product.Description
@@ -72,18 +89,130 @@
                 <MudAlert Severity="Severity.Info" Class="mt-8" NoIcon="true">
                     Free shipping specifically for @product.Name within Europe.
                 </MudAlert>
+                @if (product != null)
+                {
+                    <!-- Accordion -->
+                    <div class="mt-8">
+
+                        <!-- Elevation="0" removes shadow. DisableBorders removes border frame -->
+                        <MudExpansionPanels Elevation="0" DisableBorders="true" Class="custom-accordion">
+
+                            <!-- Details -->
+                            <MudExpansionPanel Text="Details" Icon="@Icons.Material.Outlined.ChevronRight">
+                                <MudText Typo="Typo.body2" Class="pa-2" Style="color: #555;">
+                                    @product.Description <br /><br />
+                                    Artist: @product.ArtistName <br />
+                                    Frame: @product.FrameType.ToString() <br />
+                                    Category: @product.Category.ToString()
+                                </MudText>
+                            </MudExpansionPanel>
+
+                            <!-- Return & payments -->
+                            <MudExpansionPanel Text="Return & payments" Icon="@Icons.Material.Outlined.ChevronRight">
+                                <MudText Typo="Typo.body2" Class="pa-2" Style="color: #555;">
+                                    We offer a 30-day return policy for all our prints. If you are not satisfied,
+                                    simply return it in its original packaging. We accept all major credit cards and PayPal.
+                                </MudText>
+                            </MudExpansionPanel>
+
+                            <!-- Delivery & Shipping -->
+                            <MudExpansionPanel Text="Delivery & Shipping" Icon="@Icons.Material.Outlined.ChevronRight">
+                                <MudText Typo="Typo.body2" Class="pa-2" Style="color: #555;">
+                                    All orders are processed within 1-2 business days. <br />
+                                    - Standard Shipping (3-5 days): Free<br />
+                                    - Express Shipping (1-2 days): $15.00
+                                </MudText>
+                            </MudExpansionPanel>
+
+                            <!-- Reviews -->
+                            <MudExpansionPanel Text="Reviews" Icon="@Icons.Material.Outlined.ChevronRight">
+                                <MudText Typo="Typo.body2" Class="pa-2" Style="color: #555;">
+                                    (4.8/5 based on 124 reviews)<br /><br />
+                                    "Beautiful print, high quality paper!" - Jane D.<br />
+                                    "Arrived perfectly packaged." - John S.
+                                </MudText>
+                            </MudExpansionPanel>
+
+                        </MudExpansionPanels>
+                    </div>
+                }
             </MudItem>
         </MudGrid>
     }
 </MudContainer>
 
-@code {
+
+
+<!-- Trust Bar -->
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-16 mb-8 px-4 px-md-16">
+
+    <MudDivider Style="border-color: #d0d0d0; border-width: 1px;" Class="mb-10" />
+
+    <!-- even distribution of spaces between logos -->
+    <MudGrid Justify="Justify.SpaceBetween" Class="text-center align-start">
+
+        <MudItem xs="6" sm="4" md="2">
+            <MudIcon Icon="@Icons.Material.Outlined.AssignmentReturn" Style="font-size: 3rem; color: #333;" Class="mb-4" />
+            <MudText Typo="Typo.subtitle2" Style="font-weight: 600; letter-spacing: 0.5px;">EASY RETURN</MudText>
+            <MudText Typo="Typo.caption" Style="color: #888888;">No questions</MudText>
+        </MudItem>
+
+        <MudItem xs="6" sm="4" md="2">
+            <MudIcon Icon="@Icons.Material.Outlined.Schedule" Style="font-size: 3rem; color: #333;" Class="mb-4" />
+            <MudText Typo="Typo.subtitle2" Style="font-weight: 600; letter-spacing: 0.5px;">EXPRESS SHIPPING</MudText>
+        </MudItem>
+
+        <MudItem xs="6" sm="4" md="2">
+            <MudIcon Icon="@Icons.Material.Outlined.LocalShipping" Style="font-size: 3rem; color: #333;" Class="mb-4" />
+            <MudText Typo="Typo.subtitle2" Style="font-weight: 600; letter-spacing: 0.5px;">FREE DELIVERY</MudText>
+            <MudText Typo="Typo.caption" Style="color: #888888;">from 200$</MudText>
+        </MudItem>
+
+        <MudItem xs="6" sm="4" md="2">
+            <MudIcon Icon="@Icons.Material.Outlined.ArtTrack" Style="font-size: 3rem; color: #333;" Class="mb-4" />
+            <MudText Typo="Typo.subtitle2" Style="font-weight: 600; letter-spacing: 0.5px;">UNIQUE POSTERS</MudText>
+            <MudText Typo="Typo.caption" Style="color: #888888;">original designs</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="4" md="3" Class="mt-6 mt-md-0">
+            <MudText Typo="Typo.h5" Style="font-weight: 500; margin-bottom: 24px;">Square</MudText>
+            <MudText Typo="Typo.subtitle2" Style="font-weight: 600; letter-spacing: 0.5px;">SHOP NOW</MudText>
+            <MudText Typo="Typo.caption" Style="color: #888888;">We deliver directly to<br />the 12 European countries</MudText>
+        </MudItem>
+
+    </MudGrid>
+
+    <MudDivider Style="border-color: #d0d0d0; border-width: 1px;" Class="mt-10" />
+
+</MudContainer>
+
+<MudDialog Visible="isOpen" VisibleChanged="OnDialogVisibleChanged" Options="dialogOptions" Class="position-relative bg-transparent elevation-0">
+    <DialogContent>
+        <div class="d-flex justify-center align-center" style="position: relative;">
+
+            <!-- Image -->
+            <MudImage Src="@product!.ImageUrl"
+                      ObjectFit="ObjectFit.Contain"
+                      Style="max-width: 90vw; max-height: 90vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);" />
+
+            <!-- X button for closing -->
+            <MudIconButton Icon="@Icons.Material.Filled.Close"
+                           Color="Color.Surface"
+                           Size="Size.Large"
+                           OnClick="CloseLightbox"
+                           Style="position: absolute; top: -20px; right: -20px; background-color: rgba(0,0,0,0.5); color: white; backdrop-filter: blur(4px);" />
+        </div>
+    </DialogContent>
+</MudDialog>
+    @code {
 
     [Parameter]
     public Guid Id { get; set; }
 
     private ProductDto? product;
     private int quantity = 1;
+    private bool isOpen;
+    private List<string> availableSizes = new List<string> { "A5", "A4", "A3", "A2", "A1" };
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,6 +241,37 @@
                 Console.WriteLine(ex.Message);
             }
         }
+    }
+
+    private string selectedSize = "A5";
+
+    private void SelectSize(string size)
+    {
+        selectedSize = size;
+    }
+
+    private DialogOptions dialogOptions = new()
+    {
+        MaxWidth = MaxWidth.ExtraLarge, 
+        NoHeader = true,                
+		CloseOnEscapeKey = true, // Closing on ESC key
+        BackgroundClass = "glass-backdrop" 
+    };
+
+    private void OpenLightbox()
+    {
+        isOpen = true;
+    }
+    
+    private void CloseLightbox()
+    {
+        isOpen = false;
+    }
+
+	// This method is called whenever the dialog's visibility changes, ensuring our local state stays in sync
+    private void OnDialogVisibleChanged(bool isVisible)
+    {
+        isOpen = isVisible;
     }
 
     private void GoBackToGallery()
