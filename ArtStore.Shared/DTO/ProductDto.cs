@@ -1,4 +1,6 @@
-﻿namespace ArtStore.Shared.DTO
+﻿using ArtStore.Shared.Enums;
+
+namespace ArtStore.Shared.DTO
 {
 	public class ProductDto
 	{
@@ -9,5 +11,7 @@
 		public string Currency { get; set; } = string.Empty; // Money.Currency
 		public string ImageUrl { get; set; } = string.Empty;
 		public string ArtistName { get; set; } = string.Empty;
+		public FrameType FrameType { get; set; }
+		public Category Category { get; set; }
 	}
 }
