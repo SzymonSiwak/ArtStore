@@ -1,8 +1,9 @@
-﻿using System.Net.Http;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using ArtStore.Blazor.Interfaces;
 using ArtStore.Shared.DTO;
+using Microsoft.JSInterop;
 
 namespace ArtStore.Blazor.Services
 {
@@ -10,11 +11,13 @@ namespace ArtStore.Blazor.Services
 	{
         private readonly HttpClient _http;
         private readonly IAuthService _auth;
+        private readonly IJSRuntime _jsRuntime;
 
-        public CartService(HttpClient http, IAuthService auth)
+        public CartService(HttpClient http, IAuthService auth, IJSRuntime jsRuntime)
         {
             _http = http;
             _auth = auth;
+			_jsRuntime = jsRuntime;
 		}
 
         public async Task AddToCart(Guid productId, int quantity)
@@ -67,5 +70,24 @@ namespace ArtStore.Blazor.Services
                 return null;
             }
 		}
-    }
+
+		public async Task<bool> TryAddToCartAsync(Guid productId, int quantity = 1)
+        {
+			try
+			{
+				await AddToCart(productId, quantity);
+				return true;
+			}
+			catch (Exception ex) when (ex.Message.Contains("logged in") || ex.Message.Contains("401"))
+			{
+
+				// Save intention to local storage
+				var intent = new { ProductId = productId, Quantity = quantity };
+				var jsonIntent = JsonSerializer.Serialize(intent);
+				await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "pendingCartItem", jsonIntent);
+
+				return false; 
+			}
+		}
+	}
 }

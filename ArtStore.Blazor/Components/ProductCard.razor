@@ -43,55 +43,46 @@
 	</MudCardActions>
 </MudCard>
 
+@code{
+	[Parameter]
+	public ProductDto ProductDto { get; set; } = new();
+	private int quantity = 1;
 
-	@code{
-		[Parameter]
-		public ProductDto ProductDto { get; set; } = new();
-		private int quantity = 1;
+	protected override void OnInitialized()
+	{
+		UserService.OnChange += StateHasChanged;
+	}
 
-		protected override void OnInitialized()
+	public void Dispose() => UserService.OnChange -= StateHasChanged;
+
+	private async Task ToggleFav()
+	{
+		await UserService.ToggleFavorite(ProductDto.Id);
+	}
+
+	private async Task AddToCart()
+	{
+		bool success = await CartService.TryAddToCartAsync(ProductDto.Id, 1);
+
+		if (success)
 		{
-			UserService.OnChange += StateHasChanged;
+			Snackbar.Add($"Added {ProductDto.Name} to cart!", Severity.Success);
 		}
-
-		public void Dispose() => UserService.OnChange -= StateHasChanged;
-
-		private async Task ToggleFav()
+		else
 		{
-			await UserService.ToggleFavorite(ProductDto.Id);
-		}
-
-		private async Task AddToCart()
-		{
-			try
-			{
-				await CartService.AddToCart(ProductDto!.Id, quantity);
-				Snackbar.Add($"Added {quantity} x {ProductDto.Name} to cart!", Severity.Success);
-			}
-			catch (Exception ex)
-			{
-				// if not logged, redirect to login page
-				if (ex.Message.Contains("logged in"))
-				{
-					Snackbar.Add("Please login first. Your product will be waiting for You!", Severity.Warning);
-					NavigationManager.NavigateTo("/login");
-				}
-				else
-				{
-					Snackbar.Add("Something went wrong.", Severity.Error);
-					Console.WriteLine(ex.Message);
-				}
-			}
-		}
-
-		private void GoToDetails()
-		{
-			if (ProductDto.Id == Guid.Empty)
-			{
-				Console.WriteLine("BŁĄD: ID produktu jest puste (same zera)!");
-				return;
-			}
-
-			NavigationManager.NavigateTo($"/product/{ProductDto.Id}");
+			Snackbar.Add("Firstly - sign in. Your piece of art will be waiting for You!", Severity.Warning);
+			NavigationManager.NavigateTo("/login");
 		}
 	}
+
+	private void GoToDetails()
+	{
+		if (ProductDto.Id == Guid.Empty)
+		{
+			Console.WriteLine("BŁĄD: ID produktu jest puste (same zera)!");
+			return;
+		}
+
+		NavigationManager.NavigateTo($"/product/{ProductDto.Id}");
+	}
+}

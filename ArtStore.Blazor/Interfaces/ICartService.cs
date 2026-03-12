@@ -10,5 +10,6 @@ namespace ArtStore.Blazor.Interfaces
 		Task AddToCart(Guid productId, int quantity);
 		Task<CartDto?> GetCart();
 		Task RemoveFromCart(Guid productId);
+		Task<bool> TryAddToCartAsync(Guid productId, int quantity = 1);
 	}
 }
