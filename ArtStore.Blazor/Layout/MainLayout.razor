@@ -1,4 +1,5 @@
 ﻿@using ArtStore.Blazor.Services
+@inject ISnackbar Snackbar
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject ApiAuthenticationStateProvider ApiAuthenticationStateProvider
@@ -39,10 +40,6 @@
                     </MudAvatar>
                 </MudIconButton>
             </Authorized>
-                <!-- <NotAuthorized> -->
-                <!-- Not logged in -->
-                <!-- <MudIconButton Icon="@Icons.Material.Outlined.Person" OnClick="GoToLogin" /> -->
-                <!-- </NotAuthorized> -->
         </AuthorizeView>
     </MudAppBar>
 
@@ -145,7 +142,22 @@
 
 @code{
     private void GoToLogin() => NavigationManager.NavigateTo("/login");
-    private void GoToCart() => NavigationManager.NavigateTo("/cart");
+    private async Task GoToCart()
+    {
+        var authState = await ApiAuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+             NavigationManager.NavigateTo("/cart");
+        }
+        else
+        {
+            Snackbar.Add("Please login to view your cart.", Severity.Warning);
+            NavigationManager.NavigateTo("/login");
+	    }	
+    }
+    
     private void GoToHome() => NavigationManager.NavigateTo("/");
     private void GoToArtists() => NavigationManager.NavigateTo("/artists");
     private void GoToBestsellers() => NavigationManager.NavigateTo("/collection/bestsellers");

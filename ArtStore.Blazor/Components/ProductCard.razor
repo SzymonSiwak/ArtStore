@@ -2,6 +2,8 @@
 @using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
 @inject IUserProfileService UserService
+@inject ISnackbar Snackbar
+@inject ICartService CartService
 @inject NavigationManager NavigationManager
 
 <MudCard Elevation="3" Class="h-100 position-relative">
@@ -37,7 +39,7 @@
 					   Style="top: 8px; right: 8px; background-color: rgba(255,255,255,0.7);"
 					   OnClick="@(async () => await ToggleFav())" />
 		<!-- Shopping Card icon -->
-		<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Secondary" />
+		<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Secondary" OnClick="AddToCart" />
 	</MudCardActions>
 </MudCard>
 
@@ -45,6 +47,7 @@
 	@code{
 		[Parameter]
 		public ProductDto ProductDto { get; set; } = new();
+		private int quantity = 1;
 
 		protected override void OnInitialized()
 		{
@@ -56,6 +59,29 @@
 		private async Task ToggleFav()
 		{
 			await UserService.ToggleFavorite(ProductDto.Id);
+		}
+
+		private async Task AddToCart()
+		{
+			try
+			{
+				await CartService.AddToCart(ProductDto!.Id, quantity);
+				Snackbar.Add($"Added {quantity} x {ProductDto.Name} to cart!", Severity.Success);
+			}
+			catch (Exception ex)
+			{
+				// if not logged, redirect to login page
+				if (ex.Message.Contains("logged in"))
+				{
+					Snackbar.Add("Please login first.", Severity.Warning);
+					NavigationManager.NavigateTo("/login");
+				}
+				else
+				{
+					Snackbar.Add("Something went wrong.", Severity.Error);
+					Console.WriteLine(ex.Message);
+				}
+			}
 		}
 
 		private void GoToDetails()
