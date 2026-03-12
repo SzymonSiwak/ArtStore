@@ -1,8 +1,10 @@
 ﻿@page "/cart"
 @using ArtStore.Blazor.Interfaces
 @using ArtStore.Blazor.Services
+@using System.Text.Json
 @inject ICartService CartService
 @inject ISnackbar Snackbar
+@inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
 <PageTitle>ArtStore - Shopping Cart</PageTitle>
@@ -67,6 +69,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await ProcessPendingCartItemsAsync();
         cart = await CartService.GetCart();
         isLoading = false;
     }
@@ -78,5 +81,39 @@
         cart = await CartService.GetCart();
 
         Snackbar.Add("Item removed", Severity.Info);
+    }
+    private async Task ProcessPendingCartItemsAsync()
+    {
+        try
+        {
+			// Get item from localStorage
+            var pendingItemJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "pendingCartItem");
+
+            if (!string.IsNullOrEmpty(pendingItemJson))
+            {
+				// Remove it immediately to prevent duplicate processing if user refreshes
+                await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "pendingCartItem");
+
+                // Decode
+                var intent = JsonSerializer.Deserialize<PendingCartItem>(pendingItemJson);
+
+                if (intent != null && intent.ProductId != Guid.Empty)
+                {
+                    await CartService.AddToCart(intent.ProductId, intent.Quantity);
+                    Snackbar.Add("Your saved item was added to the cart!", Severity.Success);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error during processing the items: " + ex.Message);
+        }
+    }
+
+    // Pomocnicza klasa
+    public class PendingCartItem
+    {
+        public Guid ProductId { get; set; }
+        public int Quantity { get; set; }
     }
 }

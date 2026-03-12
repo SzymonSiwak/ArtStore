@@ -73,7 +73,7 @@
 				// if not logged, redirect to login page
 				if (ex.Message.Contains("logged in"))
 				{
-					Snackbar.Add("Please login first.", Severity.Warning);
+					Snackbar.Add("Please login first. Your product will be waiting for You!", Severity.Warning);
 					NavigationManager.NavigateTo("/login");
 				}
 				else
