@@ -29,11 +29,10 @@
         <MudSpacer />
 
         <div class="d-flex align-center gap-1">
-            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>
-            <MudIconButton  OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>    
             <MudIconButton Variant="Variant.Text" OnClick="GoToCart" Icon="@Icons.Material.Outlined.ShoppingCart"></MudIconButton>
         </div>
-        <AuthorizeView>
+        <AuthorizeView Context="context">
             <Authorized>
                 <!-- Logged in -->
                 <MudIconButton OnClick="GoToProfile">
@@ -42,6 +41,10 @@
                     </MudAvatar>
                 </MudIconButton>
             </Authorized>
+            <NotAuthorized>
+                <!-- Not logged in -->
+                <MudIconButton OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+            </NotAuthorized>
         </AuthorizeView>
     </MudAppBar>
 
