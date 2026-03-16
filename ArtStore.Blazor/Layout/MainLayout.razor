@@ -1,6 +1,8 @@
-﻿@using ArtStore.Blazor.Services
-@inject ISnackbar Snackbar
+﻿@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
 @inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@inject IUserProfileService UserService
 @inject NavigationManager NavigationManager
 @inject ApiAuthenticationStateProvider ApiAuthenticationStateProvider
 
@@ -141,6 +143,21 @@
 </style>
 
 @code{
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthStateTask != null)
+        {
+            var authState = await AuthStateTask;
+
+            if (authState.User.Identity?.IsAuthenticated == true)
+            {
+                try { await UserService.GetProfile(); } catch { }
+            }
+        }
+    }
     private void GoToLogin() => NavigationManager.NavigateTo("/login");
     private async Task GoToCart()
     {

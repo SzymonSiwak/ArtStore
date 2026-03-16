@@ -5,6 +5,7 @@
 @inject ISnackbar Snackbar
 @inject ICartService CartService
 @inject NavigationManager NavigationManager
+@implements IDisposable
 
 <MudCard Elevation="3" Class="h-100 position-relative">
 	@if (!string.IsNullOrEmpty(ProductDto.ImageUrl))
@@ -48,16 +49,36 @@
 	public ProductDto ProductDto { get; set; } = new();
 	private int quantity = 1;
 
-	protected override void OnInitialized()
-	{
-		UserService.OnChange += StateHasChanged;
-	}
+	protected override void OnInitialized() => UserService.OnChange += RefreshUI;
 
-	public void Dispose() => UserService.OnChange -= StateHasChanged;
+	public void Dispose() => UserService.OnChange -= RefreshUI;
+
+	private void RefreshUI()
+	{
+		// Forced UI refresh when favorites change
+		InvokeAsync(StateHasChanged);
+	}
 
 	private async Task ToggleFav()
 	{
-		await UserService.ToggleFavorite(ProductDto.Id);
+		try
+		{
+			await UserService.ToggleFavorite(ProductDto.Id);
+
+			if (UserService.IsFavorite(ProductDto.Id))
+			{
+				Snackbar.Add($"Added {ProductDto.Name} to favorites!", Severity.Success);
+			}
+			else
+			{
+				Snackbar.Add($"Removed {ProductDto.Name} from favorites!", Severity.Info);
+			}
+		}
+		catch (Exception ex) when (ex.Message.Contains("401") || ex.Message.Contains("Unauthorized"))
+		{
+			Snackbar.Add("Firstly - sign in. Your piece of art will be waiting for You!", Severity.Warning);
+			NavigationManager.NavigateTo("/login");
+		}
 	}
 
 	private async Task AddToCart()

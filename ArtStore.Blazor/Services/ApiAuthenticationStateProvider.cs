@@ -10,11 +10,13 @@ namespace ArtStore.Blazor.Services
 	{
 		private readonly HttpClient _httpClient;
 		private readonly IAuthService _authService;
+		private readonly IUserProfileService _userService;
 
-		public ApiAuthenticationStateProvider(HttpClient httpClient, IAuthService authService)
+		public ApiAuthenticationStateProvider(HttpClient httpClient, IAuthService authService, IUserProfileService userService)
 		{
 			_httpClient = httpClient;
 			_authService = authService;
+			_userService = userService;
 		}
 
 		public override async Task<AuthenticationState> GetAuthenticationStateAsync()
