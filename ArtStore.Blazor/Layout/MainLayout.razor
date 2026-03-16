@@ -1,5 +1,8 @@
-﻿@using ArtStore.Blazor.Services
+﻿@using ArtStore.Blazor.Interfaces
+@using ArtStore.Blazor.Services
 @inherits LayoutComponentBase
+@inject ISnackbar Snackbar
+@inject IUserProfileService UserService
 @inject NavigationManager NavigationManager
 @inject ApiAuthenticationStateProvider ApiAuthenticationStateProvider
 
@@ -26,11 +29,10 @@
         <MudSpacer />
 
         <div class="d-flex align-center gap-1">
-            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>
-            <MudIconButton  OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>    
             <MudIconButton Variant="Variant.Text" OnClick="GoToCart" Icon="@Icons.Material.Outlined.ShoppingCart"></MudIconButton>
         </div>
-        <AuthorizeView>
+        <AuthorizeView Context="context">
             <Authorized>
                 <!-- Logged in -->
                 <MudIconButton OnClick="GoToProfile">
@@ -39,10 +41,10 @@
                     </MudAvatar>
                 </MudIconButton>
             </Authorized>
-                <!-- <NotAuthorized> -->
+            <NotAuthorized>
                 <!-- Not logged in -->
-                <!-- <MudIconButton Icon="@Icons.Material.Outlined.Person" OnClick="GoToLogin" /> -->
-                <!-- </NotAuthorized> -->
+                <MudIconButton OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+            </NotAuthorized>
         </AuthorizeView>
     </MudAppBar>
 
@@ -144,8 +146,38 @@
 </style>
 
 @code{
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthStateTask != null)
+        {
+            var authState = await AuthStateTask;
+
+            if (authState.User.Identity?.IsAuthenticated == true)
+            {
+                try { await UserService.GetProfile(); } catch { }
+            }
+        }
+    }
     private void GoToLogin() => NavigationManager.NavigateTo("/login");
-    private void GoToCart() => NavigationManager.NavigateTo("/cart");
+    private async Task GoToCart()
+    {
+        var authState = await ApiAuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+             NavigationManager.NavigateTo("/cart");
+        }
+        else
+        {
+            Snackbar.Add("Please login to view your cart.", Severity.Warning);
+            NavigationManager.NavigateTo("/login");
+	    }	
+    }
+    
     private void GoToHome() => NavigationManager.NavigateTo("/");
     private void GoToArtists() => NavigationManager.NavigateTo("/artists");
     private void GoToBestsellers() => NavigationManager.NavigateTo("/collection/bestsellers");

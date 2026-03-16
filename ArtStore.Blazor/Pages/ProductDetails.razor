@@ -221,26 +221,17 @@
 
     private async Task AddToCart()
     {
-        try
-        {
-            await CartService.AddToCart(product!.Id, quantity);
+		bool success = await CartService.TryAddToCartAsync(product!.Id, quantity);
 
-            Snackbar.Add($"Added {quantity} x {product.Name} to cart!", Severity.Success);
-        }
-        catch (Exception ex)
+        if(success)
         {
-            // if not logged, redirect to login page
-            if (ex.Message.Contains("logged in"))
-            {
-                Snackbar.Add("Please login first.", Severity.Warning);
-                NavigationManager.NavigateTo("/login");
-            }
-            else
-            {
-                Snackbar.Add("Something went wrong.", Severity.Error);
-                Console.WriteLine(ex.Message);
-            }
+            Snackbar.Add($"{quantity} x {product.Name} added to cart!", Severity.Success);
         }
+        else
+        {
+            Snackbar.Add("Firstly - sign in. Your piece of art will be waiting for You!", Severity.Error);
+            NavigationManager.NavigateTo("/login");
+		}
     }
 
     private string selectedSize = "A5";

@@ -56,6 +56,15 @@ namespace ArtStore.Blazor.Services
 
 				OnChange?.Invoke();
 			}
+			else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+			{
+				// Throwing this exception will be caught in the UI layer, where we can redirect to login or show a message
+				throw new Exception("401");
+			}
+			else
+			{
+				throw new Exception("Failed to toggle favorite.");
+			}
 		}
 
 		public bool IsFavorite(Guid productId) => FavoriteProductIds.Contains(productId);

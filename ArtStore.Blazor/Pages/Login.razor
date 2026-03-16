@@ -4,6 +4,7 @@
 @using ArtStore.Shared.DTO
 @inject ISnackbar Snackbar
 @inject IAuthService AuthService
+@inject IUserProfileService UserService
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavigationManager
 
@@ -46,6 +47,8 @@
 		{
 			var provider = (ApiAuthenticationStateProvider)AuthStateProvider;
 			provider.MarkUserAsAuthenticated(loginDto.Email);
+
+			await UserService.GetProfile();
 
 			Snackbar.Add("Login successful!", Severity.Success);
 			NavigationManager.NavigateTo("/");
