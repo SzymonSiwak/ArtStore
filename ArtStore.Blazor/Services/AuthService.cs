@@ -17,7 +17,18 @@ namespace ArtStore.Blazor.Services
             _jsRuntime = jsRuntime;
 		}
 
-        public async Task<bool> Login(LoginDto login)
+        public async Task<string?> Register(RegisterDto register)
+        {
+            var response = await _httpClient.PostAsJsonAsync("api/auth/register", register);
+            if (response.IsSuccessStatusCode)
+            {
+                return null; // Registration successful, no error message
+			}
+			var errorContent = await response.Content.ReadAsStringAsync();
+			return errorContent; 
+        }
+
+		public async Task<bool> Login(LoginDto login)
         {
             var response = await _httpClient.PostAsJsonAsync("api/auth/login", login);
 

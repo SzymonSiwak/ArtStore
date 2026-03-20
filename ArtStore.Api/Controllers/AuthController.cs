@@ -19,9 +19,16 @@ namespace ArtStore.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<string>> Register(RegisterDto request)
         {
-            var userId = await _mediator.Send(new RegisterUserCommand(request));
-            return Ok(new { UserId = userId });
-        }
+            try
+            {
+				var userId = await _mediator.Send(new RegisterUserCommand(request));
+				return Ok(new { UserId = userId });
+			}
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+			}
+		}
 
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponseDto>> Login(LoginDto request)

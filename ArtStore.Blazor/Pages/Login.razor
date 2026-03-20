@@ -12,35 +12,122 @@
 
 <MudContainer MaxWidth="MaxWidth.Small" Class="mt-16">
 	<MudPaper Elevation="3" Class="pa-8">
-		<MudText Typo="Typo.h4" Align="Align.Center" Class="mb-6">Sign In</MudText>
 
-		<MudForm @bind-IsValid="@success">
-			<MudTextField T="string" Label="Email" @bind-Value="loginDto.Email" Required="true"
-					InputType="InputType.Email" />
-			<MudTextField T="string" Label="Password" @bind-Value="loginDto.Password" Required="true"
-					InputType="InputType.Password" />
+		<MudText Typo="Typo.h4" Align="Align.Center" Class="mb-6">
+			@(showRegisterForm ? "Create Account" : "Sign In")
+		</MudText>
 
-			<MudButton Variant="Variant.Filled"
-					   Color="Color.Primary"
-					   Class="mt-6 full-width"
-					   OnClick="HandleLogin"
-					   Disabled="@(!success)">
-				   Login
-			</MudButton>
-		</MudForm>
+		@if (!showRegisterForm)
+		{
+			<MudForm @bind-IsValid="@isLoginValid">
+				<MudTextField T="string" Label="Email" @bind-Value="loginDto.Email" Required="true"
+						InputType="InputType.Email" />
+				<MudTextField T="string" Label="Password" @bind-Value="loginDto.Password" Required="true"
+						InputType="InputType.Password" />
 
-			<MudText Align="Align.Center" Class="mt-4">
-				Don't have an account? Use Swagger to register (for now).
+				<MudButton Variant="Variant.Filled"
+						Color="Color.Primary"
+						Class="mt-6 full-width"
+						OnClick="HandleLogin"
+						Disabled="@(!isLoginValid)">
+					Sign In
+				</MudButton>
+			</MudForm>
+
+			<MudText Align="Align.Center" Class="mt-6">
+					Don't have an account? 
+					<MudLink OnClick="ToggleForm" Color="Color.Primary" Style="cursor: pointer; font-weight: bold;">
+						Sign up!
+					</MudLink>
 			</MudText>
+		}
+		@if (showRegisterForm)
+		{
+			<MudCollapse Expanded="showRegisterForm">
+				<MudForm @bind-IsValid="@isRegisterValid">
+
+					<MudTextField T="string" Label="First Name" @bind-Value="registerDto.FirstName" Required="true" RequiredError="First name is required!" />
+					<MudTextField T="string" Label="Last Name" @bind-Value="registerDto.LastName" />
+
+					<MudTextField T="string" Label="Email" @bind-Value="registerDto.Email" Required="true" InputType="InputType.Email" RequiredError="Email is required!" />
+
+					<!-- Walidacja hasła (minimum 6 znaków) -->
+					<MudTextField T="string" Label="Password" @bind-Value="registerDto.Password" Required="true" InputType="InputType.Password"
+								  Validation="@(new Func<string, string?>(ValidatePassword))" />
+
+					<MudButton Variant="Variant.Filled"
+							   Color="Color.Secondary"
+							   Class="mt-6"
+							   FullWidth="true"
+							   OnClick="HandleRegister"
+							   Disabled="@(!isRegisterValid || isProcessing)">
+						@if (isProcessing)
+						{
+							<MudProgressCircular Size="Size.Small" Indeterminate="true" Class="mr-2" />
+						}
+						Sign Up
+					</MudButton>
+
+				</MudForm>
+
+				<MudText Align="Align.Center" Class="mt-6">
+					Already have an account?
+					<MudLink OnClick="ToggleForm" Color="Color.Primary" Style="cursor: pointer; font-weight: bold;">
+						Sign in
+					</MudLink>
+				</MudText>
+			</MudCollapse>
+		}
 	</MudPaper>
 </MudContainer>
 
-@code {
+	@code {
 	private LoginDto loginDto = new();
-	private bool success;
+	private RegisterDto registerDto = new();
+
+	private bool showRegisterForm = false;
+	private bool isLoginValid;
+	private bool isRegisterValid;
+	private bool isProcessing = false;
+
+	private void ToggleForm()
+	{
+		showRegisterForm = !showRegisterForm;
+		loginDto = new LoginDto();
+		registerDto = new RegisterDto();
+	}
+
+	private string? ValidatePassword(string password)
+	{
+		if (string.IsNullOrWhiteSpace(password))
+			return "Password is required!";
+		if (password.Length < 6)
+			return "Password must be at least 6 characters long!";
+		return null;
+	}
+
+	private async Task HandleRegister()
+	{
+		isProcessing = true;
+		var result = await AuthService.Register(registerDto);
+		if (result == null)
+		{
+			Snackbar.Add("Registration successful! Please log in.", Severity.Success);
+			loginDto.Email = registerDto.Email;
+			showRegisterForm = false;
+
+			//ToogleForm()
+		}
+		else
+		{
+			Snackbar.Add("Registration failed. Please try again.", Severity.Error);
+		}
+		isProcessing = false;
+	}
 
 	private async Task HandleLogin()
 	{
+		isProcessing = true;
 		var result = await AuthService.Login(loginDto);
 
 		if (result)
@@ -57,5 +144,6 @@
 		{
 			Snackbar.Add("Login failed. Please check your credentials.", Severity.Error);
 		}
+		isProcessing = false;
 	}
 }
