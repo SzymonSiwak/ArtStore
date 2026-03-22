@@ -8,7 +8,7 @@ namespace ArtStore.Domain.Entities
         public string Description { get; set; } = string.Empty;
 
         // User-friendly URL
-        public string URL { get; set; } = string.Empty;
+        public string Slug { get; set; } = string.Empty;
 
         //Relation Category-Product 1:N
         public ICollection<Product> Products { get; set; } = new List<Product>();

@@ -1,5 +1,5 @@
-﻿using ArtStore.Domain.Entities;
-using ArtStore.Shared.Enums;
+﻿using ArtStore.Shared.Enums;
+using ArtStore.Domain.Entities;
 using ArtStore.Domain.ValueObjects;
 
 namespace ArtStore.Infrastructure
@@ -8,12 +8,60 @@ namespace ArtStore.Infrastructure
 	{
 		public static async Task SeedAsync(ArtStoreDbContext context)
 		{
-			if (context.Artists.Any())
-			{
-				return;
-			}
+			if (context.Artists.Any()) return;
 
-			var artist1 = new Artist
+            // --- CATEGORIES ---
+            var catNature = new Category { Name = "Nature", Slug = "nature", Description = "Beautiful landscapes and views." };
+			var catPeople = new Category { Name = "People", Slug = "people", Description = "Portraits and human subjects." };
+			var catCosmos = new Category { Name = "Cosmos", Slug = "cosmos", Description = "Space, stars, and galaxies." };
+			var catFood = new Category { Name = "Food", Slug = "food", Description = "Delicious dishes and culinary art." };
+			var catAbstract = new Category { Name = "Abstract", Slug = "abstract", Description = "Non-representational art." };
+
+			await context.AddRangeAsync(catNature, catPeople, catCosmos, catFood, catAbstract);
+			await context.SaveChangesAsync();
+
+            // --- COLLECTIONS ---
+			var colFilmClub = new Collection 
+			{ 
+				Name = "Film Club", 
+				Slug = "film-club", 
+				Description = "Scenes and posters from classic films.",
+				BannerImageUrl = "images/posters.jpg"
+			};
+			var colKitchenSoul = new Collection 
+			{ 
+				Name = "Kitchen Soul", 
+				Slug = "kitchen-soul", 
+				Description = "Art inspired by cooking and kitchens.",
+                BannerImageUrl = "images/posters-2.jpg"
+            };
+			var colWildNature = new Collection 
+			{ 
+				Name = "Wild Nature", 
+				Slug = "wild-nature", 
+				Description = "Untamed landscapes and wildlife.",
+                BannerImageUrl = "images/posters-3.jpg"
+            };
+			var colVividDreams = new Collection 
+			{ 
+				Name = "Vivid Dreams", 
+				Slug = "vivid-dreams", 
+				Description = "Surreal and colorful dreamscapes.",
+                BannerImageUrl = "images/posters-4.jpg"
+            };
+			var colUrbanLifestyle = new Collection 
+			{ 
+				Name = "Urban Lifestyle", 
+				Slug = "urban-lifestyle", 
+				Description = "Cityscapes and modern life.",
+                BannerImageUrl = "images/posters-5.jpg"
+            };
+
+            await context.Collections.AddRangeAsync(colFilmClub, colKitchenSoul, colWildNature, colVividDreams, colUrbanLifestyle);
+            await context.SaveChangesAsync();
+
+            // --- ARTISTS ---
+            var artist1 = new Artist
 			{
 				Name = "Vincent van Gogh",
 				Bio = "Dutch post-impressionist painter.",
@@ -60,8 +108,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "73x92 cm",
 					ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRYRHg2ZPNoxbhAY8xxyaCVBeKirNIVHGP_g&s",
 					Price = new Money(12000, "USD"),
-					Category = Category.Living_Accessories,
-					IsBestseller = true, 
+					CategoryId = catCosmos.Id,
+					Collections = new List<Collection> { colWildNature, colVividDreams },
+                    IsBestseller = true, 
                     ArtistId = artist1.Id,
 					Frame = FrameType.Gold, 
 					CreatedAt = DateTime.UtcNow.AddMonths(-6)
@@ -73,8 +122,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "92x73 cm",
 					ImageUrl = "https://images.photowall.com/products/44235/gogh-vincent-van-sunflowers.jpg?h=699&q=85",
 					Price = new Money(5000, "USD"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catNature.Id,
+					Collections = new List<Collection> { colWildNature },
+                    IsBestseller = false,
 					ArtistId = artist1.Id,
 					Frame = FrameType.Metal,
 					CreatedAt = DateTime.UtcNow.AddMonths(-5)
@@ -87,8 +137,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "200x200 cm",
 					ImageUrl = "https://1.bonami.pl/images/fit-crop-fill/4c/2d/4c2dc61d8bc05cf8f887154636d6bd09a98f8e60-1000x1000.jpeg",
 					Price = new Money(8500, "USD"),
-					Category = Category.Stationary,
-					IsBestseller = true, 
+					CategoryId = catNature.Id,
+					Collections = new List<Collection> { colWildNature },
+                    IsBestseller = true, 
                     ArtistId = artist2.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow.AddMonths(-6)
@@ -100,7 +151,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "48x63 cm",
 					ImageUrl = "https://placehold.co/600x400",
 					Price = new Money(9000, "USD"),
-					Category = Category.Stationary,
+					CategoryId = catNature.Id, 
+					Collections = new List < Collection > { colWildNature, colVividDreams },
 					IsBestseller = false,
 					ArtistId = artist2.Id,
 					Frame = FrameType.Gold,
@@ -115,8 +167,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "50x50 cm",
 					ImageUrl = "https://placehold.co/600x400",
 					Price = new Money(300, "USD"),
-					Category = Category.Other,
-					IsBestseller = true,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = true,
 					ArtistId = artist1.Id
 				},
 
@@ -128,8 +181,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "54x27 cm",
 					ImageUrl = "images/bangkok.jpg",
 					Price = new Money(18, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow.AddMonths(-6)
@@ -142,7 +196,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "56x28 cm",
 					ImageUrl = "images/bathtub.jpg",
 					Price = new Money(21, "EUR"),
-					Category = Category.Living_Accessories,
+					CategoryId = catAbstract.Id, 
+					Collections = new List <Collection> { colVividDreams, colUrbanLifestyle },
 					IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
@@ -156,7 +211,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "62x27 cm",
 					ImageUrl = "images/beach.jpg",
 					Price = new Money(15, "EUR"),
-					Category = Category.Living_Accessories,
+					CategoryId = catNature.Id, 
+					Collections = new List <Collection> { colWildNature, colUrbanLifestyle },
 					IsBestseller = true,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
@@ -170,7 +226,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "64x28 cm",
 					ImageUrl = "images/binoculars.jpg",
 					Price = new Money(25, "EUR"),
-					Category = Category.Living_Accessories,
+					CategoryId = catAbstract.Id, 
+					Collections = new List < Collection > { colVividDreams, colUrbanLifestyle },
 					IsBestseller = true,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
@@ -184,8 +241,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "54x26 cm",
 					ImageUrl = "images/botanical-lover.jpg",
 					Price = new Money(22, "EUR"),
-					Category = Category.Stationary,
-					IsBestseller = false,
+					CategoryId = catNature.Id,
+					Collections = new List<Collection> { colWildNature, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow.AddMonths(-4)
@@ -198,8 +256,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "74x38 cm",
 					ImageUrl = "images/breakfast.jpg",
 					Price = new Money(114, "EUR"),
-					Category = Category.Other,
-					IsBestseller = false,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist4.Id,
 					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow
@@ -212,8 +271,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "54x28 cm",
 					ImageUrl = "images/cheers.jpg",
 					Price = new Money(14, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle, colKitchenSoul },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow
@@ -226,36 +286,84 @@ namespace ArtStore.Infrastructure
 					Dimensions = "174x138 cm",
 					ImageUrl = "images/cherry.jpg",
 					Price = new Money(314, "EUR"),
-					Category = Category.Other,
-					IsBestseller = true,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
+                    IsBestseller = true,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Wood,
 					CreatedAt = DateTime.UtcNow.AddMonths(-7)
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "Mars",
+                    Description = "Mars at it's finest",
+                    Dimensions = "54x27 cm",
+                    ImageUrl = "images/cosmic-stars.jpg",
+                    Price = new Money(18, "EUR"),
+                    CategoryId = catCosmos.Id,
+                    Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
+                    ArtistId = artist3.Id,
+                    Frame = FrameType.None,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-6)
+                },
+
+                new Product
 				{
 					Name = "Couch",
 					Description = "Couch poster",
 					Dimensions = "34x18 cm",
 					ImageUrl = "images/couch.jpg",
 					Price = new Money(4, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catPeople.Id,
+					Collections = new List<Collection> { colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow.AddMonths(-2)
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "Dandelion",
+                    Description = "Dandelion at it's finest",
+                    Dimensions = "54x27 cm",
+                    ImageUrl = "images/dandelion.jpg",
+                    Price = new Money(18, "EUR"),
+                    CategoryId = catNature.Id,
+                    Collections = new List<Collection> { colWildNature },
+                    IsBestseller = true,
+                    ArtistId = artist3.Id,
+                    Frame = FrameType.Gold,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-3)
+                },
+
+                new Product
+                {
+                    Name = "Eclipse",
+                    Description = "Eclipse at it's finest. So dark and heavy.",
+                    Dimensions = "54x27 cm",
+                    ImageUrl = "images/eclipse.jpg",
+                    Price = new Money(18, "EUR"),
+                    CategoryId = catCosmos.Id,
+                    Collections = new List<Collection> { colWildNature, colVividDreams },
+                    IsBestseller = false,
+                    ArtistId = artist4.Id,
+                    Frame = FrameType.Gold,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-2)
+                },
+
+                new Product
 				{
 					Name = "Eggs",
 					Description = "eggs painting",
 					Dimensions = "174x88 cm",
 					ImageUrl = "images/eggs.jpg",
 					Price = new Money(104, "EUR"),
-					Category = Category.Other,
-					IsBestseller = false,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Wood,
 					CreatedAt = DateTime.UtcNow.AddMonths(-2)
@@ -268,8 +376,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "38x18 cm",
 					ImageUrl = "images/eggs-2.jpg",
 					Price = new Money(10, "EUR"),
-					Category = Category.Stationary,
-					IsBestseller = false,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle, colVividDreams },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Metal,
 					CreatedAt = DateTime.UtcNow
@@ -282,8 +391,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "63x38 cm",
 					ImageUrl = "images/eleitas.jpg",
 					Price = new Money(126, "EUR"),
-					Category = Category.Other,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Wood,
 					CreatedAt = DateTime.UtcNow.AddMonths(-2)
@@ -296,8 +406,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "74x88 cm",
 					ImageUrl = "images/feeling-spritzy.jpg",
 					Price = new Money(21, "EUR"),
-					Category = Category.Stationary,
-					IsBestseller = true,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
+                    IsBestseller = true,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Wood,
 					CreatedAt = DateTime.UtcNow.AddMonths(-6)
@@ -310,7 +421,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "54x28 cm",
 					ImageUrl = "images/flower-head.jpg",
 					Price = new Money(21, "EUR"),
-					Category = Category.Stationary,
+					CategoryId = catFood.Id, 
+					Collections = new List <Collection> { colWildNature, colVividDreams },
 					IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Wood,
@@ -324,7 +436,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "100x48 cm",
 					ImageUrl = "images/flowers-2.jpg",
 					Price = new Money(124, "EUR"),
-					Category = Category.Other,
+					CategoryId = catNature.Id, 
+					Collections = new List <Collection> { colWildNature, colVividDreams },
 					IsBestseller = false,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Gold,
@@ -338,7 +451,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "44x28 cm",
 					ImageUrl = "images/full-of-shit.jpg",
 					Price = new Money(10, "EUR"),
-					Category = Category.Living_Accessories,
+					CategoryId = catPeople.Id,
+					Collections = new List<Collection> { colUrbanLifestyle },
 					IsBestseller = true,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Metal,
@@ -352,22 +466,39 @@ namespace ArtStore.Infrastructure
 					Dimensions = "54x28 cm",
 					ImageUrl = "images/green-image.jpg",
 					Price = new Money(15, "EUR"),
-					Category = Category.Stationary,
+					CategoryId = catNature.Id, 
+					Collections = new List <Collection> { colWildNature, colVividDreams },
 					IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Metal,
 					CreatedAt = DateTime.UtcNow
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "Green woman",
+                    Description = "Green at it's finest, so much green init",
+                    Dimensions = "54x27 cm",
+                    ImageUrl = "images/green-woman.jpg",
+                    Price = new Money(18, "EUR"),
+                    CategoryId = catPeople.Id,
+                    Collections = new List<Collection> { colUrbanLifestyle, colVividDreams },
+                    IsBestseller = true,
+                    ArtistId = artist3.Id,
+                    Frame = FrameType.Metal,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-5)
+                },
+
+                new Product
 				{
 					Name = "Greetings",
 					Description = "eggs painting",
 					Dimensions = "74x48 cm",
 					ImageUrl = "images/greetings.jpg",
 					Price = new Money(24, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = true,
+					CategoryId = catPeople.Id,
+					Collections = new List<Collection> { colUrbanLifestyle, colVividDreams },
+                    IsBestseller = true,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Wood,
 					CreatedAt = DateTime.UtcNow.AddMonths(-2)
@@ -380,22 +511,54 @@ namespace ArtStore.Infrastructure
 					Dimensions = "44x28 cm",
 					ImageUrl = "images/junijs.jpg",
 					Price = new Money(34, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
-					Frame = FrameType.None,
+					Frame = FrameType.Metal,
 					CreatedAt = DateTime.UtcNow
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "Les agudes",
+                    Description = "Les Agudes super abstractly, super-duper colorful",
+                    Dimensions = "54x27 cm",
+                    ImageUrl = "images/les-agudes.jpg",
+                    Price = new Money(18, "EUR"),
+                    CategoryId = catAbstract.Id,
+                    Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = true,
+                    ArtistId = artist4.Id,
+                    Frame = FrameType.Wood,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-4)
+                },
+
+                new Product
+                {
+                    Name = "Letters",
+                    Description = "Letters at it's finest, so much green init",
+                    Dimensions = "54x27 cm",
+                    ImageUrl = "images/letters.jpg",
+                    Price = new Money(18, "EUR"),
+                    CategoryId = catNature.Id,
+                    Collections = new List<Collection> { colWildNature },
+                    IsBestseller = true,
+                    ArtistId = artist3.Id,
+                    Frame = FrameType.Gold,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-1)
+                },
+
+                new Product
 				{
 					Name = "Lighthouse",
 					Description = "Lighthouse poster",
 					Dimensions = "53x38 cm",
 					ImageUrl = "images/lighthouse.jpg",
 					Price = new Money(44, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catPeople.Id,
+					Collections = new List<Collection> { colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow.AddMonths(-3)
@@ -408,8 +571,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "68x34 cm",
 					ImageUrl = "images/lobster.jpg",
 					Price = new Money(34, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catPeople.Id,
+					Collections = new List<Collection> { colUrbanLifestyle, colFilmClub },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow
@@ -422,8 +586,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "47x34 cm",
 					ImageUrl = "images/lobster-6.jpg",
 					Price = new Money(24, "EUR"),
-					Category = Category.Stationary,
-					IsBestseller = true,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
+                    IsBestseller = true,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow.AddDays(-10)
@@ -436,22 +601,39 @@ namespace ArtStore.Infrastructure
 					Dimensions = "37x15 cm",
 					ImageUrl = "images/lobster-8.jpg",
 					Price = new Money(44, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Metal,
 					CreatedAt = DateTime.UtcNow.AddDays(-17)
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "The solar seris",
+                    Description = "So much planets",
+                    Dimensions = "54x27 cm",
+                    ImageUrl = "images/mars.jpg",
+                    Price = new Money(18, "EUR"),
+                    CategoryId = catCosmos.Id,
+                    Collections = new List<Collection> { colWildNature, colUrbanLifestyle },
+                    IsBestseller = true,
+                    ArtistId = artist4.Id,
+                    Frame = FrameType.Wood,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-11)
+                },
+
+                new Product
 				{
 					Name = "Missed Call",
 					Description = "Missed call poster",
 					Dimensions = "37x15 cm",
 					ImageUrl = "images/missed-call.jpg",
 					Price = new Money(26, "EUR"),
-					Category = Category.Stationary,
-					IsBestseller = false,
+					CategoryId = catPeople.Id,
+					Collections = new List<Collection> { colUrbanLifestyle, colVividDreams },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow.AddDays(-26)
@@ -464,8 +646,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "167x115 cm",
 					ImageUrl = "images/mug.jpg",
 					Price = new Money(444, "EUR"),
-					Category = Category.Other,
-					IsBestseller = true,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
+                    IsBestseller = true,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Wood,
 					CreatedAt = DateTime.UtcNow.AddMonths(-5)
@@ -478,7 +661,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "37x15 cm",
 					ImageUrl = "images/noodles.jpg",
 					Price = new Money(34, "EUR"),
-					Category = Category.Living_Accessories,
+					CategoryId = catFood.Id, 
+					Collections = new List<Collection> { colKitchenSoul, colUrbanLifestyle },
 					IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Gold,
@@ -492,8 +676,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "68x45 cm",
 					ImageUrl = "images/notebooks.jpg",
 					Price = new Money(24, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow
@@ -506,50 +691,114 @@ namespace ArtStore.Infrastructure
 					Dimensions = "48x25 cm",
 					ImageUrl = "images/oranges.jpg",
 					Price = new Money(24, "EUR"),
-					Category = Category.Stationary,
-					IsBestseller = true,
+					CategoryId = catFood.Id,
+					Collections = new List<Collection> { colKitchenSoul, colVividDreams },
+                    IsBestseller = true,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow.AddMonths(-7)
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "Orange woman",
+                    Description = "Super orange woman poster, oranges everywhere",
+                    Dimensions = "68x35 cm",
+                    ImageUrl = "images/orange-woman.jpg",
+                    Price = new Money(63, "EUR"),
+                    CategoryId = catPeople.Id,
+                    Collections = new List <Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
+                    ArtistId = artist3.Id,
+                    Frame = FrameType.Metal,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-2)
+                },
+
+                new Product
 				{
 					Name = "Parasite",
 					Description = "Super parasite poster",
 					Dimensions = "68x35 cm",
 					ImageUrl = "images/parasite.jpg",
 					Price = new Money(34, "EUR"),
-					Category = Category.Living_Accessories,
+					CategoryId = catPeople.Id, 
+					Collections = new List <Collection> { colFilmClub, colUrbanLifestyle },
 					IsBestseller = false,
 					ArtistId = artist3.Id,
-					Frame = FrameType.Metal,
+					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow.AddMonths(-5)
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "Patagonia",
+                    Description = "Super patagonia poster",
+                    Dimensions = "68x35 cm",
+                    ImageUrl = "images/patagonia.jpg",
+                    Price = new Money(38, "EUR"),
+                    CategoryId = catNature.Id,
+                    Collections = new List <Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
+                    ArtistId = artist4.Id,
+                    Frame = FrameType.Gold,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-3)
+                },
+
+                new Product
 				{
 					Name = "Pool day",
 					Description = "Very super pool day painting",
 					Dimensions = "148x125 cm",
 					ImageUrl = "images/pool-day.jpg",
 					Price = new Money(124, "EUR"),
-					Category = Category.Other,
-					IsBestseller = true,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = true,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow.AddMonths(-7)
 				},
 
-				new Product
+                new Product
+                {
+                    Name = "Portal",
+                    Description = "Super portal poster",
+                    Dimensions = "68x35 cm",
+                    ImageUrl = "images/parasite.jpg",
+                    Price = new Money(34, "EUR"),
+                    CategoryId = catCosmos.Id,
+                    Collections = new List <Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = true,
+                    ArtistId = artist3.Id,
+                    Frame = FrameType.Wood,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-11)
+                },
+
+                new Product
+                {
+                    Name = "Profesor",
+                    Description = "Super profesor poster",
+                    Dimensions = "68x35 cm",
+                    ImageUrl = "images/parasite.jpg",
+                    Price = new Money(45, "EUR"),
+                    CategoryId = catPeople.Id,
+                    Collections = new List <Collection> { colUrbanLifestyle },
+                    IsBestseller = false,
+                    ArtistId = artist3.Id,
+                    Frame = FrameType.Metal,
+                    CreatedAt = DateTime.UtcNow.AddMonths(-5)
+                },
+
+                new Product
 				{
 					Name = "Smile",
 					Description = "Very super smile poster",
 					Dimensions = "68x35 cm",
 					ImageUrl = "images/smile.jpg",
 					Price = new Money(24, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow
@@ -560,10 +809,11 @@ namespace ArtStore.Infrastructure
 					Name = "Socks",
 					Description = "Very super socks painting",
 					Dimensions = "148x125 cm",
-					ImageUrl = "images/pool-day.jpg",
+					ImageUrl = "images/socks.jpg",
 					Price = new Money(124, "EUR"),
-					Category = Category.Other,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist4.Id,
 					Frame = FrameType.Metal,
 					CreatedAt = DateTime.UtcNow.AddMonths(-5)
@@ -576,7 +826,8 @@ namespace ArtStore.Infrastructure
 					Dimensions = "58x35 cm",
 					ImageUrl = "images/spring-flowers.jpg",
 					Price = new Money(38, "EUR"),
-					Category = Category.Stationary,
+					CategoryId = catAbstract.Id, 
+					Collections = new List <Collection> { colVividDreams, colUrbanLifestyle },
 					IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.None,
@@ -590,10 +841,11 @@ namespace ArtStore.Infrastructure
 					Dimensions = "48x15 cm",
 					ImageUrl = "images/tennis.jpg",
 					Price = new Money(12, "EUR"),
-					Category = Category.Living_Accessories,
+					CategoryId = catAbstract.Id, 
+					Collections = new List <Collection> { colVividDreams, colUrbanLifestyle },
 					IsBestseller = true,
 					ArtistId = artist3.Id,
-					Frame = FrameType.Metal,
+					Frame = FrameType.None,
 					CreatedAt = DateTime.UtcNow.AddMonths(-4)
 				},
 
@@ -604,8 +856,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "38x15 cm",
 					ImageUrl = "images/woman.jpg",
 					Price = new Money(32, "EUR"),
-					Category = Category.Stationary,
-					IsBestseller = false,
+					CategoryId= catPeople.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Gold,
 					CreatedAt = DateTime.UtcNow.AddMonths(-2)
@@ -618,8 +871,9 @@ namespace ArtStore.Infrastructure
 					Dimensions = "48x23 cm",
 					ImageUrl = "images/wo-tiles.jpg",
 					Price = new Money(27, "EUR"),
-					Category = Category.Living_Accessories,
-					IsBestseller = false,
+					CategoryId = catAbstract.Id,
+					Collections = new List<Collection> { colVividDreams, colUrbanLifestyle },
+                    IsBestseller = false,
 					ArtistId = artist3.Id,
 					Frame = FrameType.Metal,
 					CreatedAt = DateTime.UtcNow
