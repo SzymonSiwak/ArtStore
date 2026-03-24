@@ -26,16 +26,9 @@ namespace ArtStore.Infrastructure.Repositories
         {
             return await _context.Products
                                  .Include(p => p.Artist)
+                                 .Include(p => p.Category)
+                                 .Include(p => p.Collections)
                                  .FirstOrDefaultAsync(p => p.Id == id);
-		}
-
-        public async Task<IEnumerable<Product>> GetBestsellersAsync(int count)
-        {
-            return await _context.Products
-                                 .Include(p => p.Artist)
-                                 .Where(p => p.IsBestseller)
-                                 .Take(count)
-                                 .ToListAsync();
 		}
 
         public async Task<IEnumerable<Product>> GetNewArrivalsAsync(int count)
@@ -44,14 +37,6 @@ namespace ArtStore.Infrastructure.Repositories
                                  .Include(p => p.Artist)
                                  .OrderByDescending(p => p.CreatedAt)
                                  .Take(count)
-                                 .ToListAsync();
-		}
-
-        public async Task<IEnumerable<Product>> GetByCategoryAsync(Category category)
-        {
-            return await _context.Products
-                                 .Include(p => p.Artist)
-                                 .Where(p => p.Category == category)
                                  .ToListAsync();
 		}
 

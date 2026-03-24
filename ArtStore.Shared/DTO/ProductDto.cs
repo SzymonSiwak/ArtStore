@@ -12,6 +12,7 @@ namespace ArtStore.Shared.DTO
 		public string ImageUrl { get; set; } = string.Empty;
 		public string ArtistName { get; set; } = string.Empty;
 		public FrameType FrameType { get; set; }
-		public Category Category { get; set; }
-	}
+		public string CategoryName { get; set; } = string.Empty;
+		public Guid CategoryId { get; set; }
+    }
 }
