@@ -33,7 +33,9 @@ namespace ArtStore.Application.Common.Mappings
 
 			CreateMap<Artist, ArtistDetailsDto>();
 
-			CreateMap<User, UserProfileDto>();
+            CreateMap<Collection, CollectionDto>();
+
+            CreateMap<User, UserProfileDto>();
 		}
 	}
 }
