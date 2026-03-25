@@ -14,6 +14,8 @@ namespace ArtStore.Application.Features.Products.Queries.GetFilteredProducts
 	{
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly ICollectionRepository _collectionRepository;
 
         public GetFilteredProductsQueryHandler(IProductRepository productRepository, IMapper mapper)
         {
@@ -23,7 +25,30 @@ namespace ArtStore.Application.Features.Products.Queries.GetFilteredProducts
 
         public async Task<IEnumerable<ProductDto>> Handle(GetFilteredProductsQuery request, CancellationToken cancellationToken)
         {
-            var products = await _productRepository.GetFilteredProductsAsync(request.filter);
+            var filter = request.filter;
+
+            // Translate slugs to IDs 
+            if (!string.IsNullOrEmpty(filter.CollectionSlug))
+            {
+                var collection = await _collectionRepository.GetBySlugAsync(filter.CollectionSlug);
+                if (collection != null)
+                {
+                    filter.CollectionId = collection.Id;
+                }
+            }
+
+            // Translate category slug to IDs
+            if (!string.IsNullOrEmpty(filter.CategorySlug))
+            {
+                var category = await _categoryRepository.GetBySlugAsync(filter.CategorySlug);
+                if (category != null)
+                {
+                    filter.CategoryId = category.Id;
+                }
+            }
+
+            var products = await _productRepository.GetFilteredProductsAsync(filter);
+
             return _mapper.Map<IEnumerable<ProductDto>>(products);
 		}
 
