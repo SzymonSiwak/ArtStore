@@ -32,11 +32,11 @@
 
     <div class="d-flex gap-4 mb-8 flex-wrap align-center">
 
-        <!-- Category filter -->
+        <!-- Category filter 
         @if (CollectionName == "new-arrivals" || CollectionName == "bestsellers")
         {
             <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-                     Label="@(filter.SpecificCategory.HasValue ? filter.SpecificCategory.ToString() : "Category")"
+                     Label="@(filter.CategoryId ? filter.CategoryId : "Category")"
                      Class="@(filter.SpecificCategory.HasValue ? "filter-button filter-button-active" : "filter-button")"
                      Variant="Variant.Text"
                      AnchorOrigin="Origin.BottomLeft"
@@ -48,7 +48,7 @@
                 }
             </MudMenu>
         }
-
+        -->
         <!-- Frame filter -->
         <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
                  Label="@(filter.FrameType.HasValue ? filter.FrameType.ToString() : "Frame")"
@@ -115,6 +115,7 @@
     private bool isLoading = true;
     private List<BreadcrumbItem> _breadcrumbs = new List<BreadcrumbItem>();
 
+    /*
     protected override async Task OnParametersSetAsync()
     {
         _breadcrumbs = new List<BreadcrumbItem>
@@ -126,7 +127,8 @@
         filter = new ProductFilterDto { CollectionName = CollectionName };
         await LoadData();
     }
-
+    */
+    /*
     private async Task LoadData()
     {
         isLoading = true;
@@ -134,7 +136,7 @@
         products = await ProductService.GetFilteredProducts(filter); 
         isLoading = false;
     }
-
+    */
     private string GetDescription(string collectionName)
     {
         return "Explore our collection of " + collectionName.Replace("-", " ") + 
@@ -153,26 +155,26 @@
     private async Task OnFrameChanged(FrameType? newFrame)
     {
         filter.FrameType = newFrame;
-        await LoadData();
+    //    await LoadData();
     }
 
     private async Task OnMinPriceChanged(decimal? newMin)
     {
         filter.MinPrice = newMin;
-        await LoadData();
+     //   await LoadData();
     }
 
     private async Task OnMaxPriceChanged(decimal? newMax)
     {
         filter.MaxPrice = newMax;
-        await LoadData();
+     //   await LoadData();
     }
 
     private async Task ClearPrice()
     {
         filter.MinPrice = null;
         filter.MaxPrice = null;
-        await LoadData();
+     //   await LoadData();
     }
 
     private string FormatTitle(string name)
