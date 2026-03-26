@@ -17,7 +17,7 @@ namespace ArtStore.Blazor.Services
         {
             try
             {
-                return await _httpClient.GetFromJsonAsync<IEnumerable<CategoryDto>>("api/categories")
+                return await _httpClient.GetFromJsonAsync<IEnumerable<CategoryDto>>("api/Category")
                        ?? new List<CategoryDto>();
             }
             catch (Exception ex)
