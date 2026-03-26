@@ -28,9 +28,6 @@ namespace ArtStore.Infrastructure.Configurations
                    .IsRequired()
                    .HasMaxLength(100);
 
-            builder.Property(p => p.Category)
-                   .HasConversion<string>();
-
             builder.HasOne(p => p.Artist)
                    .WithMany(a => a.Products)
                    .HasForeignKey(p => p.ArtistId);

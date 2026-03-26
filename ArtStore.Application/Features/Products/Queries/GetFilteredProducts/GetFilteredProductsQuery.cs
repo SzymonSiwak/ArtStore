@@ -17,10 +17,12 @@ namespace ArtStore.Application.Features.Products.Queries.GetFilteredProducts
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICollectionRepository _collectionRepository;
 
-        public GetFilteredProductsQueryHandler(IProductRepository productRepository, IMapper mapper)
+        public GetFilteredProductsQueryHandler(IProductRepository productRepository, ICategoryRepository categoryRepository, ICollectionRepository collectionRepository, IMapper mapper)
         {
             _productRepository = productRepository;
-			_mapper = mapper;
+            _categoryRepository = categoryRepository;
+            _collectionRepository = collectionRepository;
+            _mapper = mapper;
 		}
 
         public async Task<IEnumerable<ProductDto>> Handle(GetFilteredProductsQuery request, CancellationToken cancellationToken)

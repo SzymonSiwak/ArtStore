@@ -1,6 +1,7 @@
 ﻿@using ArtStore.Shared.Enums
 @using MudBlazor
 
+<!--
 <MudSelect T="Category ?"
            Label="Category"
            Value="SelectedCategory"
@@ -12,18 +13,18 @@
         <MudSelectItem Value="(Category?)cat">@cat</MudSelectItem>
     }
 </MudSelect>
-
+-->
 @code {
-    [Parameter]
-    public Category? SelectedCategory { get; set; }
+    //[Parameter]
+    //public Category? SelectedCategory { get; set; }
 
-    [Parameter]
-    public EventCallback<Category?> SelectedCategoryChanged { get; set; }
+    //[Parameter]
+    //public EventCallback<Category?> SelectedCategoryChanged { get; set; }
 
-    private async Task OnValueChanged(Category? newValue)
-    {
-        SelectedCategory = newValue;
+    //private async Task OnValueChanged(Category? newValue)
+    //{
+    //    SelectedCategory = newValue;
 
-        await SelectedCategoryChanged.InvokeAsync(newValue);
-    }
+    //    await SelectedCategoryChanged.InvokeAsync(newValue);
+    //}
 }
