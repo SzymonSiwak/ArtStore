@@ -1,4 +1,7 @@
-﻿@page "/collection/{CollectionName}"
+﻿@page "/collections"
+@page "/bestsellers"
+@page "/new-arrivals"
+
 @using ArtStore.Blazor.Components
 @using ArtStore.Blazor.Interfaces
 @using ArtStore.Blazor.Services
@@ -6,10 +9,13 @@
 @using ArtStore.Shared.Enums
 @inject IProductService ProductService
 @inject ICategoryService CategoryService
+@inject ICollectionService CollectionService
+@inject NavigationManager NavigationManager
+@implements IDisposable
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8">
+<PageTitle>@FormatTitle(GetActiveRoute())</PageTitle>
 
-    <MudText Typo="Typo.h3" Class="mb-8">@FormatTitle(CollectionName)</MudText>
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8 mb-16">
 
     <MudBreadcrumbs Items="_breadcrumbs" Separator=">" Class="pa-0 mb-4" Style="font-size: 0.9rem; color: #666;">
         <ItemTemplate Context="item">
@@ -19,13 +25,14 @@
         </ItemTemplate>
     </MudBreadcrumbs>
 
+    <!-- Title -->
     <MudText Typo="Typo.h3" Style="font-weight: 500;" Class="mb-4">
-        @FormatTitle(CollectionName)
+        @FormatTitle(GetActiveRoute())
     </MudText>
 
     <!-- Description -->
     <MudText Typo="Typo.body1" Class="mb-8" Style="max-width: 900px; line-height: 1.6; color: #4a4a4a;">
-        @GetDescription(CollectionName)
+        @GetDescription(GetActiveRoute())
     </MudText>
 
     <!-- Dark line -->
@@ -34,21 +41,40 @@
     <div class="d-flex gap-4 mb-8 flex-wrap align-center">
 
         <!-- Category filter -->
-        @if (CollectionName == "new-arrivals" || CollectionName == "bestsellers")
+        <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
+                 Label="@GetCategoryLabel()"
+                 Class="@(filter.CategoryId.HasValue ? "filter-button filter-button-active" : "filter-button")"
+                 Variant="Variant.Text"
+                 AnchorOrigin="Origin.BottomLeft"
+                 TransformOrigin="Origin.TopLeft">
+
+            <MudMenuItem OnClick="@(() => OnCategoryChanged(null))">All Categories</MudMenuItem>
+            @if (categories != null)
+            {
+                @foreach (var cat in categories)
+                {
+                    <MudMenuItem OnClick="@(() => OnCategoryChanged(cat.Id))">@cat.Name</MudMenuItem>
+                }
+            }
+        </MudMenu>
+
+
+        <!-- Collection filter-->
+        @if (string.IsNullOrEmpty(CollectionName))
         {
             <MudMenu EndIcon="@Icons.Material.Filled.KeyboardArrowDown"
-                     Label="@GetCategoryLabel()"
-                     Class="@(filter.CategoryId.HasValue ? "filter-button filter-button-active" : "filter-button")"
+                     Label="@GetCollectionLabel()"
+                     Class="@(filter.CollectionId.HasValue ? "filter-button filter-button-active" : "filter-button")"
                      Variant="Variant.Text"
                      AnchorOrigin="Origin.BottomLeft"
                      TransformOrigin="Origin.TopLeft">
 
-                <MudMenuItem OnClick="@(() => OnCategoryChanged(null))">All Categories</MudMenuItem>
-                @if (categories != null)
+                <MudMenuItem OnClick="@(() => OnCollectionChanged(null))">All Collections</MudMenuItem>
+                @if (allCollections != null)
                 {
-                    @foreach (var cat in categories)
+                    @foreach (var col in allCollections)
                     {
-                        <MudMenuItem OnClick="@(() => OnCategoryChanged(cat.Id))">@cat.Name</MudMenuItem>
+                        <MudMenuItem OnClick="@(() => OnCollectionChanged(col.Id))">@col.Name</MudMenuItem>
                     }
                 }
             </MudMenu>
@@ -114,44 +140,100 @@
 @code {
     [Parameter]
     public string CollectionName { get; set; } = string.Empty;
-    private IEnumerable<CategoryDto> categories = new List<CategoryDto>();
 
+    private IEnumerable<CollectionDto> allCollections = new List<CollectionDto>();
+    private IEnumerable<CategoryDto> categories = new List<CategoryDto>();
     private IEnumerable<ProductDto> products = new List<ProductDto>();
+
     private ProductFilterDto filter = new();
     private bool isLoading = true;
+
     private List<BreadcrumbItem> _breadcrumbs = new List<BreadcrumbItem>();
 
     protected override async Task OnInitializedAsync()
     {
         categories = await CategoryService.GetAllCategoriesAsync();
+        allCollections = await CollectionService.GetAllCollectionsAsync();
+
+        NavigationManager.LocationChanged += HandleLocationChanged;
+
+        await OnParametersSetAsync();
     }
 
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        InvokeAsync(async () =>
+        {
+            await OnParametersSetAsync();
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= HandleLocationChanged;
+    }
 
     protected override async Task OnParametersSetAsync()
     {
+        var activeRoute = GetActiveRoute();
+        var currentTitle = FormatTitle(activeRoute);
+
         _breadcrumbs = new List<BreadcrumbItem>
         {
             new BreadcrumbItem("Home", href: "/"),
-            new BreadcrumbItem(FormatTitle(CollectionName), href: null, disabled: true)
+            new BreadcrumbItem(currentTitle, href: null, disabled: true)
         };
 
-        filter = new ProductFilterDto { CollectionSlug = CollectionName };
+        filter = new ProductFilterDto();
+
+        if (activeRoute == "bestsellers" || activeRoute == "new-arrivals")
+        {
+            filter.CollectionSlug = activeRoute;
+        }
+        else if (!string.IsNullOrEmpty(CollectionName))
+        {
+            filter.CollectionSlug = CollectionName;
+        }
+
         await LoadData();
     }
 
     private async Task LoadData()
     {
         isLoading = true;
-        filter.CollectionSlug = CollectionName;
+
+        //Refresh UI due to bug of not showing proper data after changing subpage
+        StateHasChanged();
+        var activeRoute = GetActiveRoute();
         products = await ProductService.GetFilteredProducts(filter); 
         isLoading = false;
+
+        //Refresh UI due to bug of not showing proper data after changing subpage
+        StateHasChanged();
     }
 
-    private string GetDescription(string collectionName)
+    private string GetActiveRoute()
     {
-        return "Explore our collection of " + collectionName.Replace("-", " ") + 
-               " and find popular designs that reflect your taste and style. " + 
-               "From delicate illustrations to eye-catching typography, colourful compositions to black and white backdrops, there's something for everyone.";
+        var uri = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToLower();
+
+        if (uri.Contains("bestsellers")) return "bestsellers";
+        if (uri.Contains("new-arrivals")) return "new-arrivals";
+        if (!string.IsNullOrEmpty(CollectionName)) return CollectionName;
+
+        return "collections"; 
+    }
+
+    private string GetDescription(string routeName)
+    {
+        if (routeName == "collections")
+            return "Explore our complete gallery of unique art prints. Find the perfect piece for You.";
+        if (routeName == "bestsellers")
+            return "Discover our most popular art prints loved by customers worldwide.";
+        if (routeName == "new-arrivals")
+            return "Be the first to explore our latest additions and freshest designs.";
+
+        return $"Explore our collection of {routeName.Replace("-", " ")} and find popular designs that reflect your taste and style.";
     }
 
     private string GetCategoryLabel()
@@ -163,11 +245,29 @@
         return selectedCat != null ? selectedCat.Name : "Category";
     }
 
+    private string GetCollectionLabel()
+    {
+        if (!filter.CollectionId.HasValue) return "Collection";
+        return allCollections.FirstOrDefault(c => c.Id == filter.CollectionId)?.Name ?? "Collection";
+    }
+
+    private string FormatTitle(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return "Artworks";
+        return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Replace("-", " "));
+    }
+
     // --- Handlers ---
 
     private async Task OnCategoryChanged(Guid? newCategory)
     {
         filter.CategoryId = newCategory;
+        await LoadData();
+    }
+
+    private async Task OnCollectionChanged(Guid? id)
+    {
+        filter.CollectionId = id;
         await LoadData();
     }
 
@@ -194,11 +294,5 @@
         filter.MinPrice = null;
         filter.MaxPrice = null;
         await LoadData();
-    }
-
-    private string FormatTitle(string name)
-    {
-        if (string.IsNullOrEmpty(name)) return "";
-        return System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name.Replace("-", " "));
     }
 }

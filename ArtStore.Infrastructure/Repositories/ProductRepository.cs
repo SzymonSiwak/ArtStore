@@ -50,18 +50,14 @@ namespace ArtStore.Infrastructure.Repositories
             if (filter.IsBestseller)
                 query = query.Where(p => p.IsBestseller);
 
-            if(filter.IsNewArrival)
-                query = query.OrderByDescending(p => p.CreatedAt).Take(10);
+            if (filter.IsNewArrival)
+                query = query.OrderByDescending(p => p.CreatedAt);
 
+            if (filter.CollectionId.HasValue)
+                query = query.Where(p => p.Collections.Any(c => c.Id == filter.CollectionId.Value));
 
-
-            if(filter.CategoryId.HasValue)
-                query = query.Where(p => p.CategoryId == filter.CategoryId.Value);
-            
-            if(filter.CollectionId.HasValue)
-                query = query.Where(p => p.Collections.Any(c => c.Id == filter.CollectionId.Value));    
-
-
+            if (filter.CategoryId.HasValue)
+                query = query.Where(p => p.CategoryId == filter.CategoryId.Value);           
 
             if (filter.MinPrice.HasValue)
 				query = query.Where(p => p.Price.Amount >= filter.MinPrice.Value);
@@ -72,8 +68,12 @@ namespace ArtStore.Infrastructure.Repositories
 			if (filter.FrameType.HasValue)
 				query = query.Where(p => p.Frame == filter.FrameType.Value);
 
+            if (filter.IsNewArrival)
+            {
+                return await query.Take(10).ToListAsync();
+            }
 
-			return await query.ToListAsync();
+            return await query.ToListAsync();
 		}
 
 

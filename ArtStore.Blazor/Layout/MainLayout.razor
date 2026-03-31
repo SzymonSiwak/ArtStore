@@ -21,8 +21,7 @@
         <div class="d-none d-md-flex gap-4 align-center" >
             <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToBestsellers">Bestsellers</MudButton>
             <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToNewArrivals">New Arrivals</MudButton>
-            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToLiving">Living</MudButton>
-            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToStationary">Stationary</MudButton>
+            <MudButton Variant="Variant.Text" OnClick="GoToCollections">Artworks</MudButton>
             <MudButton Class=navBar OnClick="GoToArtists">Artists</MudButton>
         </div>
 
@@ -180,10 +179,9 @@
     
     private void GoToHome() => NavigationManager.NavigateTo("/");
     private void GoToArtists() => NavigationManager.NavigateTo("/artists");
-    private void GoToBestsellers() => NavigationManager.NavigateTo("/collection/bestsellers");
-    private void GoToNewArrivals() => NavigationManager.NavigateTo("/collection/new-arrivals");
-    private void GoToLiving() => NavigationManager.NavigateTo("/collection/living");
-    private void GoToStationary() => NavigationManager.NavigateTo("/collection/stationary");
+    private void GoToBestsellers() => NavigationManager.NavigateTo("/bestsellers");
+    private void GoToNewArrivals() => NavigationManager.NavigateTo("/new-arrivals");
+    private void GoToCollections() => NavigationManager.NavigateTo("/collections");
 	private void GoToProfile() => NavigationManager.NavigateTo("/profile");
 
     MudTheme Custom = new MudTheme()

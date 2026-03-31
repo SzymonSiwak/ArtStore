@@ -29,13 +29,25 @@ namespace ArtStore.Application.Features.Products.Queries.GetFilteredProducts
         {
             var filter = request.filter;
 
-            // Translate slugs to IDs 
             if (!string.IsNullOrEmpty(filter.CollectionSlug))
             {
-                var collection = await _collectionRepository.GetBySlugAsync(filter.CollectionSlug);
-                if (collection != null)
+                var slug = filter.CollectionSlug.ToLower();
+
+                if (slug == "bestsellers")
                 {
-                    filter.CollectionId = collection.Id;
+                    filter.IsBestseller = true;
+                }
+                else if (slug == "new-arrivals")
+                {
+                    filter.IsNewArrival = true;
+                }
+                else
+                {
+                    var collection = await _collectionRepository.GetBySlugAsync(slug);
+                    if (collection != null)
+                    {
+                        filter.CollectionId = collection.Id; 
+                    }
                 }
             }
 

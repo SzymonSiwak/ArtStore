@@ -4,6 +4,7 @@
 @using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
 @inject IProductService ProductService
+@inject NavigationManager NavigationManager
 
 
 <PageTitle>ArtStore - Home</PageTitle>
@@ -25,6 +26,31 @@ else
     <SectionHeader Title="New Arrivals" />
     <ProductGrid Products="homeData.NewArrivals" />
 
+    <!-- COLLECTIONS -->
+    <SectionHeader Title="Our Collections" />
+
+    <MudGrid>
+        @if (homeData?.FeaturedCollections != null)
+        {
+            @foreach (var col in homeData.FeaturedCollections)
+            {
+                <MudItem xs="12" sm="6" md="4">
+                    <MudPaper Class="relative d-flex align-center justify-center rounded-lg overflow-hidden"
+                              Style="height: 250px; cursor: pointer;"
+                              @onclick="@(() => GoToCollection(col))">
+                    
+                        <!-- Baner kolekcji -->
+                        <MudImage Src="@col.BannerImageUrl" ObjectFit="ObjectFit.Cover" Fluid="true" Style="width:100%; height:100%; position:absolute;" />
+                    
+                        <!-- Nakładka z nazwą -->
+                        <div style="position:absolute; background: rgba(0,0,0,0.4); width:100%; height:100%;" class="d-flex align-center justify-center">
+                            <MudText Typo="Typo.h4" Style="color: white; font-weight: bold; text-transform: uppercase;">@col.Name</MudText>
+                        </div>
+                    </MudPaper>
+                </MudItem>
+            }
+        }
+    </MudGrid>
 }
 
 @code {
@@ -33,6 +59,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         homeData = await ProductService.GetHomePageData();
+    }
+
+    private void GoToCollection(CollectionDto col)
+    {
+        NavigationManager.NavigateTo($"/collection/{col.Slug}");
     }
 
     RenderFragment<string> SectionHeader = title => __builder =>
