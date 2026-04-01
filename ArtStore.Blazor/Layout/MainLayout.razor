@@ -12,43 +12,53 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="0" Class="px-4 px-md-16" Fixed=false Style="background: transparent; box-shadow: none; padding-left: 24px; padding-right: 24px;">
-        <MudButton Typo="Typo.h5" Class="ml-3" OnClick="GoToHome" Style="text-transform: none; min-width: auto; padding: 0;">
-            <MudText Typo="Typo.h4" Style="font-weight: 500; letter-spacing: 0.5px;">Square</MudText>
-        </MudButton>
-        <MudSpacer />
+    <MudAppBar id="main-navbar"
+               Fixed="true"
+               Elevation="0"
+               data-ishome="@IsHomePage.ToString().ToLower()"
+               Class="@(IsHomePage ? "navbar-transparent px-4 px-md-16 pt-4 pt-4 pb-2" : "navbar-solid px-4 px-md-16 pt-4")">
+               <div class="d-flex align-center justify-space-between w-100">
+                    <MudButton Typo="Typo.h5" Class="ml-3 pa-0" OnClick="GoToHome" Style="@($"text-transform: none; color: {(IsHomePage ? "white" : "#1a1a1a")};")">
+                        <MudText Typo="Typo.h4" Style="font-weight: 500; letter-spacing: 0.5px;">Square</MudText>
+                    </MudButton>
+                    <MudSpacer />
 
-        <div class="d-none d-md-flex gap-4 align-center" >
-            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToBestsellers">Bestsellers</MudButton>
-            <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToNewArrivals">New Arrivals</MudButton>
-            <MudButton Variant="Variant.Text" OnClick="GoToCollections">Artworks</MudButton>
-            <MudButton Class=navBar OnClick="GoToArtists">Artists</MudButton>
-        </div>
+                    <div class="d-none d-md-flex gap-6 align-center h-100" >
 
-        <MudSpacer />
+                        @{
+                            var linkColor = IsHomePage ? "white" : "#1a1a1a";
+                        }
+                        <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToBestsellers" Style="@($"color: {linkColor}; text-transform: none; font-size: 1rem;")">Bestsellers</MudButton>
+                        <MudButton Class=navBar Variant="Variant.Text" OnClick="GoToNewArrivals" Style="@($"color: {linkColor}; text-transform: none; font-size: 1rem;")">New Arrivals</MudButton>
+                        <MudButton Variant="Variant.Text" OnClick="GoToCollections" Style="@($"color: {linkColor}; text-transform: none; font-size: 1rem;")">Artworks</MudButton>
+                        <MudButton Class=navBar OnClick="GoToArtists" Style="@($"color: {linkColor}; text-transform: none; font-size: 1rem;")">Artists</MudButton>
+                    </div>
 
-        <div class="d-flex align-center gap-1">
-            <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/>    
-            <MudIconButton Variant="Variant.Text" OnClick="GoToCart" Icon="@Icons.Material.Outlined.ShoppingCart"></MudIconButton>
-        </div>
-        <AuthorizeView Context="context">
-            <Authorized>
-                <!-- Logged in -->
-                <MudIconButton OnClick="GoToProfile">
-                    <MudAvatar Color="Color.Secondary" Size="Size.Small">
-                        @(string.IsNullOrEmpty(context.User.Identity?.Name) ? "U" : context.User.Identity!.Name!.Substring(0, 1).ToUpper())
-                    </MudAvatar>
-                </MudIconButton>
-            </Authorized>
-            <NotAuthorized>
-                <!-- Not logged in -->
-                <MudIconButton OnClick="GoToLogin" Icon="@Icons.Material.Outlined.Person"></MudIconButton>
-            </NotAuthorized>
-        </AuthorizeView>
+                    <MudSpacer />
+
+                    <div class="d-flex align-center gap-2 h-100" style="@($"color: {(IsHomePage ? "white" : "#1a1a1a")};")">
+                        <!-- <MudIconButton Variant="Variant.Text" Icon="@Icons.Material.Outlined.Search"/> -->
+                        <MudIconButton Variant="Variant.Text" OnClick="GoToCart" Color="Color.Inherit" Icon="@Icons.Material.Outlined.ShoppingCart"></MudIconButton>
+                            <AuthorizeView Context="context">
+                                <Authorized>
+                                    <!-- Logged in -->
+                                    <MudIconButton OnClick="GoToProfile" Color="Color.Inherit">
+                                        <MudAvatar Style="@($"background-color: {(IsHomePage ? "white" : "#1a1a1a")}; color: {(IsHomePage ? "black" : "white")};")" Size="Size.Small">
+                                            @(string.IsNullOrEmpty(context.User.Identity?.Name) ? "U" : context.User.Identity!.Name!.Substring(0, 1).ToUpper())
+                                        </MudAvatar>
+                                    </MudIconButton>
+                                </Authorized>
+                                <NotAuthorized>
+                                    <!-- Not logged in -->
+                                    <MudIconButton OnClick="GoToLogin" Color="Color.Inherit" Style= Icon="@Icons.Material.Outlined.Person"></MudIconButton>
+                                </NotAuthorized>
+                            </AuthorizeView>
+                    </div>
+               </div>
     </MudAppBar>
 
     <MudMainContent Class="pa-0"> 
-        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8 mb-16 px-4 px-md-16">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge">
             @Body
         </MudContainer>
 
@@ -148,6 +158,9 @@
     [CascadingParameter]
     private Task<AuthenticationState>? AuthStateTask { get; set; }
 
+    private bool IsHomePage => NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Trim() == string.Empty ||
+                               NavigationManager.ToBaseRelativePath(NavigationManager.Uri).Trim() == "/";
+
     protected override async Task OnInitializedAsync()
     {
         if (AuthStateTask != null)
@@ -159,6 +172,8 @@
                 try { await UserService.GetProfile(); } catch { }
             }
         }
+
+        NavigationManager.LocationChanged += (sender, args) => StateHasChanged();
     }
     private void GoToLogin() => NavigationManager.NavigateTo("/login");
     private async Task GoToCart()

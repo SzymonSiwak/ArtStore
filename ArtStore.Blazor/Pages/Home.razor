@@ -18,9 +18,23 @@
 }
 else
 {
-    <!-- Header -->
-    <MudText Typo="Typo.h3" Align="Align.Center" Class="mb-5 mt-5">Welcome to ArtStore</MudText>
-    <MudText Typo="Typo.subtitle1" Align="Align.Center" Class="mb-10">Discover unique art for your space.</MudText>
+    <!-- HERO BANNER -->
+    <div class="hero-section d-flex flex-column align-center justify-center text-center">
+    
+        <!-- Main text -->
+        <MudText Typo="Typo.h2" Style="color: white; font-weight: 600; letter-spacing: -1px; text-shadow: 0px 2px 4px rgba(0,0,0,0.3); z-index: 2; max-width: 800px; line-height: 1.2;" Class="mb-6 px-4">
+            Dive into our new <br /> spring collection
+        </MudText>
+
+        <!-- White button -->
+        <MudButton Variant="Variant.Filled"
+                   OnClick="GoToCollection"
+                   Class="hero-btn"
+                   DisableElevation="true">
+            SHOP NOW
+        </MudButton>
+
+    </div>
 
     <!--  NEW ARRIVALS -->
     <SectionHeader Title="New Arrivals" />
@@ -37,7 +51,7 @@ else
                 <MudItem xs="12" sm="6" md="4">
                     <MudPaper Class="relative d-flex align-center justify-center rounded-lg overflow-hidden"
                               Style="height: 250px; cursor: pointer;"
-                              @onclick="@(() => GoToCollection(col))">
+                              @onclick="GoToCollection">
                     
                         <!-- Baner kolekcji -->
                         <MudImage Src="@col.BannerImageUrl" ObjectFit="ObjectFit.Cover" Fluid="true" Style="width:100%; height:100%; position:absolute;" />
@@ -61,10 +75,7 @@ else
         homeData = await ProductService.GetHomePageData();
     }
 
-    private void GoToCollection(CollectionDto col)
-    {
-        NavigationManager.NavigateTo($"/collection/{col.Slug}");
-    }
+    private void GoToCollection() => NavigationManager.NavigateTo($"/collections");
 
     RenderFragment<string> SectionHeader = title => __builder =>
     {

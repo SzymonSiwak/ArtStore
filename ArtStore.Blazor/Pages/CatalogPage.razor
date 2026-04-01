@@ -15,7 +15,7 @@
 
 <PageTitle>@FormatTitle(GetActiveRoute())</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Large" Class="mt-8 mb-16">
+<MudContainer MaxWidth="MaxWidth.Large" Class="pt-16 mt-8 mb-16">
 
     <MudBreadcrumbs Items="_breadcrumbs" Separator=">" Class="pa-0 mb-4" Style="font-size: 0.9rem; color: #666;">
         <ItemTemplate Context="item">
@@ -221,12 +221,12 @@
         if (uri.Contains("new-arrivals")) return "new-arrivals";
         if (!string.IsNullOrEmpty(CollectionName)) return CollectionName;
 
-        return "collections"; 
+        return "artworks"; 
     }
 
     private string GetDescription(string routeName)
     {
-        if (routeName == "collections")
+        if (routeName == "artworks")
             return "Explore our complete gallery of unique art prints. Find the perfect piece for You.";
         if (routeName == "bestsellers")
             return "Discover our most popular art prints loved by customers worldwide.";
@@ -247,8 +247,8 @@
 
     private string GetCollectionLabel()
     {
-        if (!filter.CollectionId.HasValue) return "Collection";
-        return allCollections.FirstOrDefault(c => c.Id == filter.CollectionId)?.Name ?? "Collection";
+        if (!filter.CollectionId.HasValue) return "Artworks";
+        return allCollections.FirstOrDefault(c => c.Id == filter.CollectionId)?.Name ?? "Artworks";
     }
 
     private string FormatTitle(string name)

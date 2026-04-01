@@ -34,6 +34,24 @@
         <span class="dismiss">🗙</span>
     </div>
     <script src="_framework/blazor.webassembly#[.{fingerprint}].js"></script>
+    <script>
+        // Waiting for scroll event to change navbar style on Home page
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('main-navbar');
+            if (!navbar) return;
+
+            // Checking if we're on the Home page using a data attribute
+            if (navbar.dataset.ishome === "true") {
+                if (window.scrollY > 50) {
+                    navbar.classList.remove('navbar-transparent');
+                    navbar.classList.add('navbar-solid');
+                } else {
+                    navbar.classList.remove('navbar-solid');
+                    navbar.classList.add('navbar-transparent');
+                }
+            }
+        });
+    </script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
 </body>
 
