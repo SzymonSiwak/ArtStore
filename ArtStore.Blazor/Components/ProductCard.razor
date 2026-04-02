@@ -7,42 +7,60 @@
 @inject NavigationManager NavigationManager
 @implements IDisposable
 
-<MudCard Elevation="3" Class="h-100 position-relative">
-	@if (!string.IsNullOrEmpty(ProductDto.ImageUrl))
-	{
-		<MudCardMedia Image="@ProductDto.ImageUrl" Height="200" />
-	}
-	else
-	{
-		<MudCardMedia Image="https://placehold.co/600x400" Height="200" />
-	}
+<MudCard Elevation="0" Class="h-100 bg-transparent rounded-0" Style="cursor: pointer;" @onclick="GoToDetails">
+	    <div style="width: 100%; aspect-ratio: 3/4; overflow: hidden; background-color: #f5f5f5;" class="mb-3">
+		@if (!string.IsNullOrEmpty(ProductDto.ImageUrl))
+        {
+			<MudImage Src="@ProductDto.ImageUrl"
+                      ObjectFit="ObjectFit.Cover" 
+                      Style="width: 100%; height: 100%; transition: transform 0.3s ease;" 
+                      Class="product-image-hover" />
+        }
+        else
+        {
+            <div class="d-flex justify-center align-center h-100">
+                <MudIcon Icon="@Icons.Material.Filled.ImageNotSupported" Size="Size.Large" Color="Color.Surface" />
+            </div>
+        }
+    </div>
 
-	<MudCardContent>
-		<!-- Title and artist-->
-		<MudText Typo="Typo.h6" >@ProductDto.Name</MudText>
-		<MudText Typo="Typo.body2" Color="Color.Secondary">@ProductDto.ArtistName</MudText>
+    <!-- CONTENT -->
+    <MudCardContent Class="pa-0">
+        
+        <!-- TITLE AND LIKE ICON-->
+        <div class="d-flex justify-space-between align-start w-100">
+            <MudText Typo="Typo.subtitle1" Style="font-weight: 500; color: #1a1a1a; line-height: 1.2;" Class="mr-2">
+				@ProductDto.Name
+            </MudText>
+            
+            <!-- LIKE -->
+			<MudIconButton Icon="@(UserService.IsFavorite(ProductDto.Id) ? Icons.Material.Filled.Favorite : Icons.Material.Outlined.FavoriteBorder)"
+						   Color="@(UserService.IsFavorite(ProductDto.Id) ? Color.Error : Color.Default)"
+                           Size="Size.Small"
+                           Class="pa-0"
+                           Style="color: #1a1a1a;"
+                           OnClick="ToggleFav" 
+                            />
+        </div>
 
-		<!-- Price -->
-		<MudText Typo="Typo.h6" Color="Color.Primary" Class="mt-2">
-			@ProductDto.Price @ProductDto.Currency
-		</MudText>
-	</MudCardContent>
+        <!-- ARTIST -->
+        <MudText Typo="Typo.body2" Style="color: #666666; margin-top: 4px; margin-bottom: 8px;">
+			@ProductDto.ArtistName
+        </MudText>
 
-	<MudCardActions>
-		<MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="GoToDetails">
-			Details
-		</MudButton>
-		<MudSpacer />
-		<!-- Add to favorite -->
-		<MudIconButton Icon="@(UserService.IsFavorite(ProductDto.Id) ? Icons.Material.Filled.Favorite : Icons.Material.Outlined.FavoriteBorder)"
-					   Color="Color.Error"
-					   Class="position-absolute z-10"
-					   Style="top: 8px; right: 8px; background-color: rgba(255,255,255,0.7);"
-					   OnClick="@(async () => await ToggleFav())" />
-		<!-- Shopping Card icon -->
-		<MudIconButton Icon="@Icons.Material.Filled.AddShoppingCart" Color="Color.Secondary" OnClick="AddToCart" />
-	</MudCardActions>
+        <!-- PRICE -->
+        <MudText Typo="Typo.subtitle1" Style="font-weight: 700; color: #1a1a1a;">
+            @ProductDto.Price @ProductDto.Currency
+        </MudText>
+
+    </MudCardContent>
 </MudCard>
+
+<style>
+	.product-image-hover:hover {
+		transform: scale(1.03); /* Lekkie przybliżenie po najechaniu */
+	}
+</style>
 
 @code{
 	[Parameter]

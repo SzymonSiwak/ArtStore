@@ -28,7 +28,7 @@ else
 
         <!-- White button -->
         <MudButton Variant="Variant.Filled"
-                   OnClick="GoToCollection"
+                   OnClick="@(() => NavigationManager.NavigateTo($"/collections"))"
                    Class="hero-btn"
                    DisableElevation="true">
             SHOP NOW
@@ -37,45 +37,148 @@ else
     </div>
 
     <!--  NEW ARRIVALS -->
-    <SectionHeader Title="New Arrivals" />
-    <ProductGrid Products="homeData.NewArrivals" />
+    <div style="background-color: #FAFAFA; padding-top: 80px; padding-bottom: 80px;">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="px-4 px-md-16">
+        
+            <!-- "NEW PIECES" -->
+            <MudText Typo="Typo.h3" Align="Align.Center" Style="font-weight: 500; letter-spacing: 1px;" Class="mb-12">
+                NEW PIECES
+            </MudText>
+
+            <!-- GRID WITH PRODUCTS -->
+            @if (isLoading)
+            {
+                <div class="d-flex justify-center mt-12">
+                    <MudProgressCircular Color="Color.Dark" Indeterminate="true" />
+                </div>
+            }
+            else if (homeData?.NewArrivals != null && homeData.NewArrivals.Any())
+            {
+                <MudGrid Spacing="4">
+                    @foreach (var product in homeData.NewArrivals.Take(4)) 
+                    {
+                        <MudItem xs="12" sm="6" md="3">
+                            <ProductCard ProductDto="product" />
+                        </MudItem>
+                    }
+                </MudGrid>
+            
+                <!-- OPTIONAL BUTTON -->
+                <div class="d-flex justify-center mt-10">
+                    <MudButton Variant="Variant.Outlined"
+                               Color="Color.Dark"
+                               Style="border-radius: 24px; padding: 8px 32px; font-weight: 500; text-transform: none;"
+                               OnClick="@(() => NavigationManager.NavigateTo("/new-arrivals"))">
+                        View All New Arrivals
+                    </MudButton>
+                </div>
+            }
+            else
+            {
+                <MudAlert Severity="Severity.Info" Class="mx-auto" Style="max-width: 400px;">No new pieces available at the moment.</MudAlert>
+            }
+
+        </MudContainer>
+    </div>
 
     <!-- COLLECTIONS -->
-    <SectionHeader Title="Our Collections" />
+    <div style="background-color: #F4F1DE; padding-top: 80px; padding-bottom: 80px;">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="px-4 px-md-16">
+        
+            <!-- HEADER -->
+            <MudText Typo="Typo.h3" Align="Align.Center" Style="font-weight: 500; letter-spacing: 1px; color: #1a1a1a;" Class="mb-12">
+                COLLECTIONS
+            </MudText>
 
-    <MudGrid>
-        @if (homeData?.FeaturedCollections != null)
-        {
-            @foreach (var col in homeData.FeaturedCollections)
+            @if (isLoading)
             {
-                <MudItem xs="12" sm="6" md="4">
-                    <MudPaper Class="relative d-flex align-center justify-center rounded-lg overflow-hidden"
-                              Style="height: 250px; cursor: pointer;"
-                              @onclick="GoToCollection">
-                    
-                        <!-- Baner kolekcji -->
-                        <MudImage Src="@col.BannerImageUrl" ObjectFit="ObjectFit.Cover" Fluid="true" Style="width:100%; height:100%; position:absolute;" />
-                    
-                        <!-- Nakładka z nazwą -->
-                        <div style="position:absolute; background: rgba(0,0,0,0.4); width:100%; height:100%;" class="d-flex align-center justify-center">
-                            <MudText Typo="Typo.h4" Style="color: white; font-weight: bold; text-transform: uppercase;">@col.Name</MudText>
-                        </div>
-                    </MudPaper>
-                </MudItem>
+                <div class="d-flex justify-center mt-12">
+                    <MudProgressCircular Color="Color.Dark" Indeterminate="true" />
+                </div>
             }
-        }
-    </MudGrid>
+            else if (homeData?.FeaturedCollections != null && homeData.FeaturedCollections.Any())
+            {
+                <!-- Declare 5 pieces -->
+                var topCollections = homeData.FeaturedCollections.Take(2).ToList();
+                var bottomCollections = homeData.FeaturedCollections.Skip(2).Take(3).ToList();
+
+                <!-- First 2 banners -->
+                <MudGrid Spacing="6" Class="mb-8">
+                    @foreach (var col in topCollections)
+                    {
+                        <MudItem xs="12" md="6">
+                            <div style="cursor: pointer;" @onclick="@(() => NavigationManager.NavigateTo($"/collections/{col.Slug}"))" class="collection-hover">
+                                <!-- Image -->
+                                <div style="width: 100%; aspect-ratio: 4/5; overflow: hidden; background-color: #e0e0e0;">
+                                    <MudImage Src="@col.BannerImageUrl" ObjectFit="ObjectFit.Cover" Style="width: 100%; height: 100%;" />
+                                </div>
+                            
+                                <!-- Name -->
+                                <MudText Typo="Typo.subtitle1" Class="mt-4" Style="font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase;">
+                                    @col.Name
+                                </MudText>
+                            </div>
+                        </MudItem>
+                    }
+                </MudGrid>
+
+                <!-- Last 3 banners -->
+                <MudGrid Spacing="6">
+                    @foreach (var col in bottomCollections)
+                    {
+                        <MudItem xs="12" md="4">
+                            <div style="cursor: pointer;" @onclick="@(() => NavigationManager.NavigateTo($"/collections/{col.Slug}"))" class="collection-hover">
+                                <!-- Image -->
+                                <div style="width: 100%; aspect-ratio: 4/3; overflow: hidden; background-color: #e0e0e0;">
+                                    <MudImage Src="@col.BannerImageUrl" ObjectFit="ObjectFit.Cover" Style="width: 100%; height: 100%;" />
+                                </div>
+                            
+                                <!-- Name -->
+                                <MudText Typo="Typo.subtitle1" Class="mt-4" Style="font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; line-height: 1.2;">
+                                    @col.Name
+                                </MudText>
+                            </div>
+                        </MudItem>
+                    }
+                </MudGrid>
+            
+                <!-- In case of insufficient quantity -->
+                @if (homeData.FeaturedCollections.Count() < 5)
+                {
+                    <MudAlert Severity="Severity.Warning" Class="mt-6 mx-auto" Style="max-width: 600px;">
+                        Aby sekcja Collections wyglądała jak na projekcie, dodaj w bazie danych minimum 5 kolekcji z obrazkami banerów (BannerImageUrl).
+                        Obecnie masz: @homeData.FeaturedCollections.Count().
+                    </MudAlert>
+                }
+            }
+            else
+            {
+                <MudAlert Severity="Severity.Info" Class="mx-auto" Style="max-width: 400px;">No collections found.</MudAlert>
+            }
+
+        </MudContainer>
+    </div>
 }
 
 @code {
     private HomePageDto? homeData;
+    private bool isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
-        homeData = await ProductService.GetHomePageData();
+        try
+        {
+            homeData = await ProductService.GetHomePageData();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Błąd pobierania strony głównej: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
-
-    private void GoToCollection() => NavigationManager.NavigateTo($"/collections");
 
     RenderFragment<string> SectionHeader = title => __builder =>
     {
