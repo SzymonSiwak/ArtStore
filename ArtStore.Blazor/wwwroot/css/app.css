@@ -278,6 +278,15 @@ code {
     text-underline-offset: 4px;
 }
 
+/* -----------------    OUR ARTISTS SECTION ------------------*/
+.artist-link .mud-icon-root {
+    transition: transform 0.2s ease-in-out;
+}
+
+.artist-link:hover .mud-icon-root {
+    transform: translateX(5px); /* Strza³ka przesuwa siê lekko w prawo przy najechaniu */
+}
+
 /* ---------------- ACCORDION ---------------- */
 
 .custom-accordion {

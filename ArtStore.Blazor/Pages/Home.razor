@@ -45,7 +45,7 @@ else
                 NEW PIECES
             </MudText>
 
-            <!-- GRID WITH PRODUCTS -->
+            <!-- Grid with Products -->
             @if (isLoading)
             {
                 <div class="d-flex justify-center mt-12">
@@ -157,6 +157,44 @@ else
             }
 
         </MudContainer>
+    </div>
+
+    <!-- OUR ARTIST -->
+    <div style="background-color: #F8F3D4; width: 100%; overflow: hidden;">
+    
+        <MudGrid Spacing="0" Class="ma-0">
+        
+            <!-- Text -->
+            <MudItem xs="12" md="6" Class="d-flex align-center justify-center order-2 order-md-1" Style="min-height: 500px; padding: 10%;">
+                <div style="max-width: 450px; width: 100%;">
+                
+                    <MudText Typo="Typo.h2" Style="font-weight: 600; color: #000000; letter-spacing: -0.5px;" Class="mb-6">
+                        Our Artists
+                    </MudText>
+                
+                    <MudText Typo="Typo.body1" Style="color: #1a1a1a; line-height: 1.6; font-size: 1.1rem;" Class="mb-8">
+                        We work together with artists from all over<br />
+                        the world, whom we discover for you<br />
+                        in different ways.
+                    </MudText>
+                
+                    <!-- Read more button -->
+                    <MudLink Href="/artists" Underline="Underline.None" Class="artist-link d-inline-flex align-center" Style="color: #000000; font-weight: 500; font-size: 1.1rem;">
+                        Read more
+                        <!-- Arrow icon -->
+                        <MudIcon Icon="@Icons.Material.Filled.ArrowRightAlt" Class="ml-2" Size="Size.Medium" />
+                    </MudLink>
+
+                </div>
+            </MudItem>
+
+            <!-- Image -->
+            <MudItem xs="12" md="6" Class="order-1 order-md-2">
+                <div style="background-image: url('images/artist.jpg'); background-size: cover; background-position: center; width: 100%; height: 100%; min-height: 500px;">
+                </div>
+            </MudItem>
+
+        </MudGrid>
     </div>
 }
 
