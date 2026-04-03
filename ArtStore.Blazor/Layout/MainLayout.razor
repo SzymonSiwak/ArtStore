@@ -59,7 +59,9 @@
 
     <MudMainContent Class="pa-0"> 
         <MudContainer MaxWidth="MaxWidth.ExtraLarge">
-            @Body
+            <div class="@(IsHomePage ? "mb-16" : "pt-16 mt-8 mb-16")">
+                @Body
+            </div>
         </MudContainer>
 
 
