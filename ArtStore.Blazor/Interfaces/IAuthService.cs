@@ -5,7 +5,7 @@ namespace ArtStore.Blazor.Interfaces
     public interface IAuthService
     {
 		Task<string?> Register(RegisterDto register);
-		Task<bool> Login(LoginDto login);
+		Task<(bool Success, string? ErrorMessage)> Login(LoginDto login);
 		Task Logout();
 		Task<string> GetToken();
 	}

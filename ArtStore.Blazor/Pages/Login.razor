@@ -117,8 +117,6 @@
 			Snackbar.Add("Registration successful! Please log in.", Severity.Success);
 			loginDto.Email = registerDto.Email;
 			showRegisterForm = false;
-
-			//ToogleForm()
 		}
 		else
 		{
@@ -130,7 +128,7 @@
 	private async Task HandleLogin()
 	{
 		isProcessing = true;
-		var result = await AuthService.Login(loginDto);
+		var (result, errorMessage) = await AuthService.Login(loginDto);
 
 		if (result)
 		{
@@ -167,11 +165,14 @@
 			}
 
 			Snackbar.Add("Login successful!", Severity.Success);
-			NavigationManager.NavigateTo("/", forceLoad: true);
+			NavigationManager.NavigateTo("/", forceLoad: false);
 		}
 		else
 		{
-			Snackbar.Add("Login failed. Please check your credentials.", Severity.Error);
+			if (string.IsNullOrEmpty(errorMessage))
+				Snackbar.Add("Login failed. Please try again.", Severity.Error);
+			else
+				Snackbar.Add(errorMessage, Severity.Error);
 		}
 
 		isProcessing = false;
