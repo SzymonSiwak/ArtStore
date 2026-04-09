@@ -10,7 +10,7 @@ namespace ArtStore.Domain.Entities
         // User-friendly URL
         public string Slug { get; set; } = string.Empty;
 
-        //Relation Category-Product 1:N
+        //Relation Category-Product
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }

@@ -9,7 +9,7 @@ namespace ArtStore.Domain.Entities
         public string Slug { get; set; } = string.Empty;
         public string BannerImageUrl { get; set; } = string.Empty; 
 
-        // Relation Collection-Product (N:N)
+        // Relation Collection-Product 
         public ICollection<Product> Products { get; set; } = new List<Product>();
     }
 }
