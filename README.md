@@ -13,8 +13,8 @@ This project demonstrates the full software development lifecycle: from business
 
 ## 📊 Documentation (Business & Architecture)
 As part of this project, I performed a system gap analysis and documented the transition. For compare purposes, the old version before analysis is waiting for you in branch called "OLD-VERSION".
-* [📄 Business Requirements Document (BRD)](docs/Artstore_BRD.md) - Focuses on "What" and "Why" (Business Goals, System Capabilities, SEO requirements).
-* [📐 Software Architecture Document (SAD)](docs/Artstore_SAD.md) - Focuses on "How" (Database Schema, API refactoring, DTOs, Blazor Routing).
+* [📄 Business Requirements Document (BRD)](docs/ARTSTORE_BRD.md) - Focuses on "What" and "Why" (Business Goals, System Capabilities, SEO requirements).
+* [📐 Software Architecture Document (SAD)](docs/ARTSTORE_SAD.md) - Focuses on "How" (Database Schema, API refactoring, DTOs, Blazor Routing).
 * 
 
 ---
