@@ -107,7 +107,7 @@ dotnet run
 
 The UI should now be accessible at `https://localhost:<port>` (check the terminal output for the exact port).
 
-##🗺️ Roadmap & Future Plans
+## 🗺️ Roadmap & Future Plans
 
 Payment Gateway: Integration with Stripe for real transactions.
 
