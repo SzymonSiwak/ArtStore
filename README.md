@@ -46,6 +46,67 @@ The cooperation with graphic designer give a touch of ART to design of the shop.
 
 ---
 
+## 🛠️ Getting Started / How to Run Locally
+
+Follow these steps to set up and run the application on your local machine.
+
+### Prerequisites
+* [.NET 10.0 SDK]
+* SQL Server (e.g., SQL Server Express / LocalDB or Docker container)
+* IDE: Visual Studio 2022, JetBrains Rider, or VS Code
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/SzymonSiwak/Artstore.git
+cd Artstore
+```
+
+### 2. Configure the Database
+The project uses Entity Framework Core with SQL Server. By default, it connects to local SQL Server Express. 
+
+Navigate to the API project folder and check the `appsettings.json` file. Update the `DefaultConnection` string if your local SQL instance has a different name.
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=ArtStoreDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+```
+
+### 3. Apply Migrations & Seed Data
+To create the database schema and populate it with initial data, run the following command in the terminal (ensure you are in the API project directory):
+
+```bash
+cd src/ArtStore.API
+dotnet ef database update
+```
+*(Alternatively, run `Update-Database` in the Package Manager Console in Visual Studio).*
+
+### 4. Run the Application
+The solution consists of a Backend (API) and a Frontend (Blazor). You need to run both.
+
+**Using Visual Studio:**
+1. Right-click on the Solution -> `Configure Startup Projects...`
+2. Select `Multiple startup projects`.
+3. Set the action for both the API and Blazor UI projects to `Start`.
+4. Press `F5`.
+
+**Using .NET CLI:**
+Open two separate terminal windows.
+
+*Terminal 1 (Backend):*
+```bash
+cd src/ArtStore.API
+dotnet run
+```
+
+*Terminal 2 (Frontend):*
+```bash
+cd src/ArtStore.Blazor
+dotnet run
+```
+
+The UI should now be accessible at `https://localhost:<port>` (check the terminal output for the exact port).
+
 🗺️ Roadmap & Future Plans
 
 Payment Gateway: Integration with Stripe for real transactions.
