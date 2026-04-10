@@ -28,7 +28,7 @@ namespace ArtStore.Blazor.Services
 			return errorContent; 
         }
 
-		public async Task<bool> Login(LoginDto login)
+		public async Task<(bool Success, string? ErrorMessage)> Login(LoginDto login)
         {
             var response = await _httpClient.PostAsJsonAsync("api/auth/login", login);
 
@@ -39,10 +39,18 @@ namespace ArtStore.Blazor.Services
 				// Store the token in local storage
 				await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", result!.Token);
 
-				return true;
+				return (true, null);
 			}
-            return false;
-		}
+
+            var errorMsg = await response.Content.ReadAsStringAsync();
+
+            if (string.IsNullOrWhiteSpace(errorMsg))
+            {
+                errorMsg = "An error occurred during login. Please try again.";
+            }
+
+            return (false, errorMsg);
+        }
 
         public async Task Logout()
         {

@@ -33,8 +33,15 @@ namespace ArtStore.Api.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponseDto>> Login(LoginDto request)
         {
-            var result = await _mediator.Send(new LoginUserCommand(request));
-            return Ok(result);
+            try
+            {
+                var result = await _mediator.Send(new LoginUserCommand(request));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 	}
 }

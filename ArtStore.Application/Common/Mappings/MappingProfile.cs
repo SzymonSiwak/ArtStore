@@ -12,7 +12,11 @@ namespace ArtStore.Application.Common.Mappings
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.Amount))
                 .ForMember(dest => dest.Currency, opt => opt.MapFrom(src => src.Price.Currency))
                 .ForMember(dest => dest.ArtistName, opt => opt.MapFrom(src => src.Artist != null ? 
-                           src.Artist.Name : string.Empty));
+                           src.Artist.Name : string.Empty))
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? 
+                           src.Category.Name : "Uncategorized"))
+                .ForMember(dest => dest.CategoryId, opt => opt.MapFrom(src => src.Category != null ? 
+                           src.Category.Id : Guid.Empty));
 
             CreateMap<CartItem, CartItemDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product!.Name))
@@ -29,7 +33,11 @@ namespace ArtStore.Application.Common.Mappings
 
 			CreateMap<Artist, ArtistDetailsDto>();
 
-			CreateMap<User, UserProfileDto>();
+            CreateMap<Category, CategoryDto>();
+
+            CreateMap<Collection, CollectionDto>();
+
+            CreateMap<User, UserProfileDto>();
 		}
 	}
 }

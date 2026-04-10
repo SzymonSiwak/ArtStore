@@ -3,11 +3,11 @@ using ArtStore.Domain.Entities;
 using ArtStore.Domain.Interfaces;
 using ArtStore.Infrastructure.Repositories;
 using ArtStore.Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using ArtStore.Infrastructure.Persistence.Repositories;
 
 namespace ArtStore.Infrastructure
 {
@@ -34,6 +34,8 @@ namespace ArtStore.Infrastructure
 			services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IArtistRepository, ArtistRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ICollectionRepository, CollectionRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
             //services.AddScoped<IOrderRepository, OrderRepository>();
 
             // Add other repositories as needed

@@ -2,9 +2,11 @@
 @using ArtStore.Blazor.Interfaces
 @using ArtStore.Blazor.Services
 @using ArtStore.Shared.DTO
+@using System.Text.Json
 @inject ISnackbar Snackbar
 @inject IAuthService AuthService
 @inject IUserProfileService UserService
+@inject IJSRuntime JSRuntime
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavigationManager
 
@@ -115,8 +117,6 @@
 			Snackbar.Add("Registration successful! Please log in.", Severity.Success);
 			loginDto.Email = registerDto.Email;
 			showRegisterForm = false;
-
-			//ToogleForm()
 		}
 		else
 		{
@@ -128,22 +128,58 @@
 	private async Task HandleLogin()
 	{
 		isProcessing = true;
-		var result = await AuthService.Login(loginDto);
+		var (result, errorMessage) = await AuthService.Login(loginDto);
 
 		if (result)
 		{
 			var provider = (ApiAuthenticationStateProvider)AuthStateProvider;
 			provider.MarkUserAsAuthenticated(loginDto.Email);
 
+			// Small delay to ensure the authentication state is updated before fetching the profile
+			await Task.Delay(100);
+
 			await UserService.GetProfile();
 
+			var pendingFavJson = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "pendingFavoriteItem");
+
+			if (!string.IsNullOrEmpty(pendingFavJson))
+			{
+				try
+				{
+					var intent = JsonSerializer.Deserialize<PendingFavItem>(pendingFavJson);
+
+					if (intent != null && intent.ProductId != Guid.Empty)
+					{
+						await UserService.ToggleFavorite(intent.ProductId);
+						Snackbar.Add("Added pending favorite item to your profile!", Severity.Success);
+					}
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Error processing pending favorite item: {ex.Message}");
+				}
+				finally
+				{
+					await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "pendingFavoriteItem");
+				}
+			}
+
 			Snackbar.Add("Login successful!", Severity.Success);
-			NavigationManager.NavigateTo("/");
+			NavigationManager.NavigateTo("/", forceLoad: false);
 		}
 		else
 		{
-			Snackbar.Add("Login failed. Please check your credentials.", Severity.Error);
+			if (string.IsNullOrEmpty(errorMessage))
+				Snackbar.Add("Login failed. Please try again.", Severity.Error);
+			else
+				Snackbar.Add(errorMessage, Severity.Error);
 		}
+
 		isProcessing = false;
+	}
+
+	public class PendingFavItem
+	{
+		public Guid ProductId { get; set; }
 	}
 }

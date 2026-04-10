@@ -11,28 +11,26 @@ namespace ArtStore.Application.Features.Products.Queries.GetHomePageData
 	public class GetHomePageDataQueryHandler : IRequestHandler<GetHomePageDataQuery, HomePageDto>
 	{
         private readonly IProductRepository _productRepository;
+        private readonly ICollectionRepository _collectionRepository;
         private readonly IMapper _mapper;
 
-        public GetHomePageDataQueryHandler(IProductRepository productRepository, IMapper mapper)
-		{ 	_productRepository = productRepository;
+        public GetHomePageDataQueryHandler(IProductRepository productRepository, ICollectionRepository collectionRepository ,IMapper mapper)
+		{ 	
+			_productRepository = productRepository;
+			_collectionRepository = collectionRepository;
 			_mapper = mapper;
 		}
 
 		public async Task<HomePageDto> Handle(GetHomePageDataQuery request, CancellationToken cancellationToken)
 		{
-			//Getting date from reposytory
-			var bestsellers = await _productRepository.GetBestsellersAsync(4);
-			var newArrivals = await _productRepository.GetNewArrivalsAsync(4);
-			var living = await _productRepository.GetByCategoryAsync(Category.Living_Accessories);
-			var stationary = await _productRepository.GetByCategoryAsync(Category.Stationary);
+			var collections = await _collectionRepository.GetAllAsync();
+            var newArrivals = await _productRepository.GetNewArrivalsAsync(4);
 
 			//Mapping to DTOs and returning
 			var homePageDto = new HomePageDto
 			{
-				Bestsellers = _mapper.Map<IEnumerable<ProductDto>>(bestsellers),
 				NewArrivals = _mapper.Map<IEnumerable<ProductDto>>(newArrivals),
-				LivingSection = _mapper.Map<IEnumerable<ProductDto>>(living),
-				StationarySection = _mapper.Map<IEnumerable<ProductDto>>(stationary)
+				FeaturedCollections = _mapper.Map<IEnumerable<CollectionDto>>(collections)
 			};
 			return homePageDto;
 		}

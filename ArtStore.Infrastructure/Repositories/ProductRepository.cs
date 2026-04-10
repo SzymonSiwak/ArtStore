@@ -26,16 +26,9 @@ namespace ArtStore.Infrastructure.Repositories
         {
             return await _context.Products
                                  .Include(p => p.Artist)
+                                 .Include(p => p.Category)
+                                 .Include(p => p.Collections)
                                  .FirstOrDefaultAsync(p => p.Id == id);
-		}
-
-        public async Task<IEnumerable<Product>> GetBestsellersAsync(int count)
-        {
-            return await _context.Products
-                                 .Include(p => p.Artist)
-                                 .Where(p => p.IsBestseller)
-                                 .Take(count)
-                                 .ToListAsync();
 		}
 
         public async Task<IEnumerable<Product>> GetNewArrivalsAsync(int count)
@@ -47,40 +40,26 @@ namespace ArtStore.Infrastructure.Repositories
                                  .ToListAsync();
 		}
 
-        public async Task<IEnumerable<Product>> GetByCategoryAsync(Category category)
-        {
-            return await _context.Products
-                                 .Include(p => p.Artist)
-                                 .Where(p => p.Category == category)
-                                 .ToListAsync();
-		}
-
 		public async Task<IEnumerable<Product>> GetFilteredProductsAsync(ProductFilterDto filter)
         {
             var query = _context.Products
                                 .Include(p => p.Artist)
+                                .Include(p => p.Category)
                                 .AsQueryable();
 
-            switch(filter.CollectionName?.ToLower())
-            {
-                case "bestsellers":
-                    query = query.Where(p => p.IsBestseller);
-                    break;
+            if (filter.IsBestseller)
+                query = query.Where(p => p.IsBestseller);
 
-                case "new-arrivals":
-                    query = query.OrderByDescending(p => p.CreatedAt);
-                    break;
+            if (filter.IsNewArrival)
+                query = query.OrderByDescending(p => p.CreatedAt);
 
-                case "living":
-                    query = query.Where(p => p.Category == Category.Living_Accessories);
-                    break;
+            if (filter.CollectionId.HasValue)
+                query = query.Where(p => p.Collections.Any(c => c.Id == filter.CollectionId.Value));
 
-                case "stationary":
-                    query = query.Where(p => p.Category == Category.Stationary);
-                    break;
-            }
+            if (filter.CategoryId.HasValue)
+                query = query.Where(p => p.CategoryId == filter.CategoryId.Value);           
 
-			if (filter.MinPrice.HasValue)
+            if (filter.MinPrice.HasValue)
 				query = query.Where(p => p.Price.Amount >= filter.MinPrice.Value);
 
 			if (filter.MaxPrice.HasValue)
@@ -89,10 +68,12 @@ namespace ArtStore.Infrastructure.Repositories
 			if (filter.FrameType.HasValue)
 				query = query.Where(p => p.Frame == filter.FrameType.Value);
 
-			if (filter.SpecificCategory.HasValue)
-				query = query.Where(p => p.Category == filter.SpecificCategory.Value);
+            if (filter.IsNewArrival)
+            {
+                return await query.Take(10).ToListAsync();
+            }
 
-			return await query.ToListAsync();
+            return await query.ToListAsync();
 		}
 
 
